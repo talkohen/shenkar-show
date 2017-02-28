@@ -1,6 +1,6 @@
 var mongoose = require ('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
 var schema = mongoose.Schema;
+var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
 
 
@@ -15,7 +15,6 @@ var instituteSchema = new schema (
     logo: String,
     maps: String,
     routes : String
-
 
 
 }, 
