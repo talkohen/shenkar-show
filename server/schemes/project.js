@@ -13,12 +13,12 @@ var projectSchema = new schema (
     department: {type: Number, ref: 'department'},
     students: [{type: Number, ref: 'user'}],
     description: String,
-    image: String,
+    image: [String],
     video: String,
     audio: String,
     location: String,
-    likes: String,
-    comments: String,
+    likes: Number,
+    comments: [String],
     QRcode: String
 
 }, 

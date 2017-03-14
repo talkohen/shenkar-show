@@ -1,6 +1,28 @@
 var mongoose = require ('mongoose');
 var institute = require ('../schemes/institute');
 
+var AWS = require('aws-sdk');
+var multer  = require('multer');
+var multerS3 = require('multer-s3');
+var mime = require('mime-types');
+
+var accessKeyId =  process.env.AWS_ACCESS_KEY || "AKIAI5QUNEYRQW4TWR2Q";
+var secretAccessKey = process.env.AWS_SECRET_KEY || "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";
+
+
+
+AWS.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
+});
+
+var s3 = new AWS.S3();
+
+
+
+
+
+
 
 exports.getAllInstitutes = function (req, res) {
 
@@ -44,7 +66,7 @@ exports.getInstituteByName  = function (req, res) {
     });
 }
 
-exports.createInstitute = function (request, response) {
+exports.createInstitute = function (request, response, fileKey) {
 
     institute.find({name : request.body.name },function(err, doc){
        if (doc.length){
@@ -55,13 +77,14 @@ exports.createInstitute = function (request, response) {
              var newInstitute = new institute({
                 name :request.body.name,
                 manager :request.body.manager,
-                logo :request.body.logo,
+                logo : fileKey,
                 maps :request.body.maps,
                 routes :request.body.routes
 
               });
               
            try {
+           	console.log(request.files);
               newInstitute.save(function(error, result) {
                 if (error) {
                   console.error(error);
@@ -83,7 +106,37 @@ exports.createInstitute = function (request, response) {
 
 }
 
-exports.updateInstitute = function (request, response) {
+exports.updateInstitute = function (request, response, fileKey) {
+	
+	if (fileKey == undefined ) { 
+		if (request.body.logoKey) {
+			//request.body.logoKey = request.body.logoKey.replace(/\.[^/.]+$/, "");
+			fileKey = request.body.logoKey;
+		}
+		else {
+			fileKey = '';
+		}
+		} 
+		else 
+		{
+			console.log (fileKey);
+			
+			s3.deleteObjects({
+    Bucket: 'shenkar-show2',
+    Delete: {
+        Objects: [
+             { Key: request.body.logoKey}
+        ]
+    }
+}, function(err, data) {
+
+    if (err)
+        return console.log(err);
+
+    console.log('success');
+
+});
+			}
 
 	 var query = institute.findOne().where ('name', request.body.name);
 	 
@@ -94,12 +147,12 @@ exports.updateInstitute = function (request, response) {
 	 		$set: {
 	 				name :request.body.name,
 	                manager :request.body.manager,
-	                logo :request.body.logo,
+	                logo :fileKey,
 	                maps :request.body.maps,
 	                routes :request.body.routes
-	 		}	 		
+	 		}
 	 	});
- 	
+
  	 	query.exec (function (err, results) {
  		console.log ("\n Resulets Object : " + JSON.stringify (results));
  	});
