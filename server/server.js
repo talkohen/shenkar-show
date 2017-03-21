@@ -5,8 +5,8 @@ var multer  = require('multer');
 var multerS3 = require('multer-s3');
 var mime = require('mime-types');
 
-var accessKeyId =  process.env.AWS_ACCESS_KEY || "AKIAIL5MMSWQUMKKX7DQ";
-var secretAccessKey = process.env.AWS_SECRET_KEY || "Jr5nFijiypQBV8Xd3TWMa7M32oyNhvQwRk91bqV";
+var accessKeyId =  process.env.AWS_ACCESS_KEY || "";
+var secretAccessKey = process.env.AWS_SECRET_KEY || "";
 
 
 
