@@ -4,6 +4,7 @@ var AWS = require('aws-sdk');
 var multer  = require('multer');
 var multerS3 = require('multer-s3');
 var mime = require('mime-types');
+var credentials = require ('./credentials.js');
 
 var accessKeyId =  process.env.AWS_ACCESS_KEY || "";
 var secretAccessKey = process.env.AWS_SECRET_KEY || "";
@@ -11,8 +12,8 @@ var secretAccessKey = process.env.AWS_SECRET_KEY || "";
 
 
 AWS.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey
+    accessKeyId: credentials.accessKeyId,
+    secretAccessKey: credentials.secretAccessKey
 });
 
 var s3 = new AWS.S3();
