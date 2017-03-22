@@ -19,7 +19,7 @@ var upload = multer({
     s3: s3,
     bucket: 'shenkar-show2',
     
-      limits: { fileSize: 1000*1000*5 },
+      limits: { fileSize: 100*100*0.5 },
    fileFilter: function (req, file, cb) {
  if (file.mimetype !== 'image/png' || file.originalname =='') {
  	
@@ -102,7 +102,6 @@ app.get ('/institutes/name/:instituteName', instituteController.getInstituteByNa
 app.post ('/institutes/create', upload.single('logo') , function(req, res){instituteController.createInstitute(req,res, req.file.key);});
 app.post ('/institutes/update', upload.single('logo') , 
 function(req, res){
-	
 	if (req.file){
 		
 	instituteController.updateInstitute(req,res, req.file.key);}

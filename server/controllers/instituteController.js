@@ -1,19 +1,17 @@
 var mongoose = require ('mongoose');
 var institute = require ('../schemes/institute');
+var credentials = require ('../credentials.js');
 
 var AWS = require('aws-sdk');
 var multer  = require('multer');
 var multerS3 = require('multer-s3');
 var mime = require('mime-types');
 
-var accessKeyId =  process.env.AWS_ACCESS_KEY || "AKIAI5QUNEYRQW4TWR2Q";
-var secretAccessKey = process.env.AWS_SECRET_KEY || "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";
-
 
 
 AWS.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey
+    accessKeyId: credentials.accessKeyId,
+    secretAccessKey: credentials.secretAccessKey
 });
 
 var s3 = new AWS.S3();
