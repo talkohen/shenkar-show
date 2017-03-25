@@ -12,10 +12,7 @@ var departmentSchema = new schema (
     name: String,
     manager: {type: Number, ref: 'user'},
     description: String,
-    images: [String],
-
-
-
+    images: [String]
 }, 
 
 {collection: 'departments'}

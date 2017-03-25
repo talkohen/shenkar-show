@@ -174,6 +174,23 @@ exports.deleteInstitute = function (request, response) {
 	
 	 query.exec (function (err,doc) {
 	 		try {	
+			
+			s3.deleteObjects({
+    Bucket: 'shenkar-show2',
+    Delete: {
+        Objects: [
+             { Key: doc.logo}
+        ]
+    }
+}, function(err, data) {
+
+    if (err)
+        return console.log(err);
+
+    console.log('success');
+
+});
+	 			
 	 	var query = doc.remove (function (err, deletedDoc) {
 	 		institute.findOne ({name: request.body.name}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);

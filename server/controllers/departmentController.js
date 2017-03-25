@@ -44,7 +44,15 @@ exports.getDepartmentByName  = function (req, res) {
 }
 
 
-exports.createDepartment = function (request, response) {
+exports.createDepartment = function (request, response, files) {
+	
+	var fileKeys = [];
+	
+	for (i=0; i< files.length; i++){
+	console.log ("FILEKEY : " + files[i].key);
+	fileKeys.push (files[i].key);
+}
+
 
     department.find({name : request.body.name },function(err, doc){
        if (doc.length){
@@ -56,7 +64,7 @@ exports.createDepartment = function (request, response) {
                 name :request.body.name,
                 manager :request.body.manager,
                 description :request.body.description,
-                images :request.body.images
+                images : fileKeys
 
               });
               

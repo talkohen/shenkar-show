@@ -19,7 +19,7 @@ var upload = multer({
     s3: s3,
     bucket: 'shenkar-show2',
     
-      limits: { fileSize: 100*100*0.5 },
+      limits: { fileSize: 1000*1000*1 },
    fileFilter: function (req, file, cb) {
  if (file.mimetype !== 'image/png' || file.originalname =='') {
  	
@@ -42,21 +42,21 @@ var upload = multer({
   })
 })
 
-var deleteImage = s3.deleteObjects({
-    Bucket: 'myprivatebucket/some/subfolders',
-    Delete: {
-        Objects: [
-             { Key: 'nameofthefile1.extension' }
-        ]
-    }
-}, function(err, data) {
-
-    if (err)
-        return console.log(err);
-
-    console.log('success');
-
-});
+// var deleteImage = s3.deleteObjects({
+    // Bucket: 'myprivatebucket/some/subfolders',
+    // Delete: {
+        // Objects: [
+             // { Key: 'nameofthefile1.extension' }
+        // ]
+    // }
+// }, function(err, data) {
+// 
+    // if (err)
+        // return console.log(err);
+// 
+    // console.log('success');
+// 
+// });
 
 
 //controllers
@@ -116,7 +116,7 @@ app.post ('/institutes/delete', instituteController.deleteInstitute);
 app.get ('/allDepartments', departmentController.getAllDepartments);
 app.get ('/departments/id/:departmentId', departmentController.getDepartmentById);
 app.get ('/departments/name/:departmentName', departmentController.getDepartmentByName);
-app.post ('/departments/create', departmentController.createDepartment);
+app.post ('/departments/create', upload.array('images', 5) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
 app.post ('/departments/update', departmentController.updateDepartment);
 app.post ('/departments/delete', departmentController.deleteDepartment);
 
