@@ -24,7 +24,7 @@ var s3 = new AWS.S3();
 
 exports.getAllInstitutes = function (req, res) {
 
-    institute.find ({}).populate('manager', 'name').
+    institute.find ({}).populate('manager', 'name').populate('departments', ['name','logo']).
     where('institute').ne ('PRIVATE').
     exec (function (err, docs) {
         Data = docs;
@@ -77,7 +77,13 @@ exports.createInstitute = function (request, response, fileKey) {
                 manager :request.body.manager,
                 logo : fileKey,
                 maps :request.body.maps,
-                routes :request.body.routes
+                routes :request.body.routes,
+                
+                headerBackgroundColor: request.body.headerBackgroundColor,
+    			headerFontColor: request.body.headerFontColor,
+    			footerBackgroundColor: request.body.footerBackgroundColor,
+			    footerFontColor: request.body.footerFontColor
+
 
               });
               
@@ -147,7 +153,12 @@ exports.updateInstitute = function (request, response, fileKey) {
 	                manager :request.body.manager,
 	                logo :fileKey,
 	                maps :request.body.maps,
-	                routes :request.body.routes
+	                routes :request.body.routes,
+	                
+	                headerBackgroundColor: request.body.headerBackgroundColor,
+    				headerFontColor: request.body.headerFontColor,
+    				footerBackgroundColor: request.body.footerBackgroundColor,
+			    	footerFontColor: request.body.footerFontColor
 	 		}
 	 	});
 

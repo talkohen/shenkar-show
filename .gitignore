@@ -1,2 +1,3 @@
 app/
 server/credentials.js
+server/node_modules/

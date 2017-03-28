@@ -116,8 +116,19 @@ app.post ('/institutes/delete', instituteController.deleteInstitute);
 app.get ('/allDepartments', departmentController.getAllDepartments);
 app.get ('/departments/id/:departmentId', departmentController.getDepartmentById);
 app.get ('/departments/name/:departmentName', departmentController.getDepartmentByName);
-app.post ('/departments/create', upload.array('images', 5) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
-app.post ('/departments/update', departmentController.updateDepartment);
+app.post ('/departments/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'images', maxCount : 5 }]) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
+app.post ('/departments/update',  upload.array('images', 5) ,
+function(req, res){
+	if (req.files){
+	departmentController.updateDepartment(req,res, req.files);
+	}
+	
+	else {
+		
+		instituteController.updateDepartment(req,res);
+	}
+	
+	});
 app.post ('/departments/delete', departmentController.deleteDepartment);
 
 //projects

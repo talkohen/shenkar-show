@@ -10,8 +10,10 @@ var departmentSchema = new schema (
 
     _id : {type: Number, required:true, index:1, unique:true, autoIncrement:true},
     name: String,
+    projects : [{type: Number, ref: 'project'}],
     manager: {type: Number, ref: 'user'},
     description: String,
+    logo : String, 
     images: [String]
 }, 
 

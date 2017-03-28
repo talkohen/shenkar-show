@@ -47,10 +47,15 @@ exports.getDepartmentByName  = function (req, res) {
 exports.createDepartment = function (request, response, files) {
 	
 	var fileKeys = [];
-	
-	for (i=0; i< files.length; i++){
-	console.log ("FILEKEY : " + files[i].key);
-	fileKeys.push (files[i].key);
+	var logoKey = '';
+	if (files['images'] != undefined){
+	for (i=0; i< files['images'].length; i++){
+	console.log ("FILEKEY : " + files['images'][i].key);
+	fileKeys.push (files['images'][i].key);
+}
+}
+if (files['logo'] != undefined ) {
+	logoKey = files['logo'][0].key;	
 }
 
 
@@ -62,8 +67,10 @@ exports.createDepartment = function (request, response, files) {
           	
              var newDepartment = new department({
                 name :request.body.name,
+               	institute : request.body.institute,
                 manager :request.body.manager,
                 description :request.body.description,
+                logo : logoKey,
                 images : fileKeys
 
               });
@@ -85,12 +92,9 @@ exports.createDepartment = function (request, response, files) {
             }
           });    
 
-
-
-
 }
 
-exports.updateDepartment = function (request, response) {
+exports.updateDepartment = function (request, response, files) {
 
 	 var query = department.findOne().where ('name', request.body.name);
 	 

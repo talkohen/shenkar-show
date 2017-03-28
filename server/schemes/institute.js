@@ -13,8 +13,15 @@ var instituteSchema = new schema (
     name: String,
     manager: {type: Number, ref: 'user'},
     logo: String,
+    departments: [{type: Number, ref: 'department'}],
     maps: String,
-    routes : String
+    routes : String,
+    
+    //Style
+    headerBackgroundColor: String,
+    headerFontColor: String,
+    footerBackgroundColor: String,
+    footerFontColor: String
 
 
 }, 
