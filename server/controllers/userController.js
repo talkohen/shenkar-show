@@ -1,5 +1,7 @@
 var mongoose = require ('../database');
 var user = require ('../schemes/user');
+var crypto = require ('../crypto');
+
 
 exports.getAllUsers = function (req, res) {
 
@@ -13,6 +15,59 @@ exports.getAllUsers = function (req, res) {
     });
 }
 
+exports.auth = function (req, res) {
+	
+	if (req.body.userName == undefined || req.body.password == undefined ) {
+		res.send ("missing parameters");
+	}
+	else {
+	var userName = req.body.userName;
+	var query = user.findOne().where ('userName', userName);
+	
+	
+	 query.exec (function (err,doc) {
+	 		try {	
+	 	if (doc.password == req.body.password) {
+	 		if (doc.role == "admin"){
+	 			
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: 'http://www.talco.co', sameSite: false ,path: 'http://www.talco.co'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: 'http://www.talco.co'});
+	 		res.writeHead(302, {Location: 'http://www.talco.co'});
+	 		res.end ();
+	 		
+	 		}
+	 		
+	 		else if 
+	 		(doc.role == "institute manager"){
+	 			
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/institute'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/institute'});
+	 		res.writeHead(302, {Location: '/institute'});
+	 		res.end ();
+	 		
+	 		}
+	 		else if (doc.role == "student"){
+	 		res.cookie ("shenkar-show", crypto.hashMake (userName),  { expires: new Date(Date.now() + 900000), path: '/student'});
+	 		}
+	 		
+	 		else {
+	 			res.cookie ("shenkar-show", "user",  { expires: new Date(Date.now() + 900000), httpOnly: true });
+	 		}
+	 		
+	 	}
+	 	else {
+	 		res.send ("fail");
+	 	}
+	 	}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	res.send (false);
+ }
+	 	
+	 });
+	}
+ 
+}
 
 
 exports.getUserById  = function (req, res) {
