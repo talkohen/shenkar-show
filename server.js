@@ -152,6 +152,7 @@ app.get ('/admin', adminController.getIndex);
 app.get ('/institute', instituteManagerController.getIndex);
 app.get ('/institute/update',  instituteManagerController.getUpdate);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
+app.get ('/institute/users',  instituteManagerController.getUsers);
 
 
 //student

@@ -112,7 +112,8 @@ exports.createUser = function (request, response) {
                 name :request.body.name,
                 password :request.body.password,
                 email :request.body.email,
-                department :request.body.department
+                department :request.body.department,
+                institute :request.body.institute
               });
               
            try {
@@ -151,7 +152,8 @@ exports.updateUser = function (request, response) {
                 name :request.body.name,
                 password :request.body.password,
                 email :request.body.email,
-                department :request.body.department
+                department :request.body.department,
+                institute :request.body.institute
 	 		}	 		
 	 	});
  	
