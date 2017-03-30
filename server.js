@@ -5,6 +5,7 @@ var multer  = require('multer');
 var multerS3 = require('multer-s3');
 var mime = require('mime-types');
 var credentials = require ('./credentials.js');
+var cookieParser = require('cookie-parser');
 
 
 AWS.config.update({
@@ -64,10 +65,14 @@ var userController = require ('./controllers/userController');
 var instituteController = require ('./controllers/instituteController');
 var departmentController = require ('./controllers/departmentController');
 var projectController = require ('./controllers/projectController');
+var adminController = require ('./controllers/adminController');
+var instituteManagerController = require ('./controllers/instituteManagerController');
 
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
+
+app.use(cookieParser())
 
 //schemes
 var user = require ('./schemes/user');
@@ -91,6 +96,7 @@ app.use(function(req, res, next) {
 app.get ('/allUsers', userController.getAllUsers);
 app.get ('/users/id/:userId', userController.getUserById);
 app.get ('/users/name/:userName', userController.getUserByName);
+app.post ('/users/auth', userController.auth);
 app.post ('/users/create', userController.createUser);
 app.post ('/users/update', userController.updateUser);
 app.post ('/users/delete', userController.deleteUser);
@@ -139,6 +145,17 @@ app.post ('/projects/create', projectController.createProject);
 app.post ('/projects/update', projectController.updateProject);
 app.post ('/projects/delete', projectController.deleteProject);
 
+//admin
+app.get ('/admin', adminController.getIndex);
+
+//institute manager 
+app.get ('/institute', instituteManagerController.getIndex);
+app.get ('/institute/update',  instituteManagerController.getUpdate);
+app.get ('/institute/departments',  instituteManagerController.getDepartments);
+
+
+//student
+app.get ('/student', function(req, res){res.send ("this is student");});
 
 
 app.all ('*', function (req,res) {
