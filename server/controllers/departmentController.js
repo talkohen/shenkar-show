@@ -29,6 +29,18 @@ exports.getDepartmentById  = function (req, res) {
     });
 }
 
+exports.getDepartmentById2  = function (depId, callback) {
+    var id = depId;
+    console.log ('Dep ID = ' + id);
+
+    department.findOne ({_id : id}).
+    where('department').ne ('PRIVATE').
+    exec (function (err, doc) {
+    	console.log ('dasdasd');
+        callback (doc);
+    });
+}
+
 exports.getDepartmentByName  = function (req, res) {
     var name = req.params.name;
     console.log ('department name = ' + department);

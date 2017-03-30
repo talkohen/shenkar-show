@@ -2,7 +2,9 @@ var mongoose = require ('../database');
 var user = require ('../schemes/user');
 var institute = require ('../schemes/institute');
 var department = require ('../schemes/department');
+var departmentController = require ('../controllers/departmentController');
 var auth = require ('../controllers/authController');
+var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
@@ -84,27 +86,29 @@ exports.getDepartments = function (req,res) {
     exec (function (err, doc) {
         departments = doc.departments;
         
-        console.log ("DEPS : " + departments);
         
-        for (i=0; i<departments.length; i++) {
-        	department.findOne ({_id: departments[i]}).
-    	where('department').ne ('PRIVATE').
-    	exec (function (err, dep) {
-    		
-    		console.log ("DEP :  " + dep);
+
+async.each(departments, function(depart, callback){
+   
+    departmentController.getDepartmentById2(depart, function (dep){
+      
     		myDepartments.push (dep);
-    		console.log ("myDeps :  " + myDepartments);
-    		
-    		 });
-        }
-        
-        Data = myDepartments;
-        console.log ('docs: ' + myDepartments);
-        res.json (myDepartments);
-        
-        
-        return;
+    	
+      callback();
     });
+  },
+
+  function(err){
+    res.json (myDepartments);
+  }
+);
+
+        
+
+        
+
+    });
+		
 		
 		
 	
