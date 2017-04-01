@@ -41,7 +41,7 @@ exports.getInstituteById  = function (req, res) {
     console.log ('User ID = ' + id);
 
     institute.find ({_id : id}).populate('manager', 'name').
-    where('institute').ne ('PRIVATE').
+    populate('departments', ['name', 'logo']).
     exec (function (err, docs) {
         Data = docs;
         console.log ('docs: ' + docs);

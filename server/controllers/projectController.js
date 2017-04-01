@@ -30,6 +30,19 @@ exports.getProjectById  = function (req, res) {
     });
 }
 
+//search project by id
+exports.getProjectById2  = function (projectId, callback) {
+    var id = projectId;
+    console.log ('Dep ID = ' + id);
+
+    project.findOne ({_id : id}).populate('students', 'name').
+    where('project').ne ('PRIVATE').
+    exec (function (err, doc) {
+    	console.log ('dasdasd');
+        callback (doc);
+    });
+}
+
 //search project by name
 exports.getProjectByName  = function (req, res) {
     var name = req.params.projectName;

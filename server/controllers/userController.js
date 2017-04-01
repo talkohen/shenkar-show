@@ -46,12 +46,27 @@ exports.auth = function (req, res) {
 	 		res.end ();
 	 		
 	 		}
+	 		
+	 		else if 
+	 		(doc.role == "department manager"){
+	 			
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/department'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/department'});
+	 		res.writeHead(302, {Location: '/department'});
+	 		res.end ();
+	 		
+	 		}
+	 		
+	 		
 	 		else if (doc.role == "student"){
-	 		res.cookie ("shenkar-show", crypto.hashMake (userName),  { expires: new Date(Date.now() + 900000), path: '/student'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/student'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/student'});
+	 		res.writeHead(302, {Location: '/student'});
+	 		res.end ();
 	 		}
 	 		
 	 		else {
-	 			res.cookie ("shenkar-show", "user",  { expires: new Date(Date.now() + 900000), httpOnly: true });
+	 			res.cookie ("shenkar-show", "guest",  { expires: new Date(Date.now() + 900000), httpOnly: true });
 	 		}
 	 		
 	 	}
