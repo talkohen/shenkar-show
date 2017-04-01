@@ -67,12 +67,14 @@ var departmentController = require ('./controllers/departmentController');
 var projectController = require ('./controllers/projectController');
 var adminController = require ('./controllers/adminController');
 var instituteManagerController = require ('./controllers/instituteManagerController');
+var departmentManagerController = require ('./controllers/departmentManagerController');
+var studentController = require ('./controllers/studentController');
 
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 //schemes
 var user = require ('./schemes/user');
@@ -154,9 +156,15 @@ app.get ('/institute/update',  instituteManagerController.getUpdate);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
 app.get ('/institute/users',  instituteManagerController.getUsers);
 
+//department manager 
+app.get ('/department', departmentManagerController.getIndex);
+app.get ('/department/projects', departmentManagerController.getProjects);
+app.get ('/department/users', departmentManagerController.getUsers);
+
+
 
 //student
-app.get ('/student', function(req, res){res.send ("this is student");});
+app.get ('/student', studentController.getIndex);
 
 
 app.all ('*', function (req,res) {

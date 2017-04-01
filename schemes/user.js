@@ -16,7 +16,8 @@ var userSchema = new schema (
     password: String,
     email: String,
     department: {type: Number, ref: 'department'},
-    institute: {type: Number, ref: 'institute'}
+    institute: {type: Number, ref: 'institute'},
+    project: {type: Number, ref : 'project'}
 
 }, 
 
