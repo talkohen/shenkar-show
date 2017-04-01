@@ -166,7 +166,7 @@ app.get ('/department/users', departmentManagerController.getUsers);
 //student
 app.get ('/student', studentController.getIndex);
 
-app.get ('/', ('*', function (req,res) {
+app.get ('/', function (req,res) {
     res.send ("Welcome to Shenkar show app.<br> please refer to the api for usage instructions.");
 });
 
