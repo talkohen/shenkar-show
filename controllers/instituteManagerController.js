@@ -8,6 +8,7 @@ var userController = require ('../controllers/userController');
 var auth = require ('../controllers/authController');
 var async = require("async");
 
+
 exports.getIndex = function (req,res) {
 	
 	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
@@ -38,39 +39,140 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
-}
+};
 
-exports.getUpdate = function (req,res) {
+exports.createDepartment = function (request,response, files) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		
-		  var managerId =  req.cookies.shenkarShowUserId;
-    		console.log ('User ID = ' + managerId);
-
-    institute.find ({ manager : managerId}).populate('manager', 'name').
-    where('institute').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
-        return;
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		departmentController.createDepartment (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
     });
+			
+			
+			
+		});
+	    
 		
 		
 	
 }
 else {
-	res.send ("not authorized!");
+	response.json ({error: "invalid seesion token."});
 }
 	}); }
 	else {
-		res.send ("not authorized!");
+		response.json ({error: "no session."});
 	}
+};
+
+
+exports.updateDepartment = function (request, response, files) {
+	
+		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		departmentController.updateDepartment (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
 }
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+exports.deleteDepartment = function (request, response, files) {
+	
+		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		departmentController.deleteDepartment (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+
+
+
 
 exports.getDepartments = function (req,res) {
 	
@@ -83,9 +185,7 @@ exports.getDepartments = function (req,res) {
 		var managerId =  req.cookies.shenkarShowUserId;
 		console.log ('User ID = ' + managerId);
 
-	    institute.findOne ({ manager : managerId}).populate('manager', 'name').
-	    where('institute').ne ('PRIVATE').
-	    exec (function (err, doc) {
+	    institute.findOne ({ manager : managerId}).populate('manager', 'name').exec (function (err, doc) {
 	    	
 	    	departments = doc.departments;
         
@@ -114,7 +214,7 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
-}
+};
 
 
 exports.getUsers = function (req, res) {
@@ -132,7 +232,7 @@ exports.getUsers = function (req, res) {
 	    where('institute').ne ('PRIVATE').
 	    exec (function (err, doc) {
 	    	
-	    	console.log ("INSTITUTE : " + doc)
+	    	console.log ("INSTITUTE : " + doc);
 	    	
 	    	user.find ({ institute : doc._id, role: "department manager"}).populate('institute', 'name').
     where('user').ne ('PRIVATE').
@@ -152,4 +252,4 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
-}
+};

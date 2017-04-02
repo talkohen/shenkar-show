@@ -38,10 +38,10 @@ var upload = multer({
     },
   
     key: function (req, file, cb) {
-      cb(null, Date.now().toString() + '.' + mime.extension(file.mimetype))
+      cb(null, Date.now().toString() + '.' + mime.extension(file.mimetype));
     }
   })
-})
+});
 
 // var deleteImage = s3.deleteObjects({
     // Bucket: 'myprivatebucket/some/subfolders',
@@ -88,6 +88,7 @@ app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   app.set ('json spaces', 4);
   res.set ("Content-Type", "application/json");
@@ -152,7 +153,9 @@ app.get ('/admin', adminController.getIndex);
 
 //institute manager 
 app.get ('/institute', instituteManagerController.getIndex);
-app.get ('/institute/update',  instituteManagerController.getUpdate);
+app.post ('/institute/createDepartment', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'images', maxCount : 5 }]) ,function(req, res){instituteManagerController.createDepartment(req,res, req.files);});
+app.post ('/institute/updateDepartment',  instituteManagerController.updateDepartment);
+app.post ('/institute/deleteDepartment',  instituteManagerController.deleteDepartment);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
 app.get ('/institute/users',  instituteManagerController.getUsers);
 

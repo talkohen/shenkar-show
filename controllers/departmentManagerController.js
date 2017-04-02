@@ -39,7 +39,138 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
+};
+
+
+exports.createProject = function (request,response, files) {
+	
+	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'department manager')
+	{
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			department.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.department ==  doc._id ){
+	    		projectController.createProject (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+		
+		
+	
 }
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+exports.updateDepartment = function (request, response, files) {
+	
+		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		departmentController.updateDepartment (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+exports.deleteDepartment = function (request, response, files) {
+	
+		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		departmentController.deleteDepartment (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
 
 
 exports.getProjects = function (req,res) {
@@ -82,7 +213,7 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
-}
+};
 
 
 
@@ -121,5 +252,5 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
-}
+};
 

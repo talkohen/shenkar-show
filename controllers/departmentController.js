@@ -12,7 +12,7 @@ exports.getAllDepartments = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.getDepartmentById  = function (req, res) {
@@ -27,7 +27,7 @@ exports.getDepartmentById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.getDepartmentById2  = function (depId, callback) {
     var id = depId;
@@ -39,7 +39,7 @@ exports.getDepartmentById2  = function (depId, callback) {
     	console.log ('dasdasd');
         callback (doc);
     });
-}
+};
 
 exports.getDepartmentByName  = function (req, res) {
     var name = req.params.name;
@@ -53,7 +53,7 @@ exports.getDepartmentByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.createDepartment = function (request, response, files) {
@@ -83,7 +83,8 @@ if (files['logo'] != undefined ) {
                 manager :request.body.manager,
                 description :request.body.description,
                 logo : logoKey,
-                images : fileKeys
+                images : fileKeys,
+                institute: request.body.institute
 
               });
               
@@ -104,7 +105,7 @@ if (files['logo'] != undefined ) {
             }
           });    
 
-}
+};
 
 exports.updateDepartment = function (request, response, files) {
 
@@ -136,7 +137,7 @@ exports.updateDepartment = function (request, response, files) {
  }
 
  });
-}
+};
 
 
 exports.deleteDepartment = function (request, response) {
@@ -149,7 +150,7 @@ exports.deleteDepartment = function (request, response) {
 	 		department.findOne ({name: request.body.name}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -160,5 +161,5 @@ exports.deleteDepartment = function (request, response) {
 	 	
 	 });
 
-}
+};
 

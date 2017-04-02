@@ -13,7 +13,7 @@ exports.getAllUsers = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.auth = function (req, res) {
 	
@@ -82,7 +82,7 @@ exports.auth = function (req, res) {
 	 });
 	}
  
-}
+};
 
 
 exports.getUserById  = function (req, res) {
@@ -97,7 +97,7 @@ exports.getUserById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.getUserByName  = function (req, res) {
     var name = req.params.userName;
@@ -111,7 +111,7 @@ exports.getUserByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.createUser = function (request, response) {
 
@@ -151,7 +151,7 @@ exports.createUser = function (request, response) {
 
 
 
-}
+};
 
 exports.updateUser = function (request, response) {
 
@@ -186,7 +186,7 @@ exports.updateUser = function (request, response) {
  }
 
  });
-}
+};
 
 
 exports.deleteUser = function (request, response) {
@@ -199,7 +199,7 @@ exports.deleteUser = function (request, response) {
 	 		user.findOne ({userName: request.body.userName}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -210,5 +210,5 @@ exports.deleteUser = function (request, response) {
 	 	
 	 });
 
-}
+};
 
