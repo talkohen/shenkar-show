@@ -84,7 +84,6 @@ if (files['logo'] != undefined ) {
                 description :request.body.description,
                 logo : logoKey,
                 images : fileKeys,
-                institute: request.body.institute
 
               });
               
@@ -142,12 +141,12 @@ exports.updateDepartment = function (request, response, files) {
 
 exports.deleteDepartment = function (request, response) {
 
-	var query = department.findOne().where ('name', request.body.name);
+	var query = department.findOne().where ('name', request.body.departmentId);
 	
 	 query.exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		department.findOne ({name: request.body.name}, function (err, doc) {
+	 		department.findOne ({_id: request.body.departmentId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});

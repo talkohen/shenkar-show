@@ -131,7 +131,8 @@ exports.createUser = function (request, response) {
                 password :request.body.password,
                 email :request.body.email,
                 department :request.body.department,
-                institute :request.body.institute
+                institute :request.body.institute,
+                project: request.body.project
               });
               
            try {
@@ -194,12 +195,10 @@ exports.updateUser = function (request, response) {
 
 exports.deleteUser = function (request, response) {
 
-	var query = user.findOne().where ('userName', request.body.userName);
-	
-	 query.exec (function (err,doc) {
+	 user.findOne().where ({_id :  request.body.userId}).exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({userName: request.body.userName}, function (err, doc) {
+	 		user.findOne ({_id: request.body.userId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});

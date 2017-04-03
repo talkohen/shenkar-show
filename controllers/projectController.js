@@ -72,7 +72,6 @@ exports.createProject = function (request, response) {
              var newProject = new project({
                 name :request.body.name,
                 department :request.body.department,
-                students :request.body.students,
                 description :request.body.description,
                 image :request.body.image,
                 video :request.body.video,
@@ -116,7 +115,6 @@ exports.updateProject = function (request, response) {
 	 		$set: {
 	 				name :request.body.name,
 	                department :request.body.department,
-	                students :request.body.students,
 	                description :request.body.description,
 	                image :request.body.image,
 	                video :request.body.video,
@@ -147,12 +145,12 @@ exports.updateProject = function (request, response) {
 
 exports.deleteProject = function (request, response) {
 
-	var query = project.findOne().where ('name', request.body.name);
+	var query = project.findOne().where ('name', request.body.projectId);
 	
 	 query.exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		project.findOne ({name: request.body.name}, function (err, doc) {
+	 		project.findOne ({_id: request.body.projectId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});
