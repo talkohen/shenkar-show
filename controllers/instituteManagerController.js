@@ -181,30 +181,20 @@ exports.getDepartments = function (req,res) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		var myDepartments = [];
 		var managerId =  req.cookies.shenkarShowUserId;
-		console.log ('User ID = ' + managerId);
+    		console.log ('User ID = ' + managerId);
+    		
+    		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
-	    institute.findOne ({ manager : managerId}).populate('manager', 'name').exec (function (err, doc) {
-	    	
-	    	departments = doc.departments;
-        
-        
-
-		async.each(departments, function(depart, callback){
-		departmentController.getDepartmentById2(depart, function (dep){
-		      
-		    myDepartments.push (dep);
-		    callback();
+    department.find ({ institute : manager.institute}).exec (function (err, docs) {
+    
+        console.log ('docs: ' + docs);
+        res.json (docs);
+        return;
     });
-  },
-
-  function(err){
-    res.json (myDepartments);
-  }
-);
-
-    });
+		
+		
+	});
 
 }
 else {
@@ -304,7 +294,7 @@ else {
 };
 
 
-exports.updateUser = function (request, response, files) {
+exports.updateUser = function (request, response) {
 	
 		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
 	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
@@ -355,7 +345,7 @@ else {
 };
 
 
-exports.deleteUser = function (request, response, files) {
+exports.deleteUser = function (request, response) {
 	
 		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
 	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {

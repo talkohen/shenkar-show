@@ -164,15 +164,24 @@ app.post ('/institute/createUser',  instituteManagerController.createUser);
 app.post ('/institute/updateUser',  instituteManagerController.updateUser);
 app.post ('/institute/deleteUser',  instituteManagerController.deleteUser);
 
-//department manager 
+//department manager
 app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
 app.get ('/department/users', departmentManagerController.getUsers);
+app.post ('/department/createProject', departmentManagerController.createProject);
+app.post ('/department/updateProject', departmentManagerController.updateProject);
+app.post ('/department/deleteProject', departmentManagerController.deleteProject);
+app.post ('/department/createUser',  departmentManagerController.createUser);
+app.post ('/department/updateUser',  departmentManagerController.updateUser);
+app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 
 
 
 //student
 app.get ('/student', studentController.getIndex);
+app.get ('/student/project', studentController.getProject);
+app.get ('/student/updateProject', studentController.updateProject);
+
 
 app.get ('/', function (req,res) {
     res.send ("Welcome to Shenkar show app.please refer to the api for usage instructions.");

@@ -12,7 +12,7 @@ exports.getAllProjects = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 //search project by id
@@ -28,7 +28,7 @@ exports.getProjectById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 //search project by id
 exports.getProjectById2  = function (projectId, callback) {
@@ -41,7 +41,7 @@ exports.getProjectById2  = function (projectId, callback) {
     	console.log ('dasdasd');
         callback (doc);
     });
-}
+};
 
 //search project by name
 exports.getProjectByName  = function (req, res) {
@@ -56,7 +56,7 @@ exports.getProjectByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.createProject = function (request, response) {
@@ -103,7 +103,7 @@ exports.createProject = function (request, response) {
 
 
 
-}
+};
 
 exports.updateProject = function (request, response) {
 
@@ -142,7 +142,7 @@ exports.updateProject = function (request, response) {
  }
 
  });
-}
+};
 
 
 exports.deleteProject = function (request, response) {
@@ -155,7 +155,7 @@ exports.deleteProject = function (request, response) {
 	 		project.findOne ({name: request.body.name}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -166,5 +166,5 @@ exports.deleteProject = function (request, response) {
 	 	
 	 });
 
-}
+};
 

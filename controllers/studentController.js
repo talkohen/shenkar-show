@@ -41,4 +41,83 @@ else {
 	else {
 		res.send ("not authorized!");
 	}
+};
+
+
+exports.getProject = function (request, response ) {
+	
+	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'student')
+	{
+		
+		  var studentId =  request.cookies.shenkarShowUserId;
+    		console.log ('User ID = ' + studentId);
+    		
+    		user.findOne ({_id : studentId}).exec (function (err , student) {
+
+    project.findOne ({ _id : student.project}).exec (function (err, doc) {
+    
+        console.log ('doc: ' + doc);
+        response.json (doc);
+        return;
+    });
+		
+		
+	});
 }
+else {
+	res.send ("not authorized!");
+}
+	}); }
+	else {
+		res.send ("not authorized!");
+	}
+};
+
+
+
+
+
+exports.updateProject = function (request, response, files) {
+	
+		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'student')
+	{
+		  var studentId =  request.cookies.shenkarShowUserId;
+		user.findOne ({ _id: studentId}).exec (function (err, manager) {
+			
+			project.findOne({ _id : manager.project}).exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.project);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.project ==  doc._id ){
+	    		projectController.updateProject (request, response, files);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this project."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+

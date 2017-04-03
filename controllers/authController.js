@@ -24,4 +24,4 @@ exports.authCookies =    function (session, userId, callback ) {
 	 	
 	 });
 	}
-}
+};

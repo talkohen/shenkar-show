@@ -32,7 +32,7 @@ exports.getAllInstitutes = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 
@@ -48,7 +48,7 @@ exports.getInstituteById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.getInstituteByName  = function (req, res) {
     var name = req.params.instituteName;
@@ -62,7 +62,7 @@ exports.getInstituteByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.createInstitute = function (request, response, fileKey) {
 
@@ -108,7 +108,7 @@ exports.createInstitute = function (request, response, fileKey) {
 
 
 
-}
+};
 
 exports.updateInstitute = function (request, response, fileKey) {
 	
@@ -176,7 +176,7 @@ exports.updateInstitute = function (request, response, fileKey) {
  }
 
  });
-}
+};
 
 
 exports.deleteInstitute = function (request, response) {
@@ -206,7 +206,7 @@ exports.deleteInstitute = function (request, response) {
 	 		institute.findOne ({name: request.body.name}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -217,4 +217,4 @@ exports.deleteInstitute = function (request, response) {
 	 	
 	 });
 
-}
+};
