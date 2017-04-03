@@ -160,6 +160,9 @@ app.post ('/institute/updateDepartment',  instituteManagerController.updateDepar
 app.post ('/institute/deleteDepartment',  instituteManagerController.deleteDepartment);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
 app.get ('/institute/users',  instituteManagerController.getUsers);
+app.post ('/institute/createUser',  instituteManagerController.createUser);
+app.post ('/institute/updateUser',  instituteManagerController.updateUser);
+app.post ('/institute/deleteUser',  instituteManagerController.deleteUser);
 
 //department manager 
 app.get ('/department', departmentManagerController.getIndex);
