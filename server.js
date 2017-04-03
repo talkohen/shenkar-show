@@ -6,6 +6,7 @@ var multerS3 = require('multer-s3');
 var mime = require('mime-types');
 var credentials = require ('./credentials.js');
 var cookieParser = require('cookie-parser');
+var cors = require('cors');
 
 
 AWS.config.update({
@@ -74,6 +75,7 @@ var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
+app.use(cors());
 app.use(cookieParser());
 
 //schemes

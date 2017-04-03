@@ -42,8 +42,8 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/institute'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/institute'});
-	 		res.writeHead(302, {Location: '/institute'});
-	 		res.end ();
+	 		res.send(doc);
+	 		
 	 		
 	 		}
 	 		
@@ -52,8 +52,9 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/department'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/department'});
-	 		res.writeHead(302, {Location: '/department'});
-	 		res.end ();
+	 		res.send(doc);
+	 		// res.writeHead(302, {Location: '/department'});
+	 		// res.end ();
 	 		
 	 		}
 	 		
@@ -61,12 +62,14 @@ exports.auth = function (req, res) {
 	 		else if (doc.role == "student"){
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/student'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/student'});
-	 		res.writeHead(302, {Location: '/student'});
-	 		res.end ();
+	 		res.send(doc);
+	 		// res.writeHead(302, {Location: '/student'});
+	 		// res.end ();
 	 		}
 	 		
 	 		else {
 	 			res.cookie ("shenkar-show", "guest",  { expires: new Date(Date.now() + 900000), httpOnly: true });
+	 			
 	 		}
 	 		
 	 	}
