@@ -218,14 +218,11 @@ exports.getUsers = function (req, res) {
 		var managerId =  req.cookies.shenkarShowUserId;
 		console.log ('User ID = ' + managerId);
 
-	    institute.findOne ({ manager : managerId}).
-	    where('institute').ne ('PRIVATE').
-	    exec (function (err, doc) {
+	    institute.findOne ({ manager : managerId}).exec (function (err, doc) {
 	    	
 	    	console.log ("INSTITUTE : " + doc);
 	    	
 	    	user.find ({ institute : doc._id, role: "department manager"}).populate('institute', 'name').
-    where('user').ne ('PRIVATE').
     exec (function (err, instituteUsers) {
         console.log ('institute Users: ' + instituteUsers);
         res.send (instituteUsers);
