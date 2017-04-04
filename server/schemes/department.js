@@ -14,7 +14,8 @@ var departmentSchema = new schema (
     manager: {type: Number, ref: 'user'},
     description: String,
     logo : String, 
-    images: [String]
+    images: [String],
+    institute: {type: Number, ref: 'institute'}
 }, 
 
 {collection: 'departments'}

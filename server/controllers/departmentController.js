@@ -12,7 +12,7 @@ exports.getAllDepartments = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.getDepartmentById  = function (req, res) {
@@ -27,7 +27,7 @@ exports.getDepartmentById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.getDepartmentById2  = function (depId, callback) {
     var id = depId;
@@ -39,7 +39,7 @@ exports.getDepartmentById2  = function (depId, callback) {
     	console.log ('dasdasd');
         callback (doc);
     });
-}
+};
 
 exports.getDepartmentByName  = function (req, res) {
     var name = req.params.name;
@@ -53,7 +53,7 @@ exports.getDepartmentByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.createDepartment = function (request, response, files) {
@@ -83,7 +83,7 @@ if (files['logo'] != undefined ) {
                 manager :request.body.manager,
                 description :request.body.description,
                 logo : logoKey,
-                images : fileKeys
+                images : fileKeys,
 
               });
               
@@ -104,7 +104,7 @@ if (files['logo'] != undefined ) {
             }
           });    
 
-}
+};
 
 exports.updateDepartment = function (request, response, files) {
 
@@ -136,20 +136,20 @@ exports.updateDepartment = function (request, response, files) {
  }
 
  });
-}
+};
 
 
 exports.deleteDepartment = function (request, response) {
 
-	var query = department.findOne().where ('name', request.body.name);
+	var query = department.findOne().where ('name', request.body.departmentId);
 	
 	 query.exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		department.findOne ({name: request.body.name}, function (err, doc) {
+	 		department.findOne ({_id: request.body.departmentId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -160,5 +160,5 @@ exports.deleteDepartment = function (request, response) {
 	 	
 	 });
 
-}
+};
 

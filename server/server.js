@@ -6,6 +6,7 @@ var multerS3 = require('multer-s3');
 var mime = require('mime-types');
 var credentials = require ('./credentials.js');
 var cookieParser = require('cookie-parser');
+var cors = require('cors');
 
 
 AWS.config.update({
@@ -38,10 +39,10 @@ var upload = multer({
     },
   
     key: function (req, file, cb) {
-      cb(null, Date.now().toString() + '.' + mime.extension(file.mimetype))
+      cb(null, Date.now().toString() + '.' + mime.extension(file.mimetype));
     }
   })
-})
+});
 
 // var deleteImage = s3.deleteObjects({
     // Bucket: 'myprivatebucket/some/subfolders',
@@ -74,6 +75,7 @@ var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
+app.use(cors());
 app.use(cookieParser());
 
 //schemes
@@ -88,6 +90,8 @@ app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Credentials', true);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   app.set ('json spaces', 4);
   res.set ("Content-Type", "application/json");
@@ -152,20 +156,37 @@ app.get ('/admin', adminController.getIndex);
 
 //institute manager 
 app.get ('/institute', instituteManagerController.getIndex);
-app.get ('/institute/update',  instituteManagerController.getUpdate);
+app.post ('/institute/createDepartment', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'images', maxCount : 5 }]) ,function(req, res){instituteManagerController.createDepartment(req,res, req.files);});
+app.post ('/institute/updateDepartment',  instituteManagerController.updateDepartment);
+app.post ('/institute/deleteDepartment',  instituteManagerController.deleteDepartment);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
 app.get ('/institute/users',  instituteManagerController.getUsers);
+app.post ('/institute/createUser',  instituteManagerController.createUser);
+app.post ('/institute/updateUser',  instituteManagerController.updateUser);
+app.post ('/institute/deleteUser',  instituteManagerController.deleteUser);
 
-//department manager 
+//department manager
 app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
 app.get ('/department/users', departmentManagerController.getUsers);
+app.post ('/department/createProject', departmentManagerController.createProject);
+app.post ('/department/updateProject', departmentManagerController.updateProject);
+app.post ('/department/deleteProject', departmentManagerController.deleteProject);
+app.post ('/department/createUser',  departmentManagerController.createUser);
+app.post ('/department/updateUser',  departmentManagerController.updateUser);
+app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 
 
 
 //student
 app.get ('/student', studentController.getIndex);
+app.get ('/student/project', studentController.getProject);
+app.get ('/student/updateProject', studentController.updateProject);
 
+
+app.get ('/', function (req,res) {
+    res.send ("Welcome to Shenkar show app.please refer to the api for usage instructions.");
+});
 
 app.all ('*', function (req,res) {
     res.send ("404: Page Not found.");

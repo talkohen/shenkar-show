@@ -12,7 +12,7 @@ exports.getAllProjects = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 //search project by id
@@ -28,7 +28,7 @@ exports.getProjectById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 //search project by id
 exports.getProjectById2  = function (projectId, callback) {
@@ -41,7 +41,7 @@ exports.getProjectById2  = function (projectId, callback) {
     	console.log ('dasdasd');
         callback (doc);
     });
-}
+};
 
 //search project by name
 exports.getProjectByName  = function (req, res) {
@@ -56,7 +56,7 @@ exports.getProjectByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 
 exports.createProject = function (request, response) {
@@ -72,7 +72,6 @@ exports.createProject = function (request, response) {
              var newProject = new project({
                 name :request.body.name,
                 department :request.body.department,
-                students :request.body.students,
                 description :request.body.description,
                 image :request.body.image,
                 video :request.body.video,
@@ -103,7 +102,7 @@ exports.createProject = function (request, response) {
 
 
 
-}
+};
 
 exports.updateProject = function (request, response) {
 
@@ -116,7 +115,6 @@ exports.updateProject = function (request, response) {
 	 		$set: {
 	 				name :request.body.name,
 	                department :request.body.department,
-	                students :request.body.students,
 	                description :request.body.description,
 	                image :request.body.image,
 	                video :request.body.video,
@@ -142,20 +140,20 @@ exports.updateProject = function (request, response) {
  }
 
  });
-}
+};
 
 
 exports.deleteProject = function (request, response) {
 
-	var query = project.findOne().where ('name', request.body.name);
+	var query = project.findOne().where ('name', request.body.projectId);
 	
 	 query.exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		project.findOne ({name: request.body.name}, function (err, doc) {
+	 		project.findOne ({_id: request.body.projectId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -166,5 +164,5 @@ exports.deleteProject = function (request, response) {
 	 	
 	 });
 
-}
+};
 

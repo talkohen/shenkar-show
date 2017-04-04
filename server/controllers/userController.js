@@ -13,7 +13,7 @@ exports.getAllUsers = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.auth = function (req, res) {
 	
@@ -42,8 +42,8 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/institute'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/institute'});
-	 		res.writeHead(302, {Location: '/institute'});
-	 		res.end ();
+	 		res.send(doc);
+	 		
 	 		
 	 		}
 	 		
@@ -52,8 +52,9 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/department'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/department'});
-	 		res.writeHead(302, {Location: '/department'});
-	 		res.end ();
+	 		res.send(doc);
+	 		// res.writeHead(302, {Location: '/department'});
+	 		// res.end ();
 	 		
 	 		}
 	 		
@@ -61,12 +62,14 @@ exports.auth = function (req, res) {
 	 		else if (doc.role == "student"){
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/student'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/student'});
-	 		res.writeHead(302, {Location: '/student'});
-	 		res.end ();
+	 		res.send(doc);
+	 		// res.writeHead(302, {Location: '/student'});
+	 		// res.end ();
 	 		}
 	 		
 	 		else {
 	 			res.cookie ("shenkar-show", "guest",  { expires: new Date(Date.now() + 900000), httpOnly: true });
+	 			
 	 		}
 	 		
 	 	}
@@ -82,7 +85,7 @@ exports.auth = function (req, res) {
 	 });
 	}
  
-}
+};
 
 
 exports.getUserById  = function (req, res) {
@@ -97,7 +100,7 @@ exports.getUserById  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.getUserByName  = function (req, res) {
     var name = req.params.userName;
@@ -111,7 +114,7 @@ exports.getUserByName  = function (req, res) {
         res.json (docs);
         return;
     });
-}
+};
 
 exports.createUser = function (request, response) {
 
@@ -128,7 +131,8 @@ exports.createUser = function (request, response) {
                 password :request.body.password,
                 email :request.body.email,
                 department :request.body.department,
-                institute :request.body.institute
+                institute :request.body.institute,
+                project: request.body.project
               });
               
            try {
@@ -151,7 +155,7 @@ exports.createUser = function (request, response) {
 
 
 
-}
+};
 
 exports.updateUser = function (request, response) {
 
@@ -186,20 +190,18 @@ exports.updateUser = function (request, response) {
  }
 
  });
-}
+};
 
 
 exports.deleteUser = function (request, response) {
 
-	var query = user.findOne().where ('userName', request.body.userName);
-	
-	 query.exec (function (err,doc) {
+	 user.findOne().where ({_id :  request.body.userId}).exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({userName: request.body.userName}, function (err, doc) {
+	 		user.findOne ({_id: request.body.userId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
-	 		})
+	 		});
 	 	});
 	 	
 	 	}
@@ -210,5 +212,5 @@ exports.deleteUser = function (request, response) {
 	 	
 	 });
 
-}
+};
 
