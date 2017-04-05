@@ -217,8 +217,10 @@ exports.getUsers = function (req, res) {
 		var myUsers = [];
 		var managerId =  req.cookies.shenkarShowUserId;
 		console.log ('User ID = ' + managerId);
-
-	    institute.findOne ({ manager : managerId}).exec (function (err, doc) {
+		
+		user.findOne ({_id : managerId}).exec (function (err, manager){
+		
+	    institute.findOne ({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	console.log ("INSTITUTE : " + doc);
 	    	
@@ -230,6 +232,7 @@ exports.getUsers = function (req, res) {
     });
     
     });
+  });
 
 }
 else {

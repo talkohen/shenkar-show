@@ -15,6 +15,7 @@ var departmentSchema = new schema (
     description: String,
     logo : String, 
     images: [String],
+    location: String,
     institute: {type: Number, ref: 'institute'}
 }, 
 

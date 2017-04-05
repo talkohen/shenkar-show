@@ -19,12 +19,17 @@ exports.getDepartmentById  = function (req, res) {
     var id = req.params.departmentId;
     console.log ('Dep ID = ' + id);
 
-    department.find ({_id : id}).
-    where('department').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
+    department.findOne ({_id : id}).exec (function (err, doc) {
+
+		appJSON = {
+			"id" : doc._id, 
+			"name" : doc.name,
+			"imageUrl" : doc.logo,
+			"largeImageUrl": doc.logo,
+			"locationDescription": doc.location
+		};
+        
+        res.json (appJSON);
         return;
     });
 };

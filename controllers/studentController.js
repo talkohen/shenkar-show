@@ -37,7 +37,8 @@ user.findOne ({_id: studentId}).exec (function (err, student) {
 else {
 	res.send ("not authorized!");
 }
-	}); }
+	}); 
+	}
 	else {
 		res.send ("not authorized!");
 	}
@@ -68,11 +69,11 @@ exports.getProject = function (request, response ) {
 	});
 }
 else {
-	res.send ("not authorized!");
+	response.send ("not authorized!");
 }
 	}); }
 	else {
-		res.send ("not authorized!");
+		response.send ("not authorized!");
 	}
 };
 

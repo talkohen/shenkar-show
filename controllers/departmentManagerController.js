@@ -190,7 +190,7 @@ exports.getProjects = function (requset,response) {
 	    project.find ({department: doc._id}).exec (function (err, projects) {
 	    	
 	    	response.json (projects);
-	    })  ;
+	    });
 
 		
 
@@ -219,10 +219,9 @@ exports.getUsers = function (req, res) {
 		var myUsers = [];
 		var managerId =  req.cookies.shenkarShowUserId;
 		console.log ('User ID = ' + managerId);
-
-	    department.findOne ({ manager : managerId}).
-	    where('department').ne ('PRIVATE').
-	    exec (function (err, doc) {
+		user.findOne ({_id : managerId}).exec (function (err, manager){
+			
+			department.findOne ({ _id : manager.department}).exec (function (err, doc) {
 	    	
 	    	console.log ("department : " + doc);
 	    	
@@ -235,6 +234,9 @@ exports.getUsers = function (req, res) {
     });
     
     });
+			
+		});
+	    
 
 }
 else {
