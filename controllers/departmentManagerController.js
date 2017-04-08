@@ -20,17 +20,18 @@ exports.getIndex = function (req,res) {
 		
 		  var managerId =  req.cookies.shenkarShowUserId;
     		console.log ('User ID = ' + managerId);
-
-    department.find ({ manager : managerId}).populate('manager', 'name').
-    where('department').ne ('PRIVATE').
-    exec (function (err, docs) {
+user.findOne ({ _id: managerId}).exec (function (err, manager) {
+	
+	 department.findOne ({ _id : manager.department}).exec (function (err, docs) {
         Data = docs;
         console.log ('docs: ' + docs);
         res.json (docs);
         return;
     });
-		
-		
+	
+	
+});
+				
 	
 }
 else {
@@ -53,7 +54,7 @@ exports.createProject = function (request,response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			department.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -98,7 +99,7 @@ exports.updateDepartment = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -140,7 +141,7 @@ exports.deleteDepartment = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -184,17 +185,20 @@ exports.getProjects = function (requset,response) {
 		var myProjects = [];
 		var managerId =  requset.cookies.shenkarShowUserId;
 		console.log ('User ID = ' + managerId);
-
-	    department.findOne ({ manager : managerId}).exec (function (err, doc) {
+		
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			department.findOne ({ _id : manager.department}).exec (function (err, doc) {
 	    	
-	    project.find ({department: doc._id}).exec (function (err, projects) {
+	    	project.find ({department: doc._id}).exec (function (err, projects) {
 	    	
 	    	response.json (projects);
-	    });
+	    	});
+		});
+			
+	});
 
-		
-
-});
+	    
 
     }
    
@@ -225,9 +229,7 @@ exports.getUsers = function (req, res) {
 	    	
 	    	console.log ("department : " + doc);
 	    	
-	    	user.find ({ department : doc._id, role: "student"}).populate('department', 'name').
-    where('user').ne ('PRIVATE').
-    exec (function (err, departmentUsers) {
+	    	user.find ({ department : doc._id, role: "student"}).exec (function (err, departmentUsers) {
         console.log ('department Users: ' + departmentUsers);
         res.send (departmentUsers);
         return;
@@ -259,7 +261,7 @@ exports.createProject = function (request,response) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.findOne({ _id : manager.department}).populate('manager', 'name').exec (function (err, doc) {
+			department.findOne({ _id : manager.department}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -304,7 +306,7 @@ exports.updateProject = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.findOne({ _id : manager.department}).populate('manager', 'name').exec (function (err, doc) {
+			department.findOne({ _id : manager.department}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -346,7 +348,7 @@ exports.deleteProject = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.findOne({ _id : manager.department}).populate('manager', 'name').exec (function (err, doc) {
+			department.findOne({ _id : manager.department}).exec (function (err, doc) {
 	    	
 	    	
 	    	

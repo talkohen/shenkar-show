@@ -8,20 +8,19 @@ var instituteSchema = new schema (
 
 
 {
+	
 
 	_id : {type: Number, required:true, unique:true, autoIncrement:true},
     name: String,
-    manager: {type: Number, ref: 'user'},
     logo: String,
-    images: [String],
-    maps: String,
-    routes : String,
+    image: String,
+    description: String, 
     
     //Style
-    headerBackgroundColor: String,
-    headerFontColor: String,
-    footerBackgroundColor: String,
-    footerFontColor: String
+    primaryColor: {type: String, default: "#ffffff"},
+    secondaryColor: {type: String, default: "#000000"},
+    lineColor: {type: String, default: "#ffffff"},
+    mainTextColor: {type: String, default: "#000000"}
 
 
 }, 

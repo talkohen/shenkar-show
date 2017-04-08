@@ -10,13 +10,13 @@ var projectSchema = new schema (
 
     _id : {type: Number, required:true, index:1, unique:true, autoIncrement:true},
     name: String,
+    institute: {type: Number, ref: 'institute'},
     department: {type: Number, ref: 'department'},
-    students: [{type: Number, ref: 'user'}],
     description: String,
-    image: [String],
+    image: String,
     video: String,
     audio: String,
-    location: String,
+    location: {type: Number, ref: 'location'},
     likes: Number,
     comments: [String],
     QRcode: String

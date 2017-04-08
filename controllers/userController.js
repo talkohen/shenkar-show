@@ -30,9 +30,9 @@ exports.auth = function (req, res) {
 	 	if (doc.password == req.body.password) {
 	 		if (doc.role == "admin"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: 'http://www.talco.co', sameSite: false ,path: 'http://www.talco.co'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: 'http://www.talco.co'});
-	 		res.writeHead(302, {Location: 'http://www.talco.co'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: '/', sameSite: false ,path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.writeHead(302, {Location: '/'});
 	 		res.end ();
 	 		
 	 		}
@@ -40,8 +40,8 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "institute manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/institute'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/institute'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		
 	 		
@@ -50,8 +50,8 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "department manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/department'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/department'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		// res.writeHead(302, {Location: '/department'});
 	 		// res.end ();
@@ -60,8 +60,8 @@ exports.auth = function (req, res) {
 	 		
 	 		
 	 		else if (doc.role == "student"){
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/student'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/student'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		// res.writeHead(302, {Location: '/student'});
 	 		// res.end ();

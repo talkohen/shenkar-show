@@ -25,3 +25,13 @@ exports.authCookies =    function (session, userId, callback ) {
 	 });
 	}
 };
+
+
+exports.logout = function (req, res) {
+	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
+	res.clearCookie ("shenkarShowSession", {path: req.cookies.shenkarShowSession.path});
+	res.clearCookie ("shenkarShowUserId", {path:req.cookies.shenkarShowUserId.path});
+	res.send (true);
+	}
+	res.send (false);
+};

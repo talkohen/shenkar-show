@@ -1,5 +1,6 @@
 var mongoose = require ('../database');
 var department = require ('../schemes/department');
+var fh = require ('../fileHandler.js');
 
 
 exports.getAllDepartments = function (req, res) {
@@ -63,17 +64,19 @@ exports.getDepartmentByName  = function (req, res) {
 
 exports.createDepartment = function (request, response, files) {
 	
-	var fileKeys = [];
-	var logoKey = '';
-	if (files['images'] != undefined){
-	for (i=0; i< files['images'].length; i++){
-	console.log ("FILEKEY : " + files['images'][i].key);
-	fileKeys.push (files['images'][i].key);
-}
-}
-if (files['logo'] != undefined ) {
+	
+
+	var logoKey = null;
+	var imageKey = null ;
+	
+	if (files['logo'] != undefined ) {
 	logoKey = files['logo'][0].key;	
-}
+	}
+	
+	if (files['image'] != undefined ) {
+	imageKey = files['image'][0].key;	
+	}
+
 
 
     department.find({name : request.body.name },function(err, doc){
@@ -85,10 +88,10 @@ if (files['logo'] != undefined ) {
              var newDepartment = new department({
                 name :request.body.name,
                	institute : request.body.institute,
-                manager :request.body.manager,
                 description :request.body.description,
                 logo : logoKey,
-                images : fileKeys,
+                image : imageKey,
+                location: request.body.location
 
               });
               
@@ -111,45 +114,66 @@ if (files['logo'] != undefined ) {
 
 };
 
+
 exports.updateDepartment = function (request, response, files) {
 
-	 var query = department.findOne().where ('name', request.body.name);
-	 
-	 query.exec (function (err,doc) {
+	var logo = '';
+	var image = '';
+	if (files['logo'] != undefined) { logo = files['logo'][0];}
+	if (files['image'] != undefined) { image = files['image'][0];}
 	
-	try {	
+	try {
+	fh.update (logo, request.body.logoKey, function (logoKey) {
+	
+	fh.update (image, request.body.imageKey, function (imageKey) {
+		
+		
+	 department.findOne({_id: request.body.id}).exec (function (err,doc) {
+	
 	 	var query = doc.update ({
 	 		$set: {
-	 				name :request.body.name,
-                	manager :request.body.manager,
-                	description :request.body.description,
-                	images :request.body.images
-	 		}	 		
+	 			name :request.body.name,
+               	institute : request.body.institute,
+                description :request.body.description,
+                logo : logoKey,
+                image : imageKey,
+                location: request.body.location
+	 		}
 	 	});
- 	
+
  	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
+ 	 		
  	});
  	      	
 			console.log("Updated Doc : " + doc);
-            response.send (true);
-            
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
+        
 
  });
+		
+	});
+	});
+	response.send (true);  
+}
+catch (exception) {
+	console.log (exception);
+            	return response.send (false);
+}
+
+	
 };
+
 
 
 exports.deleteDepartment = function (request, response) {
 
-	var query = department.findOne().where ('name', request.body.departmentId);
 	
-	 query.exec (function (err,doc) {
+	
+	 department.findOne({_id : request.body.id}).exec (function (err,doc) {
 	 		try {	
+			
+		fh.delete (doc.logo);
+	 	fh.delete (doc.image);
+	 			
 	 	var query = doc.remove (function (err, deletedDoc) {
 	 		department.findOne ({_id: request.body.departmentId}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
@@ -166,4 +190,5 @@ exports.deleteDepartment = function (request, response) {
 	 });
 
 };
+
 

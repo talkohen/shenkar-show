@@ -4,15 +4,14 @@
 	<meta charset = "utf-8">
 </head>
 <body>
-	<form action="http://localhost:3000/institute/createDepartment" enctype="multipart/form-data"  method="post">
+	
+	<form action="http://localhost:3000/departments/create" enctype="multipart/form-data"  method="post">
 		institute: <input type="number" name="institute"> <br> 
-		name: <input type="text" name="name"> <br> 
-		manager: <input type="number" name="manager"> <br> 
+		name: <input type="text" name="name"> <br>  
 		description: <input type="text" name="description"><br> 
-		logo : <input type = "file" name = "logo"> <br>
-		images: <input type="file"  name="images"><br> 
-		<input type="file"  name="images"><br> 
-		<input type = "hidden" name="imageName" value = "">
+		logo : <input type ="file" name = "logo"> <br>
+		image: <input type="file"  name="image"><br>
+		location : <input type="number" name="location"> <br> 
 		<input type="submit" value="send">
 
 	</form>

@@ -62,6 +62,7 @@ var upload = multer({
 
 
 //controllers
+var authController = require ('./controllers/authController');
 var userController = require ('./controllers/userController');
 var instituteController = require ('./controllers/instituteController');
 var departmentController = require ('./controllers/departmentController');
@@ -70,6 +71,7 @@ var adminController = require ('./controllers/adminController');
 var instituteManagerController = require ('./controllers/instituteManagerController');
 var departmentManagerController = require ('./controllers/departmentManagerController');
 var studentController = require ('./controllers/studentController');
+var guestController = require ('./controllers/guestController');
 
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
@@ -103,6 +105,7 @@ app.get ('/allUsers', userController.getAllUsers);
 app.get ('/users/id/:userId', userController.getUserById);
 app.get ('/users/name/:userName', userController.getUserByName);
 app.post ('/users/auth', userController.auth);
+app.get ('/logout', authController.logout);
 app.post ('/users/create', userController.createUser);
 app.post ('/users/update', userController.updateUser);
 app.post ('/users/delete', userController.deleteUser);
@@ -111,12 +114,12 @@ app.post ('/users/delete', userController.deleteUser);
 app.get ('/allInstitutes', instituteController.getAllInstitutes);
 app.get ('/institutes/id/:instituteId', instituteController.getInstituteById);
 app.get ('/institutes/name/:instituteName', instituteController.getInstituteByName);
-app.post ('/institutes/create', upload.single('logo') , function(req, res){instituteController.createInstitute(req,res, req.file.key);});
-app.post ('/institutes/update', upload.single('logo') , 
+app.post ('/institutes/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) , function(req, res){instituteController.createInstitute(req,res, req.files);});
+app.post ('/institutes/update', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) , 
 function(req, res){
-	if (req.file){
+	if (req.files){
 		
-	instituteController.updateInstitute(req,res, req.file.key);}
+	instituteController.updateInstitute(req,res, req.files);}
 	else {
 		
 		instituteController.updateInstitute(req,res);
@@ -128,8 +131,8 @@ app.post ('/institutes/delete', instituteController.deleteInstitute);
 app.get ('/allDepartments', departmentController.getAllDepartments);
 app.get ('/departments/id/:departmentId', departmentController.getDepartmentById);
 app.get ('/departments/name/:departmentName', departmentController.getDepartmentByName);
-app.post ('/departments/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'images', maxCount : 5 }]) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
-app.post ('/departments/update',  upload.array('images', 5) ,
+app.post ('/departments/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
+app.post ('/departments/update',  upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) ,
 function(req, res){
 	if (req.files){
 	departmentController.updateDepartment(req,res, req.files);
@@ -147,8 +150,19 @@ app.post ('/departments/delete', departmentController.deleteDepartment);
 app.get ('/allProjects', projectController.getAllProjects);
 app.get ('/projects/id/:projectId', projectController.getProjectById);
 app.get ('/projects/name/:projectName', projectController.getProjectByName);
-app.post ('/projects/create', projectController.createProject);
-app.post ('/projects/update', projectController.updateProject);
+app.post ('/projects/create', upload.fields([{name : 'image', maxCount : 1 } ,{name : 'video', maxCount : 1 }, {name : 'audio', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
+app.post ('/projects/update', upload.fields([{name : 'image', maxCount : 1 } ,{name : 'video', maxCount : 1 }, {name : 'audio', maxCount : 1 }]) ,
+ function(req, res){
+
+	if (req.files){
+		
+		
+	projectController.updateProject(req,res, req.files);}
+	else {
+		
+		projectController.updateProject(req,res);
+	}
+	});
 app.post ('/projects/delete', projectController.deleteProject);
 
 //admin
@@ -177,11 +191,18 @@ app.post ('/department/updateUser',  departmentManagerController.updateUser);
 app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 
 
-
 //student
 app.get ('/student', studentController.getIndex);
 app.get ('/student/project', studentController.getProject);
 app.get ('/student/updateProject', studentController.updateProject);
+
+
+//App API
+app.get ('/guest/institute/id/:instituteId', guestController.getInstituteById);
+app.get ('/guest/location/id/:locationId', guestController.getLocationById);
+app.get ('/guest/route/id/:routeId', guestController.getRouteById);
+app.get ('/guest/department/id/:departmentId', guestController.getDepartmentById);
+app.get ('/guest/project/id/:projectId', guestController.getProjectById);
 
 
 app.get ('/', function (req,res) {
