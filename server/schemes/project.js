@@ -9,18 +9,14 @@ var projectSchema = new schema (
 {
 
     _id : {type: Number, required:true, index:1, unique:true, autoIncrement:true},
+    departmentId: {type: Number, ref: 'department'},
     name: String,
-    department: {type: Number, ref: 'department'},
-    students: [{type: Number, ref: 'user'}],
     description: String,
-    image: [String],
-    video: String,
-    audio: String,
-    location: String,
-    likes: Number,
-    comments: [String],
-    QRcode: String
-
+    imageUrl: String,
+    videoUrl: String,
+    soundUrl: String,
+    location: {type: Number, ref: 'location'},
+	institute: {type: Number, ref: 'institute'},
 }, 
 
 {collection: 'projects'}
@@ -28,6 +24,13 @@ var projectSchema = new schema (
 );
 
 projectSchema.plugin(autoIncrement.plugin, 'project');
+projectSchema.set('toJSON', {
+     transform: function (doc, ret, options) {
+         ret.id = ret._id;
+         delete ret._id;
+         delete ret.__v;
+     }
+}); 
 var project = mongoose.model ('project',projectSchema);
 
 module.exports = project;

@@ -19,15 +19,17 @@ exports.getIndex = function (req,res) {
 		
 		  var managerId =  req.cookies.shenkarShowUserId;
     		console.log ('User ID = ' + managerId);
-
-    institute.find ({ manager : managerId}).populate('manager', 'name').
-    where('institute').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
+		user.findOne ({_id : managerId}).exec (function (err, manager) {
+			
+		institute.findOne ({ _id : manager.institute}).exec (function (err, doc) {
+        Data = doc;
+        console.log ('doc: ' + doc);
+        res.json (doc);
         return;
     });
+			
+		}); 
+    
 		
 		
 	
@@ -51,7 +53,7 @@ exports.createDepartment = function (request,response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -96,7 +98,7 @@ exports.updateDepartment = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -138,7 +140,7 @@ exports.deleteDepartment = function (request, response, files) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -254,7 +256,7 @@ exports.createUser = function (request,response) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -304,7 +306,7 @@ exports.updateUser = function (request, response) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	
@@ -355,7 +357,7 @@ exports.deleteUser = function (request, response) {
 		  var managerId =  request.cookies.shenkarShowUserId;
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			institute.findOne({ _id : manager.institute}).populate('manager', 'name').exec (function (err, doc) {
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
 	    	

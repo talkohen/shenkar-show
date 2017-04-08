@@ -24,7 +24,7 @@ user.findOne ({_id: studentId}).exec (function (err, student) {
 	
 	console.log ("STUDENT : " + student);
 	console.log ("STUDENT project id  : " + student.project);
-    project.findOne ({ _id : student.project}).populate('students', 'name').exec (function (err, docs) {
+    project.findOne ({ _id : student.project}).exec (function (err, docs) {
    
         console.log ('PROJECT: ' + docs);
         res.json (docs);

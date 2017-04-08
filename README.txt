@@ -5,6 +5,9 @@ POST userName and password to:
 
 https://shenkar-show.herokuapp.com/users/auth
 
+logout:
+https://shenkar-show.herokuapp.com/logout
+
 
 Institute manager - 
 
