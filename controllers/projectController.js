@@ -58,40 +58,36 @@ exports.getProjectByName  = function (req, res) {
 
 exports.createProject = function (request, response, files) {
 	
-	//id
-	//departmentId
-	//name
-	//description
-	// location
+	
+	var imageKey = '' ;
+	var videoKey = '' ;
+	var audioKey = '' ;
 	
 	
-	var imageKey = null ;
-	var videoKey = null ;
-	var audioKey = null ;
-	
-	
-	if (files['image'] != undefined ) {
-	imageKey = files['image'][0].key;	
+	if (files['imageUrl'] != undefined ) {
+	imageKey = files['imageUrl'][0].key;	
 	}
 	
-	if (files['video'] != undefined ) {
-	videoKey = files['image'][0].key;	
+	if (files['videoUrl'] != undefined ) {
+	videoKey = files['videoUrl'][0].key;	
 	}
 	
-		if (files['audio'] != undefined ) {
-	audioKey = files['image'][0].key;	
+		if (files['soundUrl'] != undefined ) {
+	audioKey = files['soundUrl'][0].key;	
 	}
 	
           	
              var newProject = new project({
+             	
+             	departmentId :request.body.departmentId,
                 name :request.body.name,
-                institute :request.body.institute,
-                department :request.body.department,
                 description :request.body.description,
-                image : imageKey,
-                video : videoKey,
-                audio : audioKey,
-                location :request.body.location
+                imageUrl : imageKey,
+                videoUrl : videoKey,
+                soundUrl : audioKey,
+                location :request.body.location,
+                institute :request.body.institute
+                
               });
               
            try {
@@ -120,9 +116,9 @@ exports.updateProject = function (request, response, files) {
 	var video = '';
 	var audio = '';
 	
-	if (files['image'] != undefined) { image = files['image'][0];}
-	if (files['video'] != undefined) { video = files['video'][0];}
-	if (files['audio'] != undefined) { audio = files['audio'][0];}
+	if (files['imageUrl'] != undefined) { image = files['imageUrl'][0];}
+	if (files['videoUrl'] != undefined) { video = files['videoUrl'][0];}
+	if (files['soundUrl'] != undefined) { audio = files['soundUrl'][0];}
 	
 	console.log ("IMAGE : " + image);
 	console.log ("VIDEO : " + video);
@@ -141,14 +137,16 @@ exports.updateProject = function (request, response, files) {
 	
 	 	var query = doc.update ({
 	 		$set: {
-	 			name :request.body.name,
-                institute :request.body.institute,
-                department :request.body.department,
+	 			
+           		departmentId :request.body.departmentId,
+                name :request.body.name,
                 description :request.body.description,
-                image : imageKey,
-                video : videoKey,
-                audio : audioKey,
-                location :request.body.location
+                imageUrl : imageKey,
+                videoUrl : videoKey,
+                soundUrl : audioKey,
+                location :request.body.location,
+                institute :request.body.institute
+                
 	 		}	 		
 	 	});
  	

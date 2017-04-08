@@ -80,6 +80,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(cors());
 app.use(cookieParser());
 
+
 //schemes
 var user = require ('./schemes/user');
 var institute = require ('./schemes/institute');
@@ -114,8 +115,8 @@ app.post ('/users/delete', userController.deleteUser);
 app.get ('/allInstitutes', instituteController.getAllInstitutes);
 app.get ('/institutes/id/:instituteId', instituteController.getInstituteById);
 app.get ('/institutes/name/:instituteName', instituteController.getInstituteByName);
-app.post ('/institutes/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) , function(req, res){instituteController.createInstitute(req,res, req.files);});
-app.post ('/institutes/update', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) , 
+app.post ('/institutes/create', upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) , function(req, res){instituteController.createInstitute(req,res, req.files);});
+app.post ('/institutes/update', upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) , 
 function(req, res){
 	if (req.files){
 		
@@ -130,9 +131,8 @@ app.post ('/institutes/delete', instituteController.deleteInstitute);
 //departments
 app.get ('/allDepartments', departmentController.getAllDepartments);
 app.get ('/departments/id/:departmentId', departmentController.getDepartmentById);
-app.get ('/departments/name/:departmentName', departmentController.getDepartmentByName);
-app.post ('/departments/create', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
-app.post ('/departments/update',  upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'image', maxCount : 1 }]) ,
+app.post ('/departments/create', upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) ,function(req, res){departmentController.createDepartment(req,res, req.files);});
+app.post ('/departments/update',  upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) ,
 function(req, res){
 	if (req.files){
 	departmentController.updateDepartment(req,res, req.files);
@@ -150,8 +150,8 @@ app.post ('/departments/delete', departmentController.deleteDepartment);
 app.get ('/allProjects', projectController.getAllProjects);
 app.get ('/projects/id/:projectId', projectController.getProjectById);
 app.get ('/projects/name/:projectName', projectController.getProjectByName);
-app.post ('/projects/create', upload.fields([{name : 'image', maxCount : 1 } ,{name : 'video', maxCount : 1 }, {name : 'audio', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
-app.post ('/projects/update', upload.fields([{name : 'image', maxCount : 1 } ,{name : 'video', maxCount : 1 }, {name : 'audio', maxCount : 1 }]) ,
+app.post ('/projects/create', upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
+app.post ('/projects/update', upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,
  function(req, res){
 
 	if (req.files){
@@ -203,6 +203,10 @@ app.get ('/guest/location/id/:locationId', guestController.getLocationById);
 app.get ('/guest/route/id/:routeId', guestController.getRouteById);
 app.get ('/guest/department/id/:departmentId', guestController.getDepartmentById);
 app.get ('/guest/project/id/:projectId', guestController.getProjectById);
+
+app.get ('/guest/institute/id/:instituteId/departments', guestController.getInstituteDepartments);
+app.get ('/guest/institute/id/:instituteId/projects', guestController.getInstituteProjects);
+app.get ('/guest/department/id/:departmentId/projects', guestController.getDepartmentProjects);
 
 
 app.get ('/', function (req,res) {

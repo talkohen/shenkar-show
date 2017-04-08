@@ -25,9 +25,9 @@ exports.getDepartmentById  = function (req, res) {
 		appJSON = {
 			"id" : doc._id, 
 			"name" : doc.name,
-			"imageUrl" : doc.logo,
-			"largeImageUrl": doc.logo,
-			"locationDescription": doc.location
+			"imageUrl" : doc.imageUrl,
+			"largeImageUrl": doc.largeImageUrl,
+			"locationDescription": doc.locationDescription
 		};
         
         res.json (appJSON);
@@ -47,34 +47,20 @@ exports.getDepartmentById2  = function (depId, callback) {
     });
 };
 
-exports.getDepartmentByName  = function (req, res) {
-    var name = req.params.name;
-    console.log ('department name = ' + department);
-
-    department.find ({name : name}).
-    where('department').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
-        return;
-    });
-};
-
 
 exports.createDepartment = function (request, response, files) {
 	
 	
 
-	var logoKey = null;
-	var imageKey = null ;
+	var logoKey = '';
+	var imageKey = '' ;
 	
-	if (files['logo'] != undefined ) {
-	logoKey = files['logo'][0].key;	
+	if (files['imageUrl'] != undefined ) {
+	logoKey = files['imageUrl'][0].key;	
 	}
 	
-	if (files['image'] != undefined ) {
-	imageKey = files['image'][0].key;	
+	if (files['largeImageUrl'] != undefined ) {
+	imageKey = files['largeImageUrl'][0].key;	
 	}
 
 
@@ -85,13 +71,13 @@ exports.createDepartment = function (request, response, files) {
             response.send ("department already exists");
           }else{
           	
+          	
              var newDepartment = new department({
                 name :request.body.name,
-               	institute : request.body.institute,
-                description :request.body.description,
-                logo : logoKey,
-                image : imageKey,
-                location: request.body.location
+                imageUrl : logoKey,
+                largeImageUrl : imageKey,
+                locationDescription: request.body.locationDescription,
+                institute : request.body.institute
 
               });
               
@@ -119,8 +105,8 @@ exports.updateDepartment = function (request, response, files) {
 
 	var logo = '';
 	var image = '';
-	if (files['logo'] != undefined) { logo = files['logo'][0];}
-	if (files['image'] != undefined) { image = files['image'][0];}
+	if (files['imageUrl'] != undefined) { logo = files['imageUrl'][0];}
+	if (files['largeImageUrl'] != undefined) { image = files['largeImageUrl'][0];}
 	
 	try {
 	fh.update (logo, request.body.logoKey, function (logoKey) {
@@ -132,12 +118,11 @@ exports.updateDepartment = function (request, response, files) {
 	
 	 	var query = doc.update ({
 	 		$set: {
-	 			name :request.body.name,
-               	institute : request.body.institute,
-                description :request.body.description,
-                logo : logoKey,
-                image : imageKey,
-                location: request.body.location
+                name :request.body.name,
+                imageUrl : logoKey,
+                largeImageUrl : imageKey,
+                locationDescription: request.body.locationDescription,
+                institute : request.body.institute
 	 		}
 	 	});
 

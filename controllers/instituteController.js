@@ -64,33 +64,25 @@ exports.createInstitute = function (request, response, files) {
 	var logoKey = null;
 	var imageKey = null ;
 	
-	if (files['logo'] != undefined ) {
-	logoKey = files['logo'][0].key;	
+	if (files['logoUrl'] != undefined ) {
+	logoKey = files['logoUrl'][0].key;	
 	}
 	
-	if (files['image'] != undefined ) {
-	imageKey = files['image'][0].key;	
+	if (files['aboutImageUrl'] != undefined ) {
+	imageKey = files['aboutImageUrl'][0].key;	
 	}
 
     institute.find({name : request.body.name },function(err, doc){
-       if (doc.length){
-            console.log("institute already exists");
-            response.send ("institute already exists");
-          }else{
-          	
           	
              var newInstitute = new institute({
                 name :request.body.name,
-                logo : logoKey,
-                image : imageKey,
-                description :request.body.description,
-                routes :request.body.routes,
-                locations : request.body.locations,
-                
+                logoUrl : logoKey,            
                 primaryColor: request.body.primaryColor,
     			secondaryColor: request.body.secondaryColor,
     			lineColor: request.body.lineColor,
-			    mainTextColor: request.body.mainTextColor
+			    mainTextColor: request.body.mainTextColor,
+			    aboutText: request.body.aboutText, 
+    			aboutImageUrl: imageKey
 
 
               });
@@ -110,7 +102,7 @@ exports.createInstitute = function (request, response, files) {
  	console.log (exception); 
  	response.send (false);
  }
-            }
+            
           });    
 
 
@@ -122,8 +114,8 @@ exports.updateInstitute = function (request, response, files) {
 
 	var logo = '';
 	var image = '';
-	if (files['logo'] != undefined) { logo = files['logo'][0];}
-	if (files['image'] != undefined) { image = files['image'][0];}
+	if (files['logoUrl'] != undefined) { logo = files['logoUrl'][0];}
+	if (files['aboutImageUrl'] != undefined) { image = files['aboutImageUrl'][0];}
 		try {
 	fh.update (logo, request.body.logoKey, function (logoKey) {
 	
@@ -136,15 +128,15 @@ exports.updateInstitute = function (request, response, files) {
 	 	var query = doc.update ({
 	 		$set: {
 	 			
-	 			name :request.body.name,
-                logo : logoKey,
-                image : imageKey,
-                description :request.body.description, 
-                
+                name :request.body.name,
+                logoUrl : logoKey,            
                 primaryColor: request.body.primaryColor,
     			secondaryColor: request.body.secondaryColor,
     			lineColor: request.body.lineColor,
-			    mainTextColor: request.body.mainTextColor
+			    mainTextColor: request.body.mainTextColor,
+			    aboutText: request.body.aboutText, 
+    			aboutImageUrl: imageKey
+
 
 	 		}
 	 	});
@@ -178,11 +170,11 @@ exports.deleteInstitute = function (request, response) {
 	 institute.findOne({_id : request.body.id}).exec (function (err,doc) {
 	 		try {	
 			
-		fh.delete (doc.logo);
-	 	fh.delete (doc.image);
+		fh.delete (doc.logoUrl);
+	 	fh.delete (doc.aboutImageUrl);
 	 			
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		institute.findOne ({name: request.body.name}, function (err, doc) {
+	 		institute.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});

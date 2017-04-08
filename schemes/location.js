@@ -23,6 +23,15 @@ var locationSchema = new schema (
 
 
 locationSchema.plugin(autoIncrement.plugin, 'location');
+
+locationSchema.set('toJSON', {
+     transform: function (doc, ret, options) {
+         ret.id = ret._id;
+         delete ret._id;
+         delete ret.__v;
+     }
+}); 
+
 var location = mongoose.model ('location', locationSchema);
 
 module.exports = location;

@@ -31,13 +31,13 @@ exports.getInstituteById  = function (req, res) {
 		instJSON = {
 			"id" : institute._id, 
 			"name" : institute.name,
-			"logoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + institute.logo,
+			"logoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + institute.logoUrl,
 			"primaryColor": institute.primaryColor,
 			"secondaryColor": institute.secondaryColor,
 			"lineColor": institute.lineColor,
 			"mainTextColor": institute.mainTextColor,
-			"aboutText": institute.description,
-			"aboutImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + institute.image
+			"aboutText": institute.aboutText,
+			"aboutImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + institute.aboutImageUrl
 			
 		};
         
@@ -53,6 +53,40 @@ exports.getInstituteById  = function (req, res) {
     );
 
 
+};
+
+
+exports.getInstituteDepartments = function (req, res) {
+	
+	var id = req.params.instituteId;
+	var resultArray = [];
+	
+	
+	department.find ({institute : id}).exec (function (err, departments) {
+		
+
+			res.send (departments);
+		
+		
+		 });
+		 
+};
+
+
+exports.getInstituteProjects = function (req, res) {
+	
+	var id = req.params.instituteId;
+	var resultArray = [];
+	
+	
+	project.find ({institute : id}).exec (function (err, projects) {
+		
+
+			res.send (projects);
+		
+		
+		 });
+		 
 };
 
 exports.getLocationById  = function (req, res) {
@@ -126,8 +160,8 @@ exports.getProjectById = function (req, res) {
 			"description" : project.description,
 			"studentNames": studentNamesArray,
 			"studentEmails": studentEmailsArray,
-			"videoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.video,
-			"soundUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.audio, 
+			"videoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.videoUrl,
+			"soundUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.soundUrl, 
 			"location" : project.location
 			
 		};
@@ -153,7 +187,7 @@ exports.getRouteById  = function (req, res) {
     console.log ('Dep ID = ' + id);
 
     route.findOne ({_id : id}).exec (function (err, doc) {
-
+if (doc != undefined) {
 		routeJSON = {
 			"id" : doc._id, 
 			"name" : doc.name,
@@ -162,6 +196,10 @@ exports.getRouteById  = function (req, res) {
         
         res.json (routeJSON);
         return;
+       }
+           else {
+   	res.send ({error: "not found"}); 
+   }
     });
 	
 	
@@ -180,15 +218,16 @@ exports.getDepartmentById  = function (req, res) {
 	
 	var id = req.params.departmentId;
     console.log ('Dep ID = ' + id);
+    
 
     department.findOne ({_id : id}).exec (function (err, doc) {
 
 		depJSON = {
 			"id" : doc._id, 
 			"name" : doc.name,
-			"imageUrl" : "https://s3.amazonaws.com/shenkar-show2/" + doc.logo,
-			"largeImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + doc.logo,
-			"locationDescription": doc.location
+			"imageUrl" : "https://s3.amazonaws.com/shenkar-show2/" + doc.imageUrl,
+			"largeImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + doc.largeImageUrl,
+			"locationDescription": doc.locationDescription
 		};
         
         res.json (depJSON);
@@ -199,3 +238,17 @@ exports.getDepartmentById  = function (req, res) {
 	
 };
 
+exports.getDepartmentProjects = function (req, res) {
+	
+	var id = req.params.departmentId;
+	
+	
+	project.find ({departmentId : id}).exec (function (err, projects) {
+		
+
+			res.send (projects);
+		
+		
+		 });
+		 
+};
