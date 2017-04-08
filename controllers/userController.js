@@ -32,7 +32,7 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: '/', sameSite: false ,path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
-	 		res.writeHead(302, {Location: '/'});
+	 		res.writeHead(302, {Location: 'talco.co/institute'});
 	 		res.end ();
 	 		
 	 		}
@@ -42,6 +42,7 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		
 	 		
@@ -52,6 +53,7 @@ exports.auth = function (req, res) {
 	 			
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		// res.writeHead(302, {Location: '/department'});
 	 		// res.end ();
@@ -62,6 +64,7 @@ exports.auth = function (req, res) {
 	 		else if (doc.role == "student"){
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.send(doc);
 	 		// res.writeHead(302, {Location: '/student'});
 	 		// res.end ();
