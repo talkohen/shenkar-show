@@ -44,7 +44,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 900000), path: '/'});
 	 		res.writeHead(302, {Location: 'http://talco.co/institute'});
-	 		res.send(doc);
+	 		res.end ();
 	 		
 	 		
 	 		}
