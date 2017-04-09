@@ -31,14 +31,12 @@ exports.getIndex = function (req,res) {
 		}); 	
 }
 else {
-	res.setHeader("Access-Control-Allow-Origin", "http://talco.co");
-	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+	res.writeHead(301, {Location: 'http://talco.co/shenkar-show/login.html'});
 	 		res.end ();
 }
 	}); }
 	else {
-		res.setHeader("Access-Control-Allow-Origin", "http://talco.co");
-		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+		res.writeHead(301, {Location: 'http://talco.co/shenkar-show/login.html'});
 	 		res.end ();
 	}
 };
