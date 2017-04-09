@@ -101,6 +101,15 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(function(req, res, next) {
+    if (req.cookies.shenkarShowSession != undefined ){
+// if user is not logged-in redirect back to login page //
+        res.redirect('http://talco.co/shenkar-show/login');
+    }   else{
+        next();
+    }
+});
+
 
 
 
