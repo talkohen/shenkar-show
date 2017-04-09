@@ -16,8 +16,7 @@ exports.authCookies =    function (session, userId, callback ) {
 	 	}
 	 	else {
 	 		
-			res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
-	 		res.end ();
+			callback (false);
 
 	 	}
 	 	}
@@ -31,9 +30,7 @@ exports.authCookies =    function (session, userId, callback ) {
 	
 	else{
 
-			res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
-	 		res.end ();
-
+			callback (false);
 	}
 };
 
