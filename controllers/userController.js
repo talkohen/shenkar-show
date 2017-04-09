@@ -40,9 +40,9 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "institute manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 1800000), path: 'http://talco.co/shenkar-show/institute/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 1800000), path: 'http://talco.co/shenkar-show/institute/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 1800000), path: 'http://talco.co/shenkar-show/institute/'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 1800000), path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 1800000), path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 1800000), path: '/'});
 	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
 	 		res.end ();
 	 		
