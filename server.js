@@ -100,7 +100,8 @@ app.use(function(req, res, next) {
   res.set ("Content-Type", "application/json");
   next();
 });
-// 
+
+
 // app.use(function(req, res, next) {
     // if (req.cookies.shenkarShowSession != undefined ){
 // // if user is not logged-in redirect back to login page //
