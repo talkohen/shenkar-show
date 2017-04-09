@@ -77,8 +77,7 @@ var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
-app.use(cors({origin: 'http://talco.co/shenkar-show'}));
-
+app.use(cors());
 app.use(cookieParser());
 
 
