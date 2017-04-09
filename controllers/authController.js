@@ -2,7 +2,7 @@ var mongoose = require ('../database');
 var user = require ('../schemes/user');
 var crypto = require ('../crypto');
 
-exports.authCookies =    function (session, userId, callback ) {
+exports.authCookies =    function (session, userId, req,res, callback ) {
 	if (userId != undefined) {
 		var query = user.findOne().where ('_id', userId);
 		

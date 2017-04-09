@@ -12,7 +12,7 @@ var async = require("async");
 exports.getIndex = function (req,res) {
 	
 	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, req,res, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
