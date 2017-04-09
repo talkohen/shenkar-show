@@ -11,6 +11,10 @@ var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
+	res.writeHead(302, {Location: 'http://talco.co/veesto'});
+	 		res.end ();
+	 		
+	
 	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
 	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
