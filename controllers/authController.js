@@ -58,6 +58,7 @@ exports.getSession = function (req, res) {
 	
 	res.json (sessionJSON);
 	}
+	res.setHeader("Access-Control-Allow-Origin", "http://talco.co");
 	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
 	 		res.end ();
 };
