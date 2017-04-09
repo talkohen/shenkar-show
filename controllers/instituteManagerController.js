@@ -17,25 +17,20 @@ exports.getIndex = function (req,res) {
 	if (result == 'institute manager')
 	{
 		
-		  var managerId =  req.cookies.shenkarShowUserId;
-    		console.log ('User ID = ' + managerId);
-		user.findOne ({_id : managerId}).exec (function (err, manager) {
-			
-		institute.findOne ({ _id : manager.institute}).exec (function (err, doc) {
-        Data = doc;
-        console.log ('doc: ' + doc);
-        res.json (doc);
-        return;
-    		});
-			
-		}); 	
-}
+		 res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
+	 		res.end ();
+	 		
+	}
 else {
-res.send (false);
+res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
+	 		res.end ();
+	 		
 }
 	}); }
 	else {
-		res.send (false);
+		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
+	 		res.end ();
+	 		
 	}
 };
 
