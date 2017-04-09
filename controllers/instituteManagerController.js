@@ -26,13 +26,9 @@ exports.getIndex = function (req,res) {
         console.log ('doc: ' + doc);
         res.json (doc);
         return;
-    });
+    		});
 			
-		}); 
-    
-		
-		
-	
+		}); 	
 }
 else {
 	res.send ("not authorized!");

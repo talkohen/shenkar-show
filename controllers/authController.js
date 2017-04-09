@@ -15,6 +15,7 @@ exports.authCookies =    function (session, userId, callback ) {
 	 	}
 	 	else {
 	 		callback ("fail");
+	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
 	 	}
 	 	}
 	 	catch (exception) {
@@ -23,6 +24,10 @@ exports.authCookies =    function (session, userId, callback ) {
  }
 	 	
 	 });
+	}
+	else {
+		callback ("fail");
+	 	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
 	}
 };
 
