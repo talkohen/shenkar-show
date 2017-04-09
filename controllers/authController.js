@@ -2,7 +2,6 @@ var mongoose = require ('../database');
 var user = require ('../schemes/user');
 var crypto = require ('../crypto');
 
-
 exports.authCookies =    function (session, userId, callback ) {
 	if (userId != undefined) {
 		var query = user.findOne().where ('_id', userId);
@@ -15,9 +14,8 @@ exports.authCookies =    function (session, userId, callback ) {
 	 		callback (doc.role);
 	 	}
 	 	else {
-	 		
-			callback (false);
-
+	 	
+			callback ("fail");
 	 	}
 	 	}
 	 	catch (exception) {
@@ -29,8 +27,8 @@ exports.authCookies =    function (session, userId, callback ) {
 	}
 	
 	else{
+			callback ("fail");
 
-			callback (false);
 	}
 };
 
@@ -57,7 +55,6 @@ exports.getSession = function (req, res) {
 	
 	res.json (sessionJSON);
 	}
-	
-	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
+	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
 	 		res.end ();
 };
