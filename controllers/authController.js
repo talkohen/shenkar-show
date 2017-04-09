@@ -15,9 +15,8 @@ exports.authCookies =    function (session, userId, callback ) {
 	 	}
 	 	else {
 	 		
-	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
 			callback (false);
-			res.end ();
+
 	 	}
 	 	}
 	 	catch (exception) {
@@ -29,9 +28,9 @@ exports.authCookies =    function (session, userId, callback ) {
 	}
 	
 	else{
-		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
-			callback ("fail");
-			res.end ();
+
+			callback (false);
+
 	}
 };
 
