@@ -31,11 +31,11 @@ exports.getIndex = function (req,res) {
 		}); 	
 }
 else {
-	res.redirect('http://talco.co/shenkar-show/login.html');
+	res.redirect('/login');
 }
 	}); }
 	else {
-		res.redirect('http://talco.co/shenkar-show/login.html');
+		res.redirect('/logout');
 	}
 };
 

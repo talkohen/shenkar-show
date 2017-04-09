@@ -58,5 +58,5 @@ exports.getSession = function (req, res) {
 	
 	res.json (sessionJSON);
 	}
-	res.redirect('http://talco.co/shenkar-show/login.html');
+	res.redirect('/');
 };
