@@ -35,3 +35,19 @@ exports.logout = function (req, res) {
 	}
 	res.send (false);
 };
+
+exports.getSession = function (req, res) {
+	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined || req.cookies.shenkarShowUserName != undefined){
+
+	sessionJSON = 
+	{
+		"session" : req.cookies.shenkarShowSession,
+		"userId" : req.cookies.shenkarShowUserId,
+		"userName" : req.cookies.shenkarShowUserName
+	} ;
+	
+	
+	res.json (sessionJSON);
+	}
+	res.send (false);
+};

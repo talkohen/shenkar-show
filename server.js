@@ -101,12 +101,16 @@ app.use(function(req, res, next) {
   next();
 });
 
+
+
+
 //users
 app.get ('/allUsers', userController.getAllUsers);
 app.get ('/users/id/:userId', userController.getUserById);
 app.get ('/users/name/:userName', userController.getUserByName);
 app.post ('/users/auth', userController.auth);
 app.get ('/logout', authController.logout);
+app.get ('/session', authController.getSession);
 app.post ('/users/create', userController.createUser);
 app.post ('/users/update', userController.updateUser);
 app.post ('/users/delete', userController.deleteUser);
