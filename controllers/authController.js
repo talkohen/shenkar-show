@@ -2,7 +2,7 @@ var mongoose = require ('../database');
 var user = require ('../schemes/user');
 var crypto = require ('../crypto');
 
-exports.authCookies =    function (session, userId, req,res, callback ) {
+exports.authCookies =    function (session, userId, callback ) {
 	if (userId != undefined) {
 		var query = user.findOne().where ('_id', userId);
 		
@@ -16,12 +16,12 @@ exports.authCookies =    function (session, userId, req,res, callback ) {
 	 	else {
 	 		
 	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+			callback (false);
 			res.end ();
 	 	}
 	 	}
 	 	catch (exception) {
  	console.log (exception); 
- 	res.writeHead(302, {Location: 'http://walla.co.il'});
  	return (false);
  }
 	 	
@@ -30,6 +30,7 @@ exports.authCookies =    function (session, userId, req,res, callback ) {
 	
 	else{
 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+			callback ("fail");
 			res.end ();
 	}
 };

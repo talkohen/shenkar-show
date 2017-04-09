@@ -31,11 +31,13 @@ exports.getIndex = function (req,res) {
 		}); 	
 }
 else {
-	res.send ("not authorized!");
+	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
+	 		res.end ();
 }
 	}); }
 	else {
-		res.send ("not authorized!");
+		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
+	 		res.end ();
 	}
 };
 
