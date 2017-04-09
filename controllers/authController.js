@@ -16,7 +16,8 @@ exports.authCookies =    function (session, userId, callback ) {
 	 	}
 	 	else {
 	 		
-			callback (false);
+			res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+	 		res.end ();
 
 	 	}
 	 	}
@@ -30,7 +31,8 @@ exports.authCookies =    function (session, userId, callback ) {
 	
 	else{
 
-			callback (false);
+			res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
+	 		res.end ();
 
 	}
 };
@@ -59,6 +61,6 @@ exports.getSession = function (req, res) {
 	res.json (sessionJSON);
 	}
 	
-	res.writeHead(301, {Location: 'http://talco.co/shenkar-show/login.html'});
+	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login.html'});
 	 		res.end ();
 };
