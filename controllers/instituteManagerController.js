@@ -30,15 +30,12 @@ exports.getIndex = function (req,res) {
 			
 		}); 	
 }
-else {console.log ("1");
-	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
-	 		res.end ();
+else {
+res.send (false);
 }
 	}); }
 	else {
-		console.log ("2");
-		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
-	 		res.end ();
+		res.send (false);
 	}
 };
 

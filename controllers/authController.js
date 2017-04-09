@@ -55,6 +55,5 @@ exports.getSession = function (req, res) {
 	
 	res.json (sessionJSON);
 	}
-	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
-	 		res.end ();
+	res.send (false);
 };
