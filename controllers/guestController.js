@@ -96,7 +96,7 @@ exports.getInstituteProjects2 = function (req, res) {
 	var resultArray = [];
 	
 	
-	project.find ({institute : instituteId , department: departmentId}).populate('students').exec (function (err, projects) {
+	project.find ({institute : instituteId , departmentId: departmentId}).populate('students').exec (function (err, projects) {
 		
 
 			res.send (projects);
