@@ -244,8 +244,8 @@ exports.getDepartmentById  = function (req, res) {
 		depJSON = {
 			"id" : doc._id, 
 			"name" : doc.name,
-			"imageUrl" : "https://s3.amazonaws.com/shenkar-show2/" + doc.imageUrl,
-			"largeImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + doc.largeImageUrl,
+			"imageUrl" :  doc.imageUrl,
+			"largeImageUrl": doc.largeImageUrl,
 			"locationDescription": doc.locationDescription
 		};
         
