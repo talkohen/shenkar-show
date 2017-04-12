@@ -178,6 +178,7 @@ exports.getProjectById = function (req, res) {
 			"description" : project.description,
 			"studentNames": studentNamesArray,
 			"studentEmails": studentEmailsArray,
+			"imageUrl" : project.imageUrl, 
 			"videoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.videoUrl,
 			"soundUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.soundUrl, 
 			"location" : project.location
