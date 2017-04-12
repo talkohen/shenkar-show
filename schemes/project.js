@@ -12,7 +12,7 @@ var projectSchema = new schema (
     departmentId: {type: Number, ref: 'department'},
     name: String,
     description: String,
-    imageUrl: String,
+    imageUrl: [String],
     videoUrl: String,
     soundUrl: String,
     location: {type: Number, ref: 'location'},
