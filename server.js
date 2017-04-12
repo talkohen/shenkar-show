@@ -223,7 +223,7 @@ app.get ('/guest/project/id/:projectId', guestController.getProjectById);
 app.get ('/guest/institute/id/:instituteId/departments', guestController.getInstituteDepartments);
 app.get ('/guest/institute/id/:instituteId/projects', guestController.getInstituteProjects);
 app.get ('/guest/department/id/:departmentId/projects', guestController.getDepartmentProjects);
-
+app.get ('/guest/institute/:instituteId/department/:departmentId/projects', guestController.getInstituteProjects2);
 
 app.get ('/', function (req,res) {
     res.send ("Welcome to Shenkar show app.please refer to the api for usage instructions.");

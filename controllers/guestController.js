@@ -89,6 +89,24 @@ exports.getInstituteProjects = function (req, res) {
 		 
 };
 
+exports.getInstituteProjects2 = function (req, res) {
+	
+	var instituteId = req.params.instituteId;
+	var departmentId = req.params.departmentId;
+	var resultArray = [];
+	
+	
+	project.find ({institute : instituteId , department: departmentId}).populate('students').exec (function (err, projects) {
+		
+
+			res.send (projects);
+		
+		
+		 });
+		 
+};
+
+
 exports.getLocationById  = function (req, res) {
 	
 	//description
