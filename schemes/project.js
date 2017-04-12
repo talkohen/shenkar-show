@@ -17,7 +17,7 @@ var projectSchema = new schema (
     soundUrl: String,
     location: {type: Number, ref: 'location'},
 	institute: {type: Number, ref: 'institute'},
-	students: {type: Number, ref: 'student'},
+	students: {type: Number, ref: 'user'}
 }, 
 
 {collection: 'projects'}
