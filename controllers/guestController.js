@@ -179,8 +179,8 @@ exports.getProjectById = function (req, res) {
 			"studentNames": studentNamesArray,
 			"studentEmails": studentEmailsArray,
 			"imageUrl" : project.imageUrl, 
-			"videoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.videoUrl,
-			"soundUrl" : "https://s3.amazonaws.com/shenkar-show2/" + project.soundUrl, 
+			"videoUrl" : project.videoUrl,
+			"soundUrl" : project.soundUrl, 
 			"location" : project.location
 			
 		};
@@ -244,8 +244,8 @@ exports.getDepartmentById  = function (req, res) {
 		depJSON = {
 			"id" : doc._id, 
 			"name" : doc.name,
-			"imageUrl" :  + doc.imageUrl,
-			"largeImageUrl":  doc.largeImageUrl,
+			"imageUrl" : "https://s3.amazonaws.com/shenkar-show2/" + doc.imageUrl,
+			"largeImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + doc.largeImageUrl,
 			"locationDescription": doc.locationDescription
 		};
         
