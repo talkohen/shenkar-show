@@ -79,7 +79,7 @@ exports.getInstituteProjects = function (req, res) {
 	var resultArray = [];
 	
 	
-	project.find ({institute : id}).populate('students').exec (function (err, projects) {
+	project.find ({institute : id}).populate('students').populate('location').exec (function (err, projects) {
 		
 
 			res.send (projects);
@@ -96,7 +96,7 @@ exports.getInstituteProjects2 = function (req, res) {
 	var resultArray = [];
 	
 	
-	project.find ({institute : instituteId , departmentId: departmentId}).populate('students').exec (function (err, projects) {
+	project.find ({institute : instituteId , departmentId: departmentId}).populate('students').populate('location').exec (function (err, projects) {
 		
 
 			res.send (projects);
