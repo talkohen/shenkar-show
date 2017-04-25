@@ -94,7 +94,7 @@ app.set ('port',port);
 app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://talco.co");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -268,7 +268,7 @@ app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 //student
 app.get ('/student', studentController.getIndex);
 app.get ('/student/project', studentController.getProject);
-app.post ('/student/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 } , {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+app.post ('/student/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 } , {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
 
 function(req, res){
 	if (req.files){

@@ -115,6 +115,8 @@ exports.updateProject = function (request, response, files) {
 	var image1 = '';
 	var image2 = '';
 	var image3 = '';
+	var image4 = '';
+	var image5 = '';
 	var video = '';
 	var audio = '';
 	var imageKeys = [];
@@ -123,6 +125,8 @@ exports.updateProject = function (request, response, files) {
 	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}
 	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}
 	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}
+	if (files['imageUrl4'] != undefined) { image4 = files['imageUrl4'][0];}
+	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}
 
 	if (files['videoUrl'] != undefined) { video = files['videoUrl'][0];}
 	if (files['soundUrl'] != undefined) { audio = files['soundUrl'][0];}
@@ -139,16 +143,20 @@ exports.updateProject = function (request, response, files) {
 	fh.update (image1, request.body.imageKey1, function (imageKey1) {
 		fh.update (image2, request.body.imageKey2, function (imageKey2) {
 			fh.update (image3, request.body.imageKey3, function (imageKey3) {
+				fh.update (image4, request.body.imageKey4, function (imageKey4) {
+					fh.update (image5, request.body.imageKey5, function (imageKey5) {
 		
 	fh.update (video, request.body.videoKey, function (videoKey) {	
 		
 	fh.update (audio, request.body.audioKey, function (audioKey) {
-		
+	user.find({project: request.body.id}).exec (function (students) {
 	project.findOne({_id: request.body.id}).exec (function (err,doc) {
 		
 	console.log ("imageKey1 : " + imageKey1);
 	console.log ("imageKey2 : " + imageKey2);
 	console.log ("imageKey3 : " + imageKey3);
+	console.log ("imageKey4 : " + imageKey4);
+	console.log ("imageKey5 : " + imageKey5);
 		
 		console.log ("imageKeys1 : " + imageKeys);
 		
@@ -158,6 +166,11 @@ exports.updateProject = function (request, response, files) {
 			console.log ("imageKeys3 : " + imageKeys);
 			if (imageKey3 != undefined) {imageKeys.push (imageKey3);}
 			console.log ("imageKeys4 : " + imageKeys);
+			if (imageKey4 != undefined) {imageKeys.push (imageKey4);}
+			console.log ("imageKeys5 : " + imageKeys);
+			if (imageKey5 != undefined) {imageKeys.push (imageKey5);}
+			console.log ("imageKeys6 : " + imageKeys);
+			
 	 	var query = doc.update ({
 	 		$set: {
 	 			
@@ -168,8 +181,8 @@ exports.updateProject = function (request, response, files) {
                 videoUrl : videoKey,
                 soundUrl : audioKey,
                 location :request.body.location,
-                institute :request.body.institute
-                
+                institute :request.body.institute,
+                studentNames : students
 	 		}	 		
 	 	});
  	
@@ -182,6 +195,9 @@ exports.updateProject = function (request, response, files) {
 
  });
 		
+	});
+	});
+	});
 	});
 	});
 	});
