@@ -11,6 +11,7 @@ var routeSchema = new schema (
 
 	_id : {type: Number, required:true, unique:true, autoIncrement:true},
     name: String,
+    institute : {type: Number, ref: 'institute'}, 
     projectIds: [{type: Number, ref: 'project'}]
 
 }, 

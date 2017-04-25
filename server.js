@@ -293,10 +293,13 @@ app.get ('/guest/route/id/:routeId', guestController.getRouteById);
 app.get ('/guest/department/id/:departmentId', guestController.getDepartmentById);
 app.get ('/guest/project/id/:projectId', guestController.getProjectById);
 
+
 app.get ('/guest/institute/id/:instituteId/departments', guestController.getInstituteDepartments);
 app.get ('/guest/institute/id/:instituteId/projects', guestController.getInstituteProjects);
 app.get ('/guest/department/id/:departmentId/projects', guestController.getDepartmentProjects);
 app.get ('/guest/institute/:instituteId/department/:departmentId/projects', guestController.getInstituteProjects2);
+//routes
+app.get ('/guest/institute/id/:instituteId/routes', guestController.getInstituteRoutes);
 
 app.get ('/public/index', function(req, res) {res.render('index.html');} );
 app.get ('/public/institute',function(req, res) {res.render('institute.html');});
