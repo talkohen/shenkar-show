@@ -17,7 +17,8 @@ var userSchema = new schema (
     email: String,
     department: {type: Number, ref: 'department'},
     institute: {type: Number, ref: 'institute'},
-    project: {type: Number, ref : 'project'}
+    project: {type: Number, ref : 'project'},
+    token: String
 
 }, 
 

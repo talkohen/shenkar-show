@@ -262,12 +262,11 @@ exports.getDepartmentProjects = function (req, res) {
 	var id = req.params.departmentId;
 	
 	
-	project.find ({departmentId : id}).populate('students').exec (function (err, projects) {
+	project.find ({departmentId : id}).exec (function (err, projects) {
 		
-
 			res.send (projects);
 		
 		
-		 });
-		 
+		 });	 
 };
+

@@ -61,8 +61,8 @@ exports.getInstituteByName  = function (req, res) {
 
 exports.createInstitute = function (request, response, files) {
 	
-	var logoKey = null;
-	var imageKey = null ;
+	var logoKey =  '';
+	var imageKey =  '' ;
 	
 	if (files['logoUrl'] != undefined ) {
 	logoKey = files['logoUrl'][0].key;	
@@ -105,9 +105,6 @@ exports.createInstitute = function (request, response, files) {
             
           });    
 
-
-
-
 };
 
 exports.updateInstitute = function (request, response, files) {
@@ -122,6 +119,7 @@ exports.updateInstitute = function (request, response, files) {
 	fh.update (image, request.body.imageKey, function (imageKey) {
 		
 		
+		console.log ("INSTITUTE ID : " + request.body.id );
 		institute.findOne({_id : request.body.id}).exec (function (err,doc) {
 	
 		

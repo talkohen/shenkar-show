@@ -105,8 +105,10 @@ exports.updateDepartment = function (request, response, files) {
 
 	var logo = '';
 	var image = '';
+	if (files != undefined) {
 	if (files['imageUrl'] != undefined) { logo = files['imageUrl'][0];}
 	if (files['largeImageUrl'] != undefined) { image = files['largeImageUrl'][0];}
+	}
 	
 	try {
 	fh.update (logo, request.body.logoKey, function (logoKey) {

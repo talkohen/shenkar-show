@@ -30,21 +30,20 @@ exports.auth = function (req, res) {
 	 	if (doc.password == req.body.password) {
 	 		if (doc.role == "admin"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: '/', sameSite: false ,path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/'});
-	 		
-	 		res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.send (doc);
 	 		
 	 		}
 	 		
 	 		else if 
 	 		(doc.role == "institute manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.writeHead(302, {Location: 'https://shenkar-show.herokuapp.com/institute'});
-	 		res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.send (doc);
 	 		
 	 		
 	 		}
@@ -52,27 +51,23 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "department manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.send(doc);
-	 		// res.writeHead(302, {Location: '/department'});
-	 		// res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.send (doc);
 	 		
 	 		}
 	 		
 	 		
 	 		else if (doc.role == "student"){
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: new Date(Date.now() + 1800000), path: '/'});
-	 		res.send(doc);
-	 		// res.writeHead(302, {Location: '/student'});
-	 		// res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.send (doc);
 	 		}
 	 		
 	 		else {
-	 			res.cookie ("shenkar-show", "guest",  { expires: new Date(Date.now() + 1800000), httpOnly: true });
+	 			res.cookie ("shenkar-show", "guest",  { expires: false, httpOnly: true });
 	 			
 	 		}
 	 		
@@ -163,17 +158,14 @@ exports.createUser = function (request, response) {
 
 exports.updateUser = function (request, response) {
 
-	 var query = user.findOne().where ('userName', request.body.userName);
-	 
-	 query.exec (function (err,doc) {
+
+
+	user.findOne({_id: request.body.id}).exec (function (err,doc) {
 	
 	try {	
 	 	var query = doc.update ({
 	 		$set: {
-	 			role : request.body.role,
-             	userName :request.body.userName,
                 name :request.body.name,
-                password :request.body.password,
                 email :request.body.email,
                 department :request.body.department,
                 institute :request.body.institute
@@ -197,12 +189,45 @@ exports.updateUser = function (request, response) {
 };
 
 
+exports.updateStudent = function (request, response) {
+
+
+
+	user.findOne({_id: request.body.id}).exec (function (err,doc) {
+	
+	try {	
+	 	var query = doc.update ({
+	 		$set: {
+                name :request.body.name,
+                email :request.body.email,
+                department :request.body.department,
+                institute :request.body.institute,
+                project :request.body.project
+	 		}	 		
+	 	});
+ 	
+ 	 	query.exec (function (err, results) {
+ 		console.log ("\n Resulets Object : " + JSON.stringify (results));
+ 	});
+ 	      	
+			console.log("Updated Doc : " + doc);
+            response.send (true);
+            
+ 	}
+ catch (exception) {
+ 	console.log (exception); 
+ 	response.send (false);
+ }
+
+ });
+};
+
 exports.deleteUser = function (request, response) {
 
-	 user.findOne().where ({_id :  request.body.userId}).exec (function (err,doc) {
+	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({_id: request.body.userId}, function (err, doc) {
+	 		user.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});

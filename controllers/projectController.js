@@ -112,36 +112,59 @@ exports.createProject = function (request, response, files) {
 exports.updateProject = function (request, response, files) {
 	
 	
-	var image = '';
+	var image1 = '';
+	var image2 = '';
+	var image3 = '';
 	var video = '';
 	var audio = '';
+	var imageKeys = [];
+	console.log ("imageKey0: " + imageKeys);
 	
-	if (files['imageUrl'] != undefined) { image = files['imageUrl'][0];}
+	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}
+	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}
+	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}
+
 	if (files['videoUrl'] != undefined) { video = files['videoUrl'][0];}
 	if (files['soundUrl'] != undefined) { audio = files['soundUrl'][0];}
 	
-	console.log ("IMAGE : " + image);
+	console.log ("IMAGE1 : " + image1);
+	console.log ("IMAGE2 : " + image2);
+	console.log ("IMAGE3 : " + image3);
 	console.log ("VIDEO : " + video);
 	console.log ("AUDIO : " + audio);
 	
 	try {
 	
 	
-	fh.update (image, request.body.imageKey, function (imageKey) {
+	fh.update (image1, request.body.imageKey1, function (imageKey1) {
+		fh.update (image2, request.body.imageKey2, function (imageKey2) {
+			fh.update (image3, request.body.imageKey3, function (imageKey3) {
 		
 	fh.update (video, request.body.videoKey, function (videoKey) {	
 		
 	fh.update (audio, request.body.audioKey, function (audioKey) {
 		
 	project.findOne({_id: request.body.id}).exec (function (err,doc) {
-	
+		
+	console.log ("imageKey1 : " + imageKey1);
+	console.log ("imageKey2 : " + imageKey2);
+	console.log ("imageKey3 : " + imageKey3);
+		
+		console.log ("imageKeys1 : " + imageKeys);
+		
+			if (imageKey1 != undefined) {imageKeys.push (imageKey1);}
+			console.log ("imageKeys2 : " + imageKeys);
+			if (imageKey2 != undefined) {imageKeys.push (imageKey2);}
+			console.log ("imageKeys3 : " + imageKeys);
+			if (imageKey3 != undefined) {imageKeys.push (imageKey3);}
+			console.log ("imageKeys4 : " + imageKeys);
 	 	var query = doc.update ({
 	 		$set: {
 	 			
            		departmentId :request.body.departmentId,
                 name :request.body.name,
                 description :request.body.description,
-                imageUrl : imageKey,
+                imageUrl : imageKeys,
                 videoUrl : videoKey,
                 soundUrl : audioKey,
                 location :request.body.location,
@@ -159,6 +182,8 @@ exports.updateProject = function (request, response, files) {
 
  });
 		
+	});
+	});
 	});
 	});
 	});

@@ -79,6 +79,8 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 app.use(cors());
 app.use(cookieParser());
+var path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 //schemes
@@ -92,7 +94,7 @@ app.set ('port',port);
 app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://talco.co");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -112,8 +114,11 @@ app.use(function(req, res, next) {
         // next();
     // }
 // });
-
-
+var ejs = require('ejs');
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/public/views');
+app.engine('html', ejs.renderFile);
+app.set('view engine', 'html');
 
 
 //users
@@ -156,7 +161,7 @@ function(req, res){
 	
 	else {
 		
-		instituteController.updateDepartment(req,res);
+		departmentController.updateDepartment(req,res);
 	}
 	
 	});
@@ -183,24 +188,77 @@ app.post ('/projects/delete', projectController.deleteProject);
 
 //admin
 app.get ('/admin', adminController.getIndex);
+app.post ('/admin/createInstitute',  upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,adminController.createInstitute);
+app.post ('/admin/updateInstitute',   upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,
+
+function(req, res){
+	if (req.files){
+	adminController.updateInstitute(req,res, req.files);
+	}
+	
+	else {
+		
+		adminController.updateInstitute(req,res);
+	}
+	
+	});
+
+
+app.post ('/admin/deleteInstitute',  adminController.deleteInstitute);
+app.get ('/admin/institutes',  adminController.getInstitutes);
+app.get ('/admin/users',  adminController.getUsers);
+app.post ('/admin/createUser',  adminController.createUser);
+app.post ('/admin/updateUser',  adminController.updateUser);
+app.post ('/admin/deleteUser',  adminController.deleteUser);
+
 
 //institute manager 
 app.get ('/institute', instituteManagerController.getIndex);
-app.post ('/institute/createDepartment', upload.fields([{name : 'logo', maxCount : 1 } ,{name : 'images', maxCount : 5 }]) ,function(req, res){instituteManagerController.createDepartment(req,res, req.files);});
-app.post ('/institute/updateDepartment',  instituteManagerController.updateDepartment);
+app.post ('/institute/createDepartment',  upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) , instituteManagerController.createDepartment);
+app.post ('/institute/updateDepartment',   upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) ,
+
+function(req, res){
+	if (req.files){
+	instituteManagerController.updateDepartment(req,res, req.files);
+	}
+	
+	else {
+		
+		instituteManagerController.updateDepartment(req,res);
+	}
+	
+	});
+
+
 app.post ('/institute/deleteDepartment',  instituteManagerController.deleteDepartment);
 app.get ('/institute/departments',  instituteManagerController.getDepartments);
 app.get ('/institute/users',  instituteManagerController.getUsers);
 app.post ('/institute/createUser',  instituteManagerController.createUser);
 app.post ('/institute/updateUser',  instituteManagerController.updateUser);
 app.post ('/institute/deleteUser',  instituteManagerController.deleteUser);
+app.get ('/institute/department/:departmentId',  instituteManagerController.getDepartment);
 
 //department manager
 app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
 app.get ('/department/users', departmentManagerController.getUsers);
-app.post ('/department/createProject', departmentManagerController.createProject);
-app.post ('/department/updateProject', departmentManagerController.updateProject);
+app.post ('/department/createProject', upload.fields([{name : 'imageUrl', maxCount : 3 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,  departmentManagerController.createProject);
+app.post ('/department/updateProject',  upload.fields([{name : 'imageUrl', maxCount : 3 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+
+function(req, res){
+	if (req.files){
+	departmentManagerController.updateProject(req,res, req.files);
+	}
+	
+	else {
+		
+		departmentManagerController.updateProject(req,res);
+	}
+	
+	}
+
+
+);
 app.post ('/department/deleteProject', departmentManagerController.deleteProject);
 app.post ('/department/createUser',  departmentManagerController.createUser);
 app.post ('/department/updateUser',  departmentManagerController.updateUser);
@@ -210,7 +268,22 @@ app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 //student
 app.get ('/student', studentController.getIndex);
 app.get ('/student/project', studentController.getProject);
-app.get ('/student/updateProject', studentController.updateProject);
+app.post ('/student/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 } , {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+
+function(req, res){
+	if (req.files){
+	studentController.updateProject(req,res, req.files);
+	}
+	
+	else {
+		
+		studentController.updateProject(req,res);
+	}
+	
+	}
+
+
+);
 
 
 //App API
@@ -224,6 +297,9 @@ app.get ('/guest/institute/id/:instituteId/departments', guestController.getInst
 app.get ('/guest/institute/id/:instituteId/projects', guestController.getInstituteProjects);
 app.get ('/guest/department/id/:departmentId/projects', guestController.getDepartmentProjects);
 app.get ('/guest/institute/:instituteId/department/:departmentId/projects', guestController.getInstituteProjects2);
+
+app.get ('/public/index', function(req, res) {res.render('index.html');} );
+app.get ('/public/institute',function(req, res) {res.render('institute.html');});
 
 app.get ('/', function (req,res) {
     res.send ("Welcome to Shenkar show app.please refer to the api for usage instructions.");

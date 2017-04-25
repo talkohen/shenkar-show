@@ -204,6 +204,46 @@ else {
 	}
 };
 
+exports.getDepartment = function (req,res) {
+	
+	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		var departmentId =  req.params.departmentId;
+		
+		var managerId =  req.cookies.shenkarShowUserId;
+    		console.log ('User ID = ' + managerId);
+    		
+    		user.findOne ({_id : managerId}).exec (function (err , manager) {
+
+    		department.findOne ({ _id : departmentId}).exec (function (err, docs) {
+    			
+    			if(manager.institute == docs.institute) {
+        			console.log ('docs: ' + docs);
+        			res.json (docs);
+       			}
+       			
+       			else {
+       				res.send (false);
+       			}
+    });
+		
+		
+	});
+
+}
+else {
+	res.send ("not authorized!");
+}
+	}); }
+	else {
+		res.send ("not authorized!");
+	}
+};
+
+
 
 exports.getUsers = function (req, res) {
 	
@@ -222,7 +262,7 @@ exports.getUsers = function (req, res) {
 	    	
 	    	console.log ("INSTITUTE : " + doc);
 	    	
-	    	user.find ({ institute : doc._id, role: "department manager"}).populate('institute', 'name').
+	    	user.find ({ institute : doc._id, role: "department manager"}).populate('institute', 'name').populate('department', 'name').
     exec (function (err, instituteUsers) {
         console.log ('institute Users: ' + instituteUsers);
         res.send (instituteUsers);
@@ -312,14 +352,15 @@ exports.updateUser = function (request, response) {
 	    	
 	    	
 	    	if (request.body.institute ==  doc._id ){
-	    		
-	    		if (doc.role == "department manager") {
+	    		user.findOne ({ _id : request.body.id}).exec (function (err, depManager) {
+	    		if (depManager.role == "department manager") {
 	    		userController.updateUser (request, response);
 	    		}
 	    		
 	    		else {
 	    			response.json ({error: "You are only authorized to update department managers."});
 	    		}
+	    		});
 	    	}
 	    	
 	    	else {
@@ -360,14 +401,18 @@ exports.deleteUser = function (request, response) {
 	    	console.log ("REQ ID : " + request.body.institute);
 	    	console.log ("DOC ID : " + doc._id);
 	    	
+	    	
+	    	
 	    	if (request.body.institute ==  doc._id ){
-	    		
-	    		if (doc.role == "department manager") {
+	    		user.findOne ({ _id : request.body.id}).exec (function (err, depManager) {
+	    		if (depManager.role == "department manager") {
 	    		userController.deleteUser (request, response);
 	    		}
+	    		
 	    		else {
 	    			response.json ({error: "You are only authorized to delete department managers."});
 	    		}
+	    		});
 	    	}
 	    	
 	    	else {

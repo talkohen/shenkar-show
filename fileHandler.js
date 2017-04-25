@@ -19,7 +19,7 @@ var s3 = new AWS.S3();
 
 exports.update = function (file, fileKey , callback) {
 	
-	var updatedKey = '';
+	var updatedKey = undefined;
 	
 	console.log ("FILEKEY : " + fileKey);
 	
@@ -39,7 +39,7 @@ if (file == '' )
 				}
 			else 
 				{
-					updatedKey = '';
+					updatedKey = undefined;
 				}
 		} 
 		else 

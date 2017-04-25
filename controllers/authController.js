@@ -2,7 +2,9 @@ var mongoose = require ('../database');
 var user = require ('../schemes/user');
 var crypto = require ('../crypto');
 
-exports.authCookies =    function (session, userId, callback ) {
+
+
+var auth =    function (session, userId, callback ) {
 	if (userId != undefined) {
 		var query = user.findOne().where ('_id', userId);
 		
@@ -32,28 +34,50 @@ exports.authCookies =    function (session, userId, callback ) {
 	}
 };
 
+exports.authCookies = auth;
 
 exports.logout = function (req, res) {
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
+	
+	console.log ("REQ : " + req);
+	if (req.cookies.shenkarShowSession != undefined && req.cookies.shenkarShowUserId != undefined &&  req.cookies.shenkarShowUserName != undefined){
+		
+		console.log ("IN : " + req.cookies);
 	res.clearCookie ("shenkarShowSession", {path: req.cookies.shenkarShowSession.path});
 	res.clearCookie ("shenkarShowUserId", {path:req.cookies.shenkarShowUserId.path});
-	res.send (true);
+	res.clearCookie ("shenkarShowUserName", {path:req.cookies.shenkarShowUserName.path});
 	}
-	res.send (false);
+	
+	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});
+	res.end ();
+	
 };
 
 exports.getSession = function (req, res) {
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined || req.cookies.shenkarShowUserName != undefined){
-
-	sessionJSON = 
+	if (req.cookies.shenkarShowSession != undefined && req.cookies.shenkarShowUserId != undefined && req.cookies.shenkarShowUserName != undefined){
+		
+	
+		console.log ("1 : " );
+	auth (req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+		
+		console.log ("2 : " );
+		sessionJSON = 
 	{
 		"session" : req.cookies.shenkarShowSession,
 		"userId" : req.cookies.shenkarShowUserId,
-		"userName" : req.cookies.shenkarShowUserName
+		"userName" : req.cookies.shenkarShowUserName,
+		"role" : result
 	} ;
 	
 	
 	res.json (sessionJSON);
+		
+		
+		
+	});
+	
 	}
+	else {
+		console.log ("3 : " );
 	res.send (false);
+	}
 };

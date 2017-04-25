@@ -188,12 +188,17 @@ exports.getProjects = function (requset,response) {
 		
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.findOne ({ _id : manager.department}).exec (function (err, doc) {
+			department.findOne ({ _id : manager.department}).exec (function (err, department) {
 	    	
-	    	project.find ({department: doc._id}).exec (function (err, projects) {
+	    	if (department){
+	    	project.find ({departmentId: department._id}).exec (function (err, projects) {
 	    	
 	    	response.json (projects);
 	    	});
+	    	}
+	    	else {
+	    		response.send ("{'error' : 'department not found'}");
+	    	}
 		});
 			
 	});
@@ -225,16 +230,19 @@ exports.getUsers = function (req, res) {
 		console.log ('User ID = ' + managerId);
 		user.findOne ({_id : managerId}).exec (function (err, manager){
 			
-			department.findOne ({ _id : manager.department}).exec (function (err, doc) {
+			department.findOne ({ _id : manager.department}).exec (function (err, department) {
+	    	if (department){
+	    	console.log ("department : " + department);
 	    	
-	    	console.log ("department : " + doc);
-	    	
-	    	user.find ({ department : doc._id, role: "student"}).exec (function (err, departmentUsers) {
+	    	user.find ({ department : department._id, role: "student"}).populate('project', 'name').exec (function (err, departmentUsers) {
         console.log ('department Users: ' + departmentUsers);
         res.send (departmentUsers);
-        return;
+      
     });
-    
+    }
+	    	else {
+	    		res.send ("{'error' : 'department not found'}");
+	    	}
     });
 			
 		});
@@ -251,7 +259,7 @@ else {
 };
 
 
-exports.createProject = function (request,response) {
+exports.createProject = function (request,response, files) {
 	
 	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
 	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
@@ -265,11 +273,11 @@ exports.createProject = function (request,response) {
 	    	
 	    	
 	    	
-	    	console.log ("REQ ID : " + request.body.department);
+	    	console.log ("REQ ID : " + request.body.departmentId);
 	    	console.log ("DOC ID : " + doc._id);
 	    	
-	    	if (request.body.department ==  doc._id ){
-	    		projectController.createProject (request, response);
+	    	if (request.body.departmentId ==  doc._id ){
+	    		projectController.createProject (request, response, files);
 	    	}
 	    	
 	    	else {
@@ -307,14 +315,12 @@ exports.updateProject = function (request, response, files) {
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			department.findOne({ _id : manager.department}).exec (function (err, doc) {
-	    	
-	    	
-	    	
-	    	console.log ("REQ ID : " + request.body.department);
+	    
+	    	console.log ("REQ ID : " + request.body.departmentId);
 	    	console.log ("DOC ID : " + doc._id);
 	    	
-	    	if (request.body.department ==  doc._id ){
-	    		projectController.updateProject (request, response);
+	    	if (request.body.departmentId ==  doc._id ){
+	    		projectController.updateProject (request, response, files);
 	    	}
 	    	
 	    	else {
@@ -450,14 +456,15 @@ exports.updateUser = function (request, response) {
 	    	
 	    	
 	    	if (request.body.department ==  doc._id ){
-	    		
-	    		if (doc.role == "student") {
-	    		userController.updateUser (request, response);
+	    		user.findOne({ _id : request.body.id}).exec (function (err, user) {
+	    		if (user.role == "student") {
+	    		userController.updateStudent (request, response);
 	    		}
 	    		
 	    		else {
 	    			response.json ({error: "You are only authorized to update students."});
 	    		}
+	    		});
 	    	}
 	    	
 	    	else {
