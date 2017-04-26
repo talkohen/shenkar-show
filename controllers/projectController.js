@@ -118,9 +118,8 @@ exports.updateProject = function (request, response, files) {
 	var image4 = '';
 	var image5 = '';
 	var video = '';
-	var audio = '';
-	var imageKeys = [];
-	console.log ("imageKey0: " + imageKeys);
+	var sound = '';
+	
 	
 	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}
 	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}
@@ -129,13 +128,20 @@ exports.updateProject = function (request, response, files) {
 	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}
 
 	if (files['videoUrl'] != undefined) { video = files['videoUrl'][0];}
-	if (files['soundUrl'] != undefined) { audio = files['soundUrl'][0];}
+	if (files['soundUrl'] != undefined) { sound = files['soundUrl'][0];}
 	
 	console.log ("IMAGE1 : " + image1);
 	console.log ("IMAGE2 : " + image2);
 	console.log ("IMAGE3 : " + image3);
 	console.log ("VIDEO : " + video);
-	console.log ("AUDIO : " + audio);
+	console.log ("AUDIO : " + sound);
+	
+	console.log ("request.body.imageKey1 : " + request.body.imageKey1);
+	console.log ("request.body.imageKey2 : " + request.body.imageKey2);
+	console.log ("request.body.imageKey3 : " + request.body.imageKey3);
+	console.log ("request.body.imageKey4 : " + request.body.imageKey4);
+	console.log ("request.body.imageKey5 : " + request.body.imageKey5);
+	
 	
 	try {
 	
@@ -145,11 +151,9 @@ exports.updateProject = function (request, response, files) {
 			fh.update (image3, request.body.imageKey3, function (imageKey3) {
 				fh.update (image4, request.body.imageKey4, function (imageKey4) {
 					fh.update (image5, request.body.imageKey5, function (imageKey5) {
+						fh.update (video, request.body.videoKey, function (videoKey) {	
+							fh.update (sound, request.body.soundKey, function (audioKey) {
 		
-	fh.update (video, request.body.videoKey, function (videoKey) {	
-		
-	fh.update (audio, request.body.audioKey, function (audioKey) {
-	user.find({project: request.body.id}).exec (function (students) {
 	project.findOne({_id: request.body.id}).exec (function (err,doc) {
 		
 	console.log ("imageKey1 : " + imageKey1);
@@ -158,6 +162,8 @@ exports.updateProject = function (request, response, files) {
 	console.log ("imageKey4 : " + imageKey4);
 	console.log ("imageKey5 : " + imageKey5);
 		
+		var imageKeys = [];
+		console.log ("imageKey0: " + imageKeys);
 		console.log ("imageKeys1 : " + imageKeys);
 		
 			if (imageKey1 != undefined) {imageKeys.push (imageKey1);}
@@ -181,8 +187,8 @@ exports.updateProject = function (request, response, files) {
                 videoUrl : videoKey,
                 soundUrl : audioKey,
                 location :request.body.location,
-                institute :request.body.institute,
-                studentNames : students
+                institute :request.body.institute
+                
 	 		}	 		
 	 	});
  	
@@ -195,7 +201,6 @@ exports.updateProject = function (request, response, files) {
 
  });
 		
-	});
 	});
 	});
 	});

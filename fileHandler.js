@@ -24,7 +24,7 @@ exports.update = function (file, fileKey , callback) {
 	console.log ("FILEKEY : " + fileKey);
 	
 	if (file == '' ){
-		
+			
 			console.log ("1111111");
 			callback (fileKey);
 		
@@ -44,11 +44,14 @@ if (file == '' )
 		} 
 		else 
 		{
-			updatedKey = file.key;
+			updatedKey = "https://shenkar-show2.s3.amazonaws.com/" + file.key;
+			
+			splitKey = fileKey.split ("https://shenkar-show2.s3.amazonaws.com/");
+			console.log (splitKey); 
 			
 			s3.deleteObjects({
     		Bucket: 'shenkar-show2',
-    		Delete: { Objects: [{ Key: fileKey}]}
+    		Delete: { Objects: [{ Key: splitKey[0]}]}
 			}, function(err, data) {
 
     		if (err)

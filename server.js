@@ -242,8 +242,8 @@ app.get ('/institute/department/:departmentId',  instituteManagerController.getD
 app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
 app.get ('/department/users', departmentManagerController.getUsers);
-app.post ('/department/createProject', upload.fields([{name : 'imageUrl', maxCount : 3 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,  departmentManagerController.createProject);
-app.post ('/department/updateProject',  upload.fields([{name : 'imageUrl', maxCount : 3 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+app.post ('/department/createProject', upload.fields([{name : 'imageUrl1', maxCount : 3 } ,  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } , {name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,  departmentManagerController.createProject);
+app.post ('/department/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 3 },  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 }  ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
 
 function(req, res){
 	if (req.files){
