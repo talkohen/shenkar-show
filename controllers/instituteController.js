@@ -6,6 +6,7 @@ var AWS = require('aws-sdk');
 var multer  = require('multer');
 var multerS3 = require('multer-s3');
 var mime = require('mime-types');
+var fh = require ('../fileHandler.js');
 
 
 
@@ -24,9 +25,7 @@ var s3 = new AWS.S3();
 
 exports.getAllInstitutes = function (req, res) {
 
-    institute.find ({}).populate('manager', 'name').populate('departments', ['name','logo']).
-    where('institute').ne ('PRIVATE').
-    exec (function (err, docs) {
+    institute.find ({}).exec (function (err, docs) {
         Data = docs;
         console.log ('docs: ' + docs);
         res.json (docs);
@@ -40,9 +39,7 @@ exports.getInstituteById  = function (req, res) {
     var id = req.params.instituteId;
     console.log ('User ID = ' + id);
 
-    institute.find ({_id : id}).populate('manager', 'name').
-    populate('departments', ['name', 'logo']).
-    exec (function (err, docs) {
+    institute.find ({_id : id}).exec (function (err, docs) {
         Data = docs;
         console.log ('docs: ' + docs);
         res.json (docs);
@@ -54,9 +51,7 @@ exports.getInstituteByName  = function (req, res) {
     var name = req.params.instituteName;
     console.log ('Institute name = ' + name);
 
-    institute.find ({name : name}).populate('manager', 'name').
-    where('institute').ne ('PRIVATE').
-    exec (function (err, docs) {
+    institute.find ({name : name}).exec (function (err, docs) {
         Data = docs;
         console.log ('docs: ' + docs);
         res.json (docs);
@@ -64,25 +59,30 @@ exports.getInstituteByName  = function (req, res) {
     });
 };
 
-exports.createInstitute = function (request, response, fileKey) {
+exports.createInstitute = function (request, response, files) {
+	
+	var logoKey =  '';
+	var imageKey =  '' ;
+	
+	if (files['logoUrl'] != undefined ) {
+	logoKey = files['logoUrl'][0].key;	
+	}
+	
+	if (files['aboutImageUrl'] != undefined ) {
+	imageKey = files['aboutImageUrl'][0].key;	
+	}
 
     institute.find({name : request.body.name },function(err, doc){
-       if (doc.length){
-            console.log("institute already exists");
-            response.send ("institute already exists");
-          }else{
           	
              var newInstitute = new institute({
                 name :request.body.name,
-                manager :request.body.manager,
-                logo : fileKey,
-                maps :request.body.maps,
-                routes :request.body.routes,
-                
-                headerBackgroundColor: request.body.headerBackgroundColor,
-    			headerFontColor: request.body.headerFontColor,
-    			footerBackgroundColor: request.body.footerBackgroundColor,
-			    footerFontColor: request.body.footerFontColor
+                logoUrl : logoKey,            
+                primaryColor: request.body.primaryColor,
+    			secondaryColor: request.body.secondaryColor,
+    			lineColor: request.body.lineColor,
+			    mainTextColor: request.body.mainTextColor,
+			    aboutText: request.body.aboutText, 
+    			aboutImageUrl: imageKey
 
 
               });
@@ -102,108 +102,77 @@ exports.createInstitute = function (request, response, fileKey) {
  	console.log (exception); 
  	response.send (false);
  }
-            }
+            
           });    
-
-
-
 
 };
 
-exports.updateInstitute = function (request, response, fileKey) {
+exports.updateInstitute = function (request, response, files) {
+
+	var logo = '';
+	var image = '';
+	if (files['logoUrl'] != undefined) { logo = files['logoUrl'][0];}
+	if (files['aboutImageUrl'] != undefined) { image = files['aboutImageUrl'][0];}
+		try {
+	fh.update (logo, request.body.logoKey, function (logoKey) {
 	
-	if (fileKey == undefined ) { 
-		if (request.body.logoKey) {
-			//request.body.logoKey = request.body.logoKey.replace(/\.[^/.]+$/, "");
-			fileKey = request.body.logoKey;
-		}
-		else {
-			fileKey = '';
-		}
-		} 
-		else 
-		{
-			console.log (fileKey);
-			
-			s3.deleteObjects({
-    Bucket: 'shenkar-show2',
-    Delete: {
-        Objects: [
-             { Key: request.body.logoKey}
-        ]
-    }
-}, function(err, data) {
-
-    if (err)
-        return console.log(err);
-
-    console.log('success');
-
-});
-			}
-
-	 var query = institute.findOne().where ('name', request.body.name);
-	 
-	 query.exec (function (err,doc) {
+	fh.update (image, request.body.imageKey, function (imageKey) {
+		
+		
+		console.log ("INSTITUTE ID : " + request.body.id );
+		institute.findOne({_id : request.body.id}).exec (function (err,doc) {
 	
-	try {	
+		
 	 	var query = doc.update ({
 	 		$set: {
-	 				name :request.body.name,
-	                manager :request.body.manager,
-	                logo :fileKey,
-	                maps :request.body.maps,
-	                routes :request.body.routes,
-	                
-	                headerBackgroundColor: request.body.headerBackgroundColor,
-    				headerFontColor: request.body.headerFontColor,
-    				footerBackgroundColor: request.body.footerBackgroundColor,
-			    	footerFontColor: request.body.footerFontColor
+	 			
+                name :request.body.name,
+                logoUrl : logoKey,            
+                primaryColor: request.body.primaryColor,
+    			secondaryColor: request.body.secondaryColor,
+    			lineColor: request.body.lineColor,
+			    mainTextColor: request.body.mainTextColor,
+			    aboutText: request.body.aboutText, 
+    			aboutImageUrl: imageKey
+
+
 	 		}
 	 	});
 
  	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
+ 	 		
  	});
  	      	
 			console.log("Updated Doc : " + doc);
-            response.send (true);
-            
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
+        
 
  });
+		
+	});
+	});
+	response.send (true);  
+}
+catch (exception) {
+	console.log (exception);
+            	return response.send (false);
+}
+
+	
 };
 
 
 exports.deleteInstitute = function (request, response) {
 
-	var query = institute.findOne().where ('name', request.body.name);
 	
-	 query.exec (function (err,doc) {
+	
+	 institute.findOne({_id : request.body.id}).exec (function (err,doc) {
 	 		try {	
 			
-			s3.deleteObjects({
-    Bucket: 'shenkar-show2',
-    Delete: {
-        Objects: [
-             { Key: doc.logo}
-        ]
-    }
-}, function(err, data) {
-
-    if (err)
-        return console.log(err);
-
-    console.log('success');
-
-});
+		fh.delete (doc.logoUrl);
+	 	fh.delete (doc.aboutImageUrl);
 	 			
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		institute.findOne ({name: request.body.name}, function (err, doc) {
+	 		institute.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});

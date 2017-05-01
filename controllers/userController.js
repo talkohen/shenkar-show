@@ -30,9 +30,10 @@ exports.auth = function (req, res) {
 	 	if (doc.password == req.body.password) {
 	 		if (doc.role == "admin"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), domain: 'http://www.talco.co', sameSite: false ,path: 'http://www.talco.co'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: 'http://www.talco.co'});
-	 		res.writeHead(302, {Location: 'http://www.talco.co'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/admin'});
 	 		res.end ();
 	 		
 	 		}
@@ -40,9 +41,11 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "institute manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/institute'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/institute'});
-	 		res.send(doc);
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
+	 		res.end ();
 	 		
 	 		
 	 		}
@@ -50,25 +53,25 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "department manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/department'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/department'});
-	 		res.send(doc);
-	 		// res.writeHead(302, {Location: '/department'});
-	 		// res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/department'});
+	 		res.end ();
 	 		
 	 		}
 	 		
 	 		
 	 		else if (doc.role == "student"){
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: new Date(Date.now() + 900000), path: '/student'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: new Date(Date.now() + 900000), path: '/student'});
-	 		res.send(doc);
-	 		// res.writeHead(302, {Location: '/student'});
-	 		// res.end ();
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/student'});
+	 		res.end ();
 	 		}
 	 		
 	 		else {
-	 			res.cookie ("shenkar-show", "guest",  { expires: new Date(Date.now() + 900000), httpOnly: true });
+	 			res.cookie ("shenkar-show", "guest",  { expires: false, httpOnly: true });
 	 			
 	 		}
 	 		
@@ -151,25 +154,18 @@ exports.createUser = function (request, response) {
  }
             }
           });    
-
-
-
-
 };
 
 exports.updateUser = function (request, response) {
 
-	 var query = user.findOne().where ('userName', request.body.userName);
-	 
-	 query.exec (function (err,doc) {
+
+
+	user.findOne({_id: request.body.id}).exec (function (err,doc) {
 	
 	try {	
 	 	var query = doc.update ({
 	 		$set: {
-	 			role : request.body.role,
-             	userName :request.body.userName,
                 name :request.body.name,
-                password :request.body.password,
                 email :request.body.email,
                 department :request.body.department,
                 institute :request.body.institute
@@ -195,10 +191,10 @@ exports.updateUser = function (request, response) {
 
 exports.deleteUser = function (request, response) {
 
-	 user.findOne().where ({_id :  request.body.userId}).exec (function (err,doc) {
+	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
 	 		try {	
 	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({_id: request.body.userId}, function (err, doc) {
+	 		user.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});
@@ -214,3 +210,98 @@ exports.deleteUser = function (request, response) {
 
 };
 
+
+
+exports.createStudent = function (request, response, callback) {
+
+    user.find({userName : request.body.userName },function(err, doc){
+       if (doc.length){
+            console.log("user already exists");
+            response.send ("user already exists");
+          }else{
+          	
+             var newUser = new user({
+             	role : request.body.role,
+             	userName :request.body.userName,
+                name :request.body.name,
+                password :request.body.password,
+                email :request.body.email,
+                department :request.body.department,
+                institute :request.body.institute,
+                project: request.body.project
+              });
+              
+           try {
+              newUser.save(function(error, result) {
+                if (error) {
+                  console.error(error);
+                } else {
+                  console.log("Saved document : " + doc);
+                  callback (true);
+                };
+              });
+              }
+               catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+            }
+          });    
+};
+
+
+
+
+exports.updateStudent = function (request, response, callback) {
+
+
+
+	user.findOne({_id: request.body.id}).exec (function (err,doc) {
+	
+	try {	
+	 	var query = doc.update ({
+	 		$set: {
+                name :request.body.name,
+                email :request.body.email,
+                department :request.body.department,
+                institute :request.body.institute,
+                project :request.body.project
+	 		}	 		
+	 	});
+ 	
+ 	 	query.exec (function (err, results) {
+ 		console.log ("\n Resulets Object : " + JSON.stringify (results));
+ 	});
+ 	      	
+			console.log("Updated Doc : " + doc);
+            callback (true);
+            
+ 	}
+ catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+
+ });
+};
+
+exports.deleteStudent = function (request, response, callback) {
+
+	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
+	 		try {	
+	 	var query = doc.remove (function (err, deletedDoc) {
+	 		user.findOne ({_id: request.body.id}, function (err, doc) {
+	 			console.log("Removed doc : " + doc);
+                  callback (true);
+	 		});
+	 	});
+	 	
+	 	}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+	 	
+	 });
+
+};

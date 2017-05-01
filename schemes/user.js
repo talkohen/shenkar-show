@@ -17,7 +17,8 @@ var userSchema = new schema (
     email: String,
     department: {type: Number, ref: 'department'},
     institute: {type: Number, ref: 'institute'},
-    project: {type: Number, ref : 'project'}
+    project: {type: Number, ref : 'project'},
+    token: String
 
 }, 
 
@@ -26,6 +27,14 @@ var userSchema = new schema (
 );
 
 userSchema.plugin(autoIncrement.plugin, 'user');
+
+userSchema.set('toJSON', {
+     transform: function (doc, ret, options) {
+         ret.id = ret._id;
+         delete ret._id;
+         delete ret.__v;
+     }
+}); 
 var user = mongoose.model ('user', userSchema);
 
 module.exports = user;

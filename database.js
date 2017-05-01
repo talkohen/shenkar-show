@@ -2,7 +2,9 @@ var mongoose = require ('mongoose');
 var  autoIncrement = require('mongoose-auto-increment');
 config = {
     mongoUrl : 'mongodb://shenkarShow:shenkarShow1@ds145009.mlab.com:45009/shenkar_show'
-}
+};
+
+
 
 var options = {
     server : {
@@ -10,6 +12,7 @@ var options = {
     }
 };
 
+mongoose.plugin(require('meanie-mongoose-to-json'));
 mongoose.connect (config.mongoUrl, options);
 db = mongoose.connection;
 

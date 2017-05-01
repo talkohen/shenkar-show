@@ -5,6 +5,7 @@ var user = require ('../schemes/user');
 var department = require ('../schemes/department');
 var project = require ('../schemes/project');
 var departmentController = require ('../controllers/departmentController');
+var projectController = require ('../controllers/projectController');
 var userController = require ('../controllers/userController');
 var auth = require ('../controllers/authController');
 var async = require("async");
@@ -24,7 +25,7 @@ user.findOne ({_id: studentId}).exec (function (err, student) {
 	
 	console.log ("STUDENT : " + student);
 	console.log ("STUDENT project id  : " + student.project);
-    project.findOne ({ _id : student.project}).populate('students', 'name').exec (function (err, docs) {
+    project.findOne ({ _id : student.project}).exec (function (err, docs) {
    
         console.log ('PROJECT: ' + docs);
         res.json (docs);
@@ -89,16 +90,16 @@ exports.updateProject = function (request, response, files) {
 	if (result == 'student')
 	{
 		  var studentId =  request.cookies.shenkarShowUserId;
-		user.findOne ({ _id: studentId}).exec (function (err, manager) {
+		user.findOne ({ _id: studentId}).exec (function (err, student) {
 			
-			project.findOne({ _id : manager.project}).exec (function (err, doc) {
+			project.findOne({ _id : student.project}).exec (function (err, doc) {
 	    	
 	    	
 	    	
-	    	console.log ("REQ ID : " + request.body.project);
+	    	console.log ("REQ ID : " + request.body.id);
 	    	console.log ("DOC ID : " + doc._id);
 	    	
-	    	if (request.body.project ==  doc._id ){
+	    	if (request.body.id ==  doc._id ){
 	    		projectController.updateProject (request, response, files);
 	    	}
 	    	
