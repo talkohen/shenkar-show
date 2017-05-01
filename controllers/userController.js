@@ -33,8 +33,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/admin'});
-	 		res.end ();
+	 		res.send (doc);
 	 		
 	 		}
 	 		
@@ -44,8 +43,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/institute'});
-	 		res.end ();
+	 		res.send (doc);
 	 		
 	 		
 	 		}
@@ -56,8 +54,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/department'});
-	 		res.end ();
+	 		res.send (doc);
 	 		
 	 		}
 	 		
@@ -66,8 +63,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		res.writeHead(302, {Location: 'http://talco.co/shenkar-show/student'});
-	 		res.end ();
+	 		res.send (doc);
 	 		}
 	 		
 	 		else {
