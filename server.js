@@ -77,7 +77,7 @@ var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
-app.use(cors());
+app.use(cors({credentials: true}));
 app.use(cookieParser());
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
