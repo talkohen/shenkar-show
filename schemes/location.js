@@ -14,6 +14,7 @@ var locationSchema = new schema (
     lat: Number,
     lng: Number,
     url: String,
+    institute: {type: Number, ref: 'institute'}
 
 }, 
 

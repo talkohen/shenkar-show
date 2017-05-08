@@ -56,13 +56,18 @@ exports.createDepartment = function (request, response, files) {
 	var imageKey = '' ;
 	
 	if (files['imageUrl'] != undefined ) {
-	logoKey = files['imageUrl'][0].key;	
+	logoKey = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl'][0].key;	
+	}
+		else {
+		logoKey = null;
 	}
 	
 	if (files['largeImageUrl'] != undefined ) {
-	imageKey = files['largeImageUrl'][0].key;	
+	imageKey = "https://shenkar-show2.s3.amazonaws.com/" + files['largeImageUrl'][0].key;	
 	}
-
+	else {
+		imageKey = null;
+	}
 
 
     department.find({name : request.body.name },function(err, doc){

@@ -35,7 +35,7 @@ exports.createInstitute = function (request,response, files) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
-		
+
 	    		instituteController.createInstitute (request, response, files);
 	    	
 	
@@ -72,7 +72,12 @@ else {
 };
 
 
-exports.deleteInstitute = function (request, response, files) {
+exports.deleteInstitute = function (request, response) {
+	
+	
+	
+	console.log ("INSTITUTE ID IN ADMIN : " + request.body.id);
+	
 	
 		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
 	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
@@ -80,7 +85,7 @@ exports.deleteInstitute = function (request, response, files) {
 	if (result == 'admin')
 	{
 		
-	    		instituteController.deleteInstitute (request, response, files);
+	    		instituteController.deleteInstitute (request, response);
 	    	
 	    
 }

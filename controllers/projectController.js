@@ -1,5 +1,6 @@
 var mongoose = require ('../database');
 var project = require ('../schemes/project');
+var user = require ('../schemes/user');
 var fh = require ('../fileHandler.js');
 
 //return all projects in database
@@ -58,23 +59,58 @@ exports.getProjectByName  = function (req, res) {
 
 exports.createProject = function (request, response, files) {
 	
+	var imageKeys = [] ;
+	var image1, image2, image3, image4, image5 , sound;
 	
-	var imageKey = '' ;
-	var videoKey = '' ;
-	var audioKey = '' ;
-	
-	
-	if (files['imageUrl'] != undefined ) {
-	imageKey = files['imageUrl'][0].key;	
+		if (files['imageUrl1'] != undefined ) {
+	image1 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl1'][0].key;	
+	imageKeys.push(image1);
+	}
+		else {
+		image1 = null;
 	}
 	
-	if (files['videoUrl'] != undefined ) {
-	videoKey = files['videoUrl'][0].key;	
+	if (files['imageUrl2'] != undefined ) {
+	image2 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl2'][0].key;	
+	imageKeys.push(image2);
+	}
+		else {
+		image2 = null;
 	}
 	
-		if (files['soundUrl'] != undefined ) {
-	audioKey = files['soundUrl'][0].key;	
+	if (files['imageUrl3'] != undefined ) {
+	image3 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl3'][0].key;	
+	imageKeys.push(image3);
 	}
+		else {
+		image3 = null;
+	}
+	
+	if (files['imageUrl4'] != undefined ) {
+	image4 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl4'][0].key;	
+	imageKeys.push(image4);
+	}
+		else {
+		image4 = null;
+	}
+	
+	if (files['imageUrl5'] != undefined ) {
+	image5 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl5'][0].key;	
+	imageKeys.push(image5);
+	}
+		else {
+		image5 = null;
+	}
+	
+	if (files['soundUrl'] != undefined ) {
+	sound = "https://shenkar-show2.s3.amazonaws.com/" + files['soundUrl'][0].key;	
+	}
+		else {
+		sound = null;
+	}
+	
+
+
 	
           	
              var newProject = new project({
@@ -82,9 +118,9 @@ exports.createProject = function (request, response, files) {
              	departmentId :request.body.departmentId,
                 name :request.body.name,
                 description :request.body.description,
-                imageUrl : imageKey,
-                videoUrl : videoKey,
-                soundUrl : audioKey,
+                imageUrl : imageKeys,
+                videoUrl : request.body.videoUrl,
+                soundUrl : sound,
                 location :request.body.location,
                 institute :request.body.institute
                 
@@ -117,23 +153,19 @@ exports.updateProject = function (request, response, files) {
 	var image3 = '';
 	var image4 = '';
 	var image5 = '';
-	var video = '';
 	var sound = '';
 	
 	
-	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}
-	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}
-	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}
-	if (files['imageUrl4'] != undefined) { image4 = files['imageUrl4'][0];}
-	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}
-
-	if (files['videoUrl'] != undefined) { video = files['videoUrl'][0];}
-	if (files['soundUrl'] != undefined) { sound = files['soundUrl'][0];}
+	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}	
+	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}	
+	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}	
+	if (files['imageUrl4'] != undefined) { image4 = files['imageUrl4'][0];}	
+	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}	
+	if (files['soundUrl'] != undefined) { sound = files['soundUrl'][0];}	
 	
 	console.log ("IMAGE1 : " + image1);
 	console.log ("IMAGE2 : " + image2);
 	console.log ("IMAGE3 : " + image3);
-	console.log ("VIDEO : " + video);
 	console.log ("AUDIO : " + sound);
 	
 	console.log ("request.body.imageKey1 : " + request.body.imageKey1);
@@ -151,10 +183,11 @@ exports.updateProject = function (request, response, files) {
 			fh.update (image3, request.body.imageKey3, function (imageKey3) {
 				fh.update (image4, request.body.imageKey4, function (imageKey4) {
 					fh.update (image5, request.body.imageKey5, function (imageKey5) {
-						fh.update (video, request.body.videoKey, function (videoKey) {	
 							fh.update (sound, request.body.soundKey, function (audioKey) {
-		
+	
 	project.findOne({_id: request.body.id}).exec (function (err,doc) {
+		
+		
 		
 	console.log ("imageKey1 : " + imageKey1);
 	console.log ("imageKey2 : " + imageKey2);
@@ -184,11 +217,10 @@ exports.updateProject = function (request, response, files) {
                 name :request.body.name,
                 description :request.body.description,
                 imageUrl : imageKeys,
-                videoUrl : videoKey,
+                videoUrl : request.body.videoUrl,
                 soundUrl : audioKey,
                 location :request.body.location,
                 institute :request.body.institute
-                
 	 		}	 		
 	 	});
  	
@@ -199,15 +231,14 @@ exports.updateProject = function (request, response, files) {
 			console.log("Updated Doc : " + doc);
         
 
- });
-		
-	});
-	});
-	});
-	});
-	});
-	});
-	});
+					 					}); //project
+									
+								}); //audio
+						});	//image 5
+					});//image 4
+				});//image 3
+			});//image 2
+		});//image 1
 	response.send (true);  
 }
 catch (exception) {
@@ -229,7 +260,6 @@ exports.deleteProject = function (request, response) {
 			
 		
 	 	fh.delete (doc.image);
-	 	fh.delete (doc.video);
 	 	fh.delete (doc.audio);
 	 			
 	 	var query = doc.remove (function (err, deletedDoc) {
@@ -247,4 +277,127 @@ exports.deleteProject = function (request, response) {
 	 	
 	 });
 
+};
+
+
+exports.updateStudentsInfo = function (req, res) {
+	
+	console.log ("UPDATING STUDENTS INFO...");
+	
+	try {
+
+project.findOne ({_id : req.body.project}).exec(function (err, project) {
+	user.find ({project: req.body.project }).exec (function (err, students) {
+
+			
+		var studentNames =[];
+		var studentEmails = [];
+		
+		if (students) {
+			for ( i=0 ; i<students.length; i++) {
+				studentNames.push (students[i].name);
+				studentEmails.push (students[i].email);
+				
+			}
+		}
+		
+		var query = project.update ({
+	 		$set: {
+	 			
+                studentNames: studentNames,
+                studentEmails: studentEmails
+	 		}	 		
+	 	});
+ 	
+ 	 		query.exec (function (err, results) {
+ 	 		return (true);
+ 			});
+			
+		});
+	});
+		}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	return (false);
+ 	}
+};
+
+exports.updateStudentsInfo2 = function (oldProject, newProject) {
+	
+	console.log ("UPDATING STUDENTS INFO 2...");
+	try {
+
+project.findOne ({_id : oldProject}).exec(function (err, project) {
+	user.find ({project: oldProject }).exec (function (err, students) {
+
+			
+		var studentNames =[];
+		var studentEmails = [];
+		
+		if (students) {
+			for ( i=0 ; i<students.length; i++) {
+				studentNames.push (students[i].name);
+				studentEmails.push (students[i].email);
+				
+			}
+		}
+		
+		var query = project.update ({
+	 		$set: {
+	 			
+                studentNames: studentNames,
+                studentEmails: studentEmails
+	 		}	 		
+	 	});
+ 	
+ 	 		query.exec (function (err, results) {
+ 	 		return (true);
+ 			});
+			
+		});
+	});
+		}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	return (false);
+ 	}
+ 	
+ 	try {
+
+project.findOne ({_id : newProject}).exec(function (err, project) {
+	user.find ({project: newProject }).exec (function (err, students) {
+
+			
+		var studentNames =[];
+		var studentEmails = [];
+		
+		if (students) {
+			for ( i=0 ; i<students.length; i++) {
+				studentNames.push (students[i].name);
+				studentEmails.push (students[i].email);
+				
+			}
+		}
+		
+		var query = project.update ({
+	 		$set: {
+	 			
+                studentNames: studentNames,
+                studentEmails: studentEmails
+	 		}	 		
+	 	});
+ 	
+ 	 		query.exec (function (err, results) {
+ 	 		return (true);
+ 			});
+			
+		});
+	});
+		}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	return (false);
+ 	}
+	
+	
 };

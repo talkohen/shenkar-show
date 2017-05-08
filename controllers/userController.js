@@ -73,7 +73,7 @@ exports.auth = function (req, res) {
 	 		
 	 	}
 	 	else {
-	 		res.send ("fail");
+	 		res.send (false);
 	 	}
 	 	}
 	 	catch (exception) {
@@ -150,10 +150,6 @@ exports.createUser = function (request, response) {
  }
             }
           });    
-
-
-
-
 };
 
 exports.updateUser = function (request, response) {
@@ -189,39 +185,6 @@ exports.updateUser = function (request, response) {
 };
 
 
-exports.updateStudent = function (request, response) {
-
-
-
-	user.findOne({_id: request.body.id}).exec (function (err,doc) {
-	
-	try {	
-	 	var query = doc.update ({
-	 		$set: {
-                name :request.body.name,
-                email :request.body.email,
-                department :request.body.department,
-                institute :request.body.institute,
-                project :request.body.project
-	 		}	 		
-	 	});
- 	
- 	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
- 	});
- 	      	
-			console.log("Updated Doc : " + doc);
-            response.send (true);
-            
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
-
- });
-};
-
 exports.deleteUser = function (request, response) {
 
 	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
@@ -243,3 +206,98 @@ exports.deleteUser = function (request, response) {
 
 };
 
+
+
+exports.createStudent = function (request, response, callback) {
+
+    user.find({userName : request.body.userName },function(err, doc){
+       if (doc.length){
+            console.log("user already exists");
+            response.send ("user already exists");
+          }else{
+          	
+             var newUser = new user({
+             	role : request.body.role,
+             	userName :request.body.userName,
+                name :request.body.name,
+                password :request.body.password,
+                email :request.body.email,
+                department :request.body.department,
+                institute :request.body.institute,
+                project: request.body.project
+              });
+              
+           try {
+              newUser.save(function(error, result) {
+                if (error) {
+                  console.error(error);
+                } else {
+                  console.log("Saved document : " + doc);
+                  callback (true);
+                };
+              });
+              }
+               catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+            }
+          });    
+};
+
+
+
+
+exports.updateStudent = function (request, response, callback) {
+
+
+
+	user.findOne({_id: request.body.id}).exec (function (err,doc) {
+	
+	try {	
+	 	var query = doc.update ({
+	 		$set: {
+                name :request.body.name,
+                email :request.body.email,
+                department :request.body.department,
+                institute :request.body.institute,
+                project :request.body.project
+	 		}	 		
+	 	});
+ 	
+ 	 	query.exec (function (err, results) {
+ 		console.log ("\n Resulets Object : " + JSON.stringify (results));
+ 	});
+ 	      	
+			console.log("Updated Doc : " + doc);
+            callback (true);
+            
+ 	}
+ catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+
+ });
+};
+
+exports.deleteStudent = function (request, response, callback) {
+
+	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
+	 		try {	
+	 	var query = doc.remove (function (err, deletedDoc) {
+	 		user.findOne ({_id: request.body.id}, function (err, doc) {
+	 			console.log("Removed doc : " + doc);
+                  callback (true);
+	 		});
+	 	});
+	 	
+	 	}
+	 	catch (exception) {
+ 	console.log (exception); 
+ 	callback (false);
+ }
+	 	
+	 });
+
+};

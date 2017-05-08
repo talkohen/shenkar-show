@@ -31,13 +31,13 @@ exports.getInstituteById  = function (req, res) {
 		instJSON = {
 			"id" : institute._id, 
 			"name" : institute.name,
-			"logoUrl" : "https://s3.amazonaws.com/shenkar-show2/" + institute.logoUrl,
+			"logoUrl" : institute.logoUrl,
 			"primaryColor": institute.primaryColor,
 			"secondaryColor": institute.secondaryColor,
 			"lineColor": institute.lineColor,
 			"mainTextColor": institute.mainTextColor,
 			"aboutText": institute.aboutText,
-			"aboutImageUrl": "https://s3.amazonaws.com/shenkar-show2/" + institute.aboutImageUrl
+			"aboutImageUrl": institute.aboutImageUrl
 			
 		};
         

@@ -4,6 +4,7 @@ var institute = require ('../schemes/institute');
 var user = require ('../schemes/user');
 var department = require ('../schemes/department');
 var project = require ('../schemes/project');
+var location = require ('../schemes/location');
 var departmentController = require ('../controllers/departmentController');
 var projectController = require ('../controllers/projectController');
 var userController = require ('../controllers/userController');
@@ -362,7 +363,7 @@ exports.deleteProject = function (request, response, files) {
 	    	console.log ("DOC ID : " + doc._id);
 	    	
 	    	if (request.body.department ==  doc._id ){
-	    		departmentProject.deleteProject (request, response);
+	    		projectController.deleteProject (request, response);
 	    	}
 	    	
 	    	else {
@@ -407,7 +408,22 @@ exports.createUser = function (request,response) {
 	    		
 	    		if (request.body.role == "student")
 	    		{
-	    		userController.createUser (request, response);
+	    			try {
+	    		userController.createStudent (request, response , function (result) {
+	    			if (result == true){
+	    			projectController.updateStudentsInfo (request, response);
+	    			response.send(true);
+	    			}
+	    			else {
+	    				response.send (false);
+	    			}
+	    		});
+	    		
+	    		}
+	    		catch (exception) {
+			 	console.log (exception); 
+			 	response.send (false);
+			 	}
 	    		}
 	    		else {
 	    			response.json ({error: "You are only authorized to create a student user."});
@@ -458,7 +474,25 @@ exports.updateUser = function (request, response) {
 	    	if (request.body.department ==  doc._id ){
 	    		user.findOne({ _id : request.body.id}).exec (function (err, user) {
 	    		if (user.role == "student") {
-	    		userController.updateStudent (request, response);
+	    			var oldProject = user.project;
+	    			var newProject =request.body.project;
+	    			try {
+	    		userController.updateStudent (request, response , function (result) {
+	    			if (result == true) {
+	    			projectController.updateStudentsInfo2 (oldProject, newProject);
+	    			response.send(true);
+	    			}
+	    			else {
+	    				console.log ("STUDENT UPDATE ERROR");
+	    				response.send(false);
+	    			}
+	    		});
+	    		
+	    		}
+	    		catch (exception) {
+			 	console.log (exception); 
+			 	response.send (false);
+			 	}
 	    		}
 	    		
 	    		else {
@@ -506,13 +540,30 @@ exports.deleteUser = function (request, response) {
 	    	console.log ("DOC ID : " + doc._id);
 	    	
 	    	if (request.body.department ==  doc._id ){
+	    			user.findOne({ _id : request.body.id}).exec (function (err, user) {
+	    		if (user.role == "student") {
+	    			
+	    			try {
+	    		userController.deleteStudent (request, response , function (result) {
+	    			if (result == true) {
+	    			projectController.updateStudentsInfo (request, response);
+	    			response.send(true);
+	    			}
+	    			else {
+	    				response.send (false);
+	    			}
+	    		});
 	    		
-	    		if (doc.role == "student") {
-	    		userController.deleteUser (request, response);
+	    		}
+	    		catch (exception) {
+			 	console.log (exception); 
+			 	response.send (false);
+			 	}
 	    		}
 	    		else {
 	    			response.json ({error: "You are only authorized to delete students."});
 	    		}
+	    		});
 	    	}
 	    	
 	    	else {
@@ -532,5 +583,46 @@ else {
 	}); }
 	else {
 		response.json ({error: "no session."});
+	}
+};
+
+
+exports.getLocations = function (req, res) {
+	
+	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	console.log ("userType : " + result);
+	if (result == 'department manager')
+	{
+		var myUsers = [];
+		var managerId =  req.cookies.shenkarShowUserId;
+		console.log ('User ID = ' + managerId);
+		user.findOne ({_id : managerId}).exec (function (err, manager){
+			
+			department.findOne ({ _id : manager.department}).exec (function (err, department) {
+	    	if (department){
+	    	console.log ("department : " + department);
+	    	
+	    	location.find ({ institute : manager.institute}).exec (function (err, locations) {
+        console.log ('locations: ' + locations);
+        res.send (locations);
+      
+    });
+    }
+	    	else {
+	    		res.send ("{'error' : 'department not found'}");
+	    	}
+    });
+			
+		});
+	    
+
+}
+else {
+	res.send ("not authorized!");
+}
+	}); }
+	else {
+		res.send ("not authorized!");
 	}
 };

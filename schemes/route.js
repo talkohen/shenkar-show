@@ -22,6 +22,14 @@ var routeSchema = new schema (
 
 
 routeSchema.plugin(autoIncrement.plugin, 'route');
+routeSchema.set('toJSON', {
+     transform: function (doc, ret, options) {
+         ret.id = ret._id;
+         delete ret._id;
+         delete ret.__v;
+     }
+}); 
+
 var route = mongoose.model ('route', routeSchema);
 
 module.exports = route;

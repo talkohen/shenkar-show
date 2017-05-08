@@ -65,11 +65,17 @@ exports.createInstitute = function (request, response, files) {
 	var imageKey =  '' ;
 	
 	if (files['logoUrl'] != undefined ) {
-	logoKey = files['logoUrl'][0].key;	
+	logoKey = "https://shenkar-show2.s3.amazonaws.com/" + files['logoUrl'][0].key;	
+	}
+	else {
+		logoKey = null;
 	}
 	
 	if (files['aboutImageUrl'] != undefined ) {
-	imageKey = files['aboutImageUrl'][0].key;	
+	imageKey = "https://shenkar-show2.s3.amazonaws.com/" + files['aboutImageUrl'][0].key;	
+	}
+		else {
+		imageKey = null;
 	}
 
     institute.find({name : request.body.name },function(err, doc){
@@ -163,14 +169,17 @@ catch (exception) {
 
 exports.deleteInstitute = function (request, response) {
 
-	
+	console.log ("INSTITUTE ID IN institute : " + request.body.id);
 	
 	 institute.findOne({_id : request.body.id}).exec (function (err,doc) {
 	 		try {	
-			
-		fh.delete (doc.logoUrl);
+		
+			if (doc.logoUrl != null){
+		fh.delete (doc.logoUrl );
+		}
+		if (doc.aboutImageUrl != null) {
 	 	fh.delete (doc.aboutImageUrl);
-	 			
+	 		}
 	 	var query = doc.remove (function (err, deletedDoc) {
 	 		institute.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);

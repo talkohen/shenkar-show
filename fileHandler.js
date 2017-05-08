@@ -45,7 +45,8 @@ if (file == '' )
 		else 
 		{
 			updatedKey = "https://shenkar-show2.s3.amazonaws.com/" + file.key;
-			
+			if (fileKey != undefined) {
+				try {
 			splitKey = fileKey.split ("https://shenkar-show2.s3.amazonaws.com/");
 			console.log (splitKey); 
 			
@@ -57,7 +58,11 @@ if (file == '' )
     		if (err)
         	console.log(err);
 			});
-			
+			}
+			catch (exception) {
+				console.log (exception);
+			}
+			}
 		}	
 	
 	callback (updatedKey);
