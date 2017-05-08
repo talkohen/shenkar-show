@@ -363,7 +363,7 @@ exports.deleteProject = function (request, response, files) {
 	    	console.log ("DOC ID : " + doc._id);
 	    	
 	    	if (request.body.department ==  doc._id ){
-	    		departmentProject.deleteProject (request, response);
+	    		projectController.deleteProject (request, response);
 	    	}
 	    	
 	    	else {

@@ -59,19 +59,58 @@ exports.getProjectByName  = function (req, res) {
 
 exports.createProject = function (request, response, files) {
 	
+	var imageKeys = [] ;
+	var image1, image2, image3, image4, image5 , sound;
 	
-	var imageKey = '' ;
-	var audioKey = '' ;
-	
-	
-	if (files['imageUrl'] != undefined ) {
-	imageKey = files['imageUrl'][0].key;	
+		if (files['imageUrl1'] != undefined ) {
+	image1 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl1'][0].key;	
+	imageKeys.push(image1);
+	}
+		else {
+		image1 = null;
 	}
 	
-	
-		if (files['soundUrl'] != undefined ) {
-	audioKey = files['soundUrl'][0].key;	
+	if (files['imageUrl2'] != undefined ) {
+	image2 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl2'][0].key;	
+	imageKeys.push(image2);
 	}
+		else {
+		image2 = null;
+	}
+	
+	if (files['imageUrl3'] != undefined ) {
+	image3 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl3'][0].key;	
+	imageKeys.push(image3);
+	}
+		else {
+		image3 = null;
+	}
+	
+	if (files['imageUrl4'] != undefined ) {
+	image4 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl4'][0].key;	
+	imageKeys.push(image4);
+	}
+		else {
+		image4 = null;
+	}
+	
+	if (files['imageUrl5'] != undefined ) {
+	image5 = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl5'][0].key;	
+	imageKeys.push(image5);
+	}
+		else {
+		image5 = null;
+	}
+	
+	if (files['soundUrl'] != undefined ) {
+	sound = "https://shenkar-show2.s3.amazonaws.com/" + files['soundUrl'][0].key;	
+	}
+		else {
+		sound = null;
+	}
+	
+
+
 	
           	
              var newProject = new project({
@@ -79,9 +118,9 @@ exports.createProject = function (request, response, files) {
              	departmentId :request.body.departmentId,
                 name :request.body.name,
                 description :request.body.description,
-                imageUrl : imageKey,
-                videoUrl : videoUrl,
-                soundUrl : audioKey,
+                imageUrl : imageKeys,
+                videoUrl : request.body.videoUrl,
+                soundUrl : sound,
                 location :request.body.location,
                 institute :request.body.institute
                 
@@ -117,12 +156,12 @@ exports.updateProject = function (request, response, files) {
 	var sound = '';
 	
 	
-	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}
-	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}
-	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}
-	if (files['imageUrl4'] != undefined) { image4 = files['imageUrl4'][0];}
-	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}
-	if (files['soundUrl'] != undefined) { sound = files['soundUrl'][0];}
+	if (files['imageUrl1'] != undefined) { image1 = files['imageUrl1'][0];}	
+	if (files['imageUrl2'] != undefined) { image2 = files['imageUrl2'][0];}	
+	if (files['imageUrl3'] != undefined) { image3 = files['imageUrl3'][0];}	
+	if (files['imageUrl4'] != undefined) { image4 = files['imageUrl4'][0];}	
+	if (files['imageUrl5'] != undefined) { image5 = files['imageUrl5'][0];}	
+	if (files['soundUrl'] != undefined) { sound = files['soundUrl'][0];}	
 	
 	console.log ("IMAGE1 : " + image1);
 	console.log ("IMAGE2 : " + image2);

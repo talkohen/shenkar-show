@@ -59,7 +59,7 @@ exports.getProject = function (request, response ) {
     		
     		user.findOne ({_id : studentId}).exec (function (err , student) {
 
-    project.findOne ({ _id : student.project}).exec (function (err, doc) {
+    project.findOne ({ _id : student.project}).populate('location').exec (function (err, doc) {
     
         console.log ('doc: ' + doc);
         response.json (doc);

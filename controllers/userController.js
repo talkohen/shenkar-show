@@ -73,7 +73,7 @@ exports.auth = function (req, res) {
 	 		
 	 	}
 	 	else {
-	 		res.send ("fail");
+	 		res.send (false);
 	 	}
 	 	}
 	 	catch (exception) {

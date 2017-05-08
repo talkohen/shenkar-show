@@ -77,7 +77,7 @@ var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
 
-app.use(cors({credentials: true}));
+app.use(cors());
 app.use(cookieParser());
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -94,7 +94,7 @@ app.set ('port',port);
 app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://shenkar-show-web-new.herokuapp.com");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -171,8 +171,8 @@ app.post ('/departments/delete', departmentController.deleteDepartment);
 app.get ('/allProjects', projectController.getAllProjects);
 app.get ('/projects/id/:projectId', projectController.getProjectById);
 app.get ('/projects/name/:projectName', projectController.getProjectByName);
-app.post ('/projects/create', upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
-app.post ('/projects/update', upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,
+app.post ('/projects/create', upload.fields([{name : 'imageUrl', maxCount : 1 } , {name : 'soundUrl', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
+app.post ('/projects/update', upload.fields([{name : 'imageUrl', maxCount : 1 } , {name : 'soundUrl', maxCount : 1 }]) ,
  function(req, res){
 
 	if (req.files){
@@ -188,7 +188,20 @@ app.post ('/projects/delete', projectController.deleteProject);
 
 //admin
 app.get ('/admin', adminController.getIndex);
-app.post ('/admin/createInstitute',  upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,adminController.createInstitute);
+app.post ('/admin/createInstitute',  upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,
+
+function(req, res){
+	if (req.files){
+	adminController.createInstitute(req,res, req.files);
+	}
+	
+	else {
+		
+		adminController.createInstitute(req,res);
+	}
+	
+	});
+	
 app.post ('/admin/updateInstitute',   upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,
 
 function(req, res){
@@ -214,7 +227,19 @@ app.post ('/admin/deleteUser',  adminController.deleteUser);
 
 //institute manager 
 app.get ('/institute', instituteManagerController.getIndex);
-app.post ('/institute/createDepartment',  upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) , instituteManagerController.createDepartment);
+app.post ('/institute/createDepartment',  upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) ,
+
+function(req, res){
+	if (req.files){
+	instituteManagerController.createDepartment(req,res, req.files);
+	}
+	
+	else {
+		
+		instituteManagerController.createDepartment(req,res);
+	}
+	
+	});
 app.post ('/institute/updateDepartment',   upload.fields([{name : 'imageUrl', maxCount : 1 } ,{name : 'largeImageUrl', maxCount : 1 }]) ,
 
 function(req, res){
@@ -254,8 +279,21 @@ app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
 app.get ('/department/locations', departmentManagerController.getLocations);
 app.get ('/department/users', departmentManagerController.getUsers);
-app.post ('/department/createProject', upload.fields([{name : 'imageUrl1', maxCount : 3 } ,  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } , {name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) ,  departmentManagerController.createProject);
-app.post ('/department/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 3 },  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 }  ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+app.post ('/department/createProject', upload.fields([{name : 'imageUrl1', maxCount : 1 } ,  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } ,  {name : 'soundUrl', maxCount : 1 }]) ,
+
+function(req, res){
+	if (req.files){
+	departmentManagerController.createProject(req,res, req.files);
+	}
+	
+	else {
+		
+		departmentManagerController.createProject(req,res);
+	}
+	
+	});
+	
+app.post ('/department/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 },  {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 }  , {name : 'soundUrl', maxCount : 1 }]) , 
 
 function(req, res){
 	if (req.files){
@@ -280,7 +318,7 @@ app.post ('/department/deleteUser',  departmentManagerController.deleteUser);
 //student
 app.get ('/student', studentController.getIndex);
 app.get ('/student/project', studentController.getProject);
-app.post ('/student/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 } , {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } ,{name : 'videoUrl', maxCount : 1 }, {name : 'soundUrl', maxCount : 1 }]) , 
+app.post ('/student/updateProject',  upload.fields([{name : 'imageUrl1', maxCount : 1 } , {name : 'imageUrl2', maxCount : 1 } , {name : 'imageUrl3', maxCount : 1 } ,{name : 'imageUrl4', maxCount : 1 } , {name : 'imageUrl5', maxCount : 1 } , {name : 'soundUrl', maxCount : 1 }]) , 
 
 function(req, res){
 	if (req.files){
