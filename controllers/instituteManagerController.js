@@ -16,8 +16,8 @@ var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -46,8 +46,8 @@ res.send (false);
 
 exports.createDepartment = function (request,response, files) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -91,8 +91,8 @@ else {
 
 exports.updateDepartment = function (request, response, files) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -133,8 +133,8 @@ else {
 
 exports.deleteDepartment = function (request, response, files) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -179,8 +179,8 @@ else {
 
 exports.getDepartments = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -211,8 +211,8 @@ else {
 
 exports.getDepartment = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -252,8 +252,8 @@ else {
 
 exports.getUsers = function (req, res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -289,8 +289,8 @@ else {
 
 exports.createUser = function (request,response) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -339,8 +339,8 @@ else {
 
 exports.updateUser = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -391,8 +391,8 @@ else {
 
 exports.deleteUser = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -443,8 +443,8 @@ else {
 
 exports.createLocation = function (request,response) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -488,8 +488,8 @@ else {
 
 exports.updateLocation = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -530,8 +530,8 @@ else {
 
 exports.deleteLocation = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -576,8 +576,8 @@ else {
 
 exports.getLocations = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -610,8 +610,8 @@ else {
 
 exports.createRoute = function (request,response) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -655,8 +655,8 @@ else {
 
 exports.updateRoute = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -697,8 +697,8 @@ else {
 
 exports.deleteRoute = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -743,8 +743,8 @@ else {
 
 exports.getRoutes = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
@@ -775,8 +775,8 @@ else {
 
 exports.getProjects = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
