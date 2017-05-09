@@ -6,19 +6,13 @@ var crypto = require ('../crypto');
 
 var auth =    function (session, userId, callback ) {
 	if (userId != undefined) {
-		var query = user.findOne().where ('_id', userId);
-		
-		 query.exec (function (err,doc) {
+ user.findOne().where ('_id', userId).exec (function (err,doc) {
 	 		try {	
-	 	if (crypto.hashCheck (doc.email , session)) {
+	 	
 	 		
 	 		console.log ("Role : " + doc.role);
 	 		callback (doc.role);
-	 	}
-	 	else {
-	 	
-			callback ("fail");
-	 	}
+
 	 	}
 	 	catch (exception) {
  	console.log (exception); 
