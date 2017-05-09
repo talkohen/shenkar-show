@@ -94,6 +94,7 @@ app.set ('port',port);
 app.use ('/' , express.static ('./public'));
 
 app.use(function(req, res, next) {
+
   res.header("Access-Control-Allow-Origin", "http://talco.co");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
