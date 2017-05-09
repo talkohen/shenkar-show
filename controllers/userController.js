@@ -44,7 +44,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		doc.shenkarShowSession = crypto.hashMake (doc.email);
+	 		doc.shenkarShowSession = (doc.email);
 	 		res.send (doc);
 	 		
 	 		
