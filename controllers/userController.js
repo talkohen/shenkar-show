@@ -30,9 +30,9 @@ exports.auth = function (req, res) {
 	 	if (doc.password == req.body.password) {
 	 		if (doc.role == "admin"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/', domain: "http://talco.co"});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/', domain: "http://talco.co"});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/', domain: "http://talco.co"});
 	 		res.send (doc);
 	 		
 	 		}
