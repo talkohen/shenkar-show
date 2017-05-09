@@ -40,9 +40,9 @@ exports.auth = function (req, res) {
 	 		else if 
 	 		(doc.role == "institute manager"){
 	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email));
-	 		res.cookie ("shenkarShowUserId", doc._id);
-	 		res.cookie ("shenkarShowUserName", doc.name);
+	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
 	 		res.send (doc);
 	 		
 	 		
