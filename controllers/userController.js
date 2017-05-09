@@ -33,6 +33,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/', domain: "http://talco.co"});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/', domain: "http://talco.co"});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/', domain: "http://talco.co"});
+	 		doc.shenkarShowSession = crypto.hashMake (doc.email);
 	 		res.send (doc);
 	 		
 	 		}
@@ -43,6 +44,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
+	 		doc.shenkarShowSession = crypto.hashMake (doc.email);
 	 		res.send (doc);
 	 		
 	 		
