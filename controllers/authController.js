@@ -5,11 +5,15 @@ var crypto = require ('../crypto');
 
 
 var auth =    function (session, userId, callback ) {
+	
+	console.log ("session : " + session);
+	console.log ("userId : " + userId);
+	
 	if (userId != undefined) {
  user.findOne().where ('_id', userId).exec (function (err,doc) {
 	 		try {	
 	 	
-	 		
+	 		console.log ("doc : " + doc);
 	 		console.log ("Role : " + doc.role);
 	 		callback (doc.role);
 
