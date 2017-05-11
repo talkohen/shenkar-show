@@ -158,6 +158,8 @@ exports.getProjectById = function (req, res) {
     console.log ('Dep ID = ' + id);
 
 	user.find ({project: id}). exec (function (err, students) {
+		console.log ("students : " + students);
+		
 		studentNamesArray  = [];
 		studentEmailsArray  = [];
 		for (i=0; i<students.length; i++) {
