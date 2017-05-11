@@ -180,6 +180,7 @@ else {
 exports.getDepartments = function (req,res) {
 	
 	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
+		console.log ("req.cookies.shenkarShowUserId : " +req.cookies.shenkarShowUserId);
 	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
