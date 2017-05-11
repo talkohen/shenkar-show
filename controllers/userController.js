@@ -21,6 +21,8 @@ exports.auth = function (req, res) {
 		res.send ("missing parameters");
 	}
 	else {
+		console.log (req.body.userName);
+		console.log (req.body.password);
 	var userName = req.body.userName;
 	var query = user.findOne().where ('userName', userName);
 	
@@ -45,6 +47,7 @@ exports.auth = function (req, res) {
 	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
 	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
 	 		
+	 		console.log (doc);
 	 		res.send (doc);
 	 		
 	 		
