@@ -93,6 +93,7 @@ var port = process.env.PORT || 3000;
 app.set ('port',port);
 app.use ('/' , express.static ('./public'));
 
+//headers
 app.use(function(req, res, next) {
 
   res.header("Access-Control-Allow-Origin", 'https://shenkar-show-web-new.herokuapp.com');
