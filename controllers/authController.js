@@ -4,9 +4,8 @@ var crypto = require ('../crypto');
 
 
 
-var auth =    function (session, userId, callback ) {
+var auth =    function (userId, callback ) {
 	
-	console.log ("session : " + session);
 	console.log ("userId : " + userId);
 	
 	if (userId != undefined) {
@@ -37,12 +36,11 @@ exports.authCookies = auth;
 exports.logout = function (req, res) {
 	
 	console.log ("REQ : " + req);
-	if (req.cookies.shenkarShowSession != undefined && req.cookies.shenkarShowUserId != undefined &&  req.cookies.shenkarShowUserName != undefined){
+	if (req.cookies.shenkarShowUserId != undefined){
 		
-		console.log ("IN : " + req.cookies);
-	res.clearCookie ("shenkarShowSession", {path: req.cookies.shenkarShowSession.path});
-	res.clearCookie ("shenkarShowUserId", {path:req.cookies.shenkarShowUserId.path});
-	res.clearCookie ("shenkarShowUserName", {path:req.cookies.shenkarShowUserName.path});
+
+	// res.clearCookie ("shenkarShowUserId", {path:req.cookies.shenkarShowUserId.path});
+
 	}
 	
 	res.writeHead(302, {Location: 'http://talco.co/shenkar-show/login'});

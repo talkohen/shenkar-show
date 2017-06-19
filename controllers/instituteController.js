@@ -1,5 +1,8 @@
 var mongoose = require ('mongoose');
 var institute = require ('../schemes/institute');
+var department = require ('../schemes/department');
+var project = require ('../schemes/project');
+var user = require ('../schemes/user');
 var credentials = require ('../credentials.js');
 
 var AWS = require('aws-sdk');
@@ -61,9 +64,10 @@ exports.getInstituteByName  = function (req, res) {
 
 exports.createInstitute = function (request, response, files) {
 	
-	var logoKey =  '';
-	var imageKey =  '' ;
+	var logoKey =  null;
+	var imageKey =  null ;
 	
+	if (files != undefined){
 	if (files['logoUrl'] != undefined ) {
 	logoKey = "https://shenkar-show2.s3.amazonaws.com/" + files['logoUrl'][0].key;	
 	}
@@ -77,7 +81,7 @@ exports.createInstitute = function (request, response, files) {
 		else {
 		imageKey = null;
 	}
-
+}
     institute.find({name : request.body.name },function(err, doc){
           	
              var newInstitute = new institute({
@@ -115,31 +119,34 @@ exports.createInstitute = function (request, response, files) {
 
 exports.updateInstitute = function (request, response, files) {
 
-	var logo = '';
-	var image = '';
-	if (files['logoUrl'] != undefined) { logo = files['logoUrl'][0];}
-	if (files['aboutImageUrl'] != undefined) { image = files['aboutImageUrl'][0];}
-		try {
-	fh.update (logo, request.body.logoKey, function (logoKey) {
 	
-	fh.update (image, request.body.imageKey, function (imageKey) {
-		
-		
+		try {
+
+	var logo = null;
+	var image = null ;
+	
+
+			
 		console.log ("INSTITUTE ID : " + request.body.id );
 		institute.findOne({_id : request.body.id}).exec (function (err,doc) {
+			
+	if (files != undefined){
+	if (files['logoUrl'] != undefined) { logo = 'https://s3.amazonaws.com/shenkar-show2/' + files['logoUrl'][0].key;} else {logo = doc.logourl; }
+	if (files['aboutImageUrl'] != undefined) { image = 'https://s3.amazonaws.com/shenkar-show2/' + files['aboutImageUrl'][0].key;} else {image = doc.aboutImageUrl; }
+	}
 	
 		
 	 	var query = doc.update ({
 	 		$set: {
 	 			
                 name :request.body.name,
-                logoUrl : logoKey,            
+                logoUrl : logo,            
                 primaryColor: request.body.primaryColor,
     			secondaryColor: request.body.secondaryColor,
     			lineColor: request.body.lineColor,
 			    mainTextColor: request.body.mainTextColor,
 			    aboutText: request.body.aboutText, 
-    			aboutImageUrl: imageKey
+    			aboutImageUrl: image
 
 
 	 		}
@@ -154,8 +161,7 @@ exports.updateInstitute = function (request, response, files) {
 
  });
 		
-	});
-	});
+
 	response.send (true);  
 }
 catch (exception) {
@@ -180,13 +186,18 @@ exports.deleteInstitute = function (request, response) {
 		if (doc.aboutImageUrl != null) {
 	 	fh.delete (doc.aboutImageUrl);
 	 		}
-	 	var query = doc.remove (function (err, deletedDoc) {
+	 department.remove ({institute: doc.id}).exec (function (err, deletedDepartments) {
+	 	project.remove ({institute: doc.id}).exec (function (err, deletedProjects) {
+	 		user.remove ({institute: doc.id}).exec (function (err, deletedUsers) {
+	 			doc.remove (function (err, deletedDoc) {
 	 		institute.findOne ({_id: request.body.id}, function (err, doc) {
 	 			console.log("Removed doc : " + doc);
                   response.send (true);
 	 		});
 	 	});
-	 	
+	 	 	});
+	 	});
+	 	});
 	 	}
 	 	catch (exception) {
  	console.log (exception); 

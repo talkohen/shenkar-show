@@ -71,12 +71,15 @@ if (file == '' )
 
 
 exports.delete = function (fileKey, callback) {
+	if (fileKey != undefined) {
+	splitKey = fileKey.split ("https://shenkar-show2.s3.amazonaws.com/");
 	
+	if (splitKey != undefined) {
 	s3.deleteObjects({
     Bucket: 'shenkar-show2',
     Delete: {
         Objects: [
-             { Key: fileKey}
+             { Key: splitKey}
         ]
     }
 }, function(err, data) {
@@ -87,5 +90,29 @@ exports.delete = function (fileKey, callback) {
     console.log('success');
 
 });
-	
+	}
+	}
 };
+
+// 
+// exports.deleteFile = function (request, response) {
+// 	
+	// if ( request.headers['x-access-token'] != undefined){
+// 		
+		// var userId = request.headers['x-access-token'];
+// 	
+	// user.findOne ({_id : userId}).exec (function (err , user) {
+// 		
+		// if ( request.body.institute != undefined){
+// 			
+			// institute.findOne ({_id: request.body.institute}).exec (function (err , institue) {
+// 				
+// 				
+			// });
+		// }
+// 		
+	// });
+// 	
+	// }
+// 	
+// };

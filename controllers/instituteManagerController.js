@@ -3,6 +3,7 @@ var user = require ('../schemes/user');
 var institute = require ('../schemes/institute');
 var user = require ('../schemes/user');
 var department = require ('../schemes/department');
+var map = require ('../schemes/map');
 var departmentController = require ('../controllers/departmentController');
 var location = require ('../schemes/location');
 var locationController = require ('../controllers/locationController');
@@ -16,17 +17,18 @@ var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies(req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		
-		  var managerId =  req.cookies.shenkarShowUserId;
+		  var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
 		user.findOne ({_id : managerId}).exec (function (err, manager) {
 			
-		institute.findOne ({ _id : manager.institute}).exec (function (err, doc) {
+			console.log ("MANAGER INSTITUTE : " + manager.institute );
+		institute.find ({ _id : manager.institute}).exec (function (err, doc) {
         Data = doc;
         console.log ('doc: ' + doc);
         res.json (doc);
@@ -46,12 +48,12 @@ res.send (false);
 
 exports.createDepartment = function (request,response, files) {
 	
-	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+	if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -91,12 +93,12 @@ else {
 
 exports.updateDepartment = function (request, response, files) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -133,12 +135,12 @@ else {
 
 exports.deleteDepartment = function (request, response, files) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -179,13 +181,14 @@ else {
 
 exports.getDepartments = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-		console.log ("req.cookies.shenkarShowUserId : " +req.cookies.shenkarShowUserId);
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if (req.headers['x-access-token'] != undefined){
+	
+	console.log ("req.headers['x-access-token'] : " +req.headers['x-access-token']);
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
@@ -212,14 +215,14 @@ else {
 
 exports.getDepartment = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies(req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		var departmentId =  req.params.departmentId;
 		
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
@@ -253,13 +256,13 @@ else {
 
 exports.getUsers = function (req, res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if (req.headers['x-access-token'] != undefined){
+	auth.authCookies(req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		var myUsers = [];
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
 		console.log ('User ID = ' + managerId);
 		
 		user.findOne ({_id : managerId}).exec (function (err, manager){
@@ -290,12 +293,12 @@ else {
 
 exports.createUser = function (request,response) {
 	
-	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+	if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -340,17 +343,18 @@ else {
 
 exports.updateUser = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
 	    	
 	    	
+	    	console.log ("REQUEST : " + request.body.userName);
 	    	
 	    	console.log ("REQ ID : " + request.body.institute);
 	    	console.log ("DOC ID : " + doc._id);
@@ -392,12 +396,12 @@ else {
 
 exports.deleteUser = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -444,12 +448,12 @@ else {
 
 exports.createLocation = function (request,response) {
 	
-	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+	if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -489,12 +493,12 @@ else {
 
 exports.updateLocation = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -531,12 +535,12 @@ else {
 
 exports.deleteLocation = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -577,12 +581,12 @@ else {
 
 exports.getLocations = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
@@ -611,12 +615,12 @@ else {
 
 exports.createRoute = function (request,response) {
 	
-	if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+	if (request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -656,12 +660,12 @@ else {
 
 exports.updateRoute = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -698,12 +702,12 @@ else {
 
 exports.deleteRoute = function (request, response) {
 	
-		if (1 != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		  var managerId =  request.cookies.shenkarShowUserId;
+		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
 			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
@@ -744,12 +748,12 @@ else {
 
 exports.getRoutes = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies(req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
@@ -776,17 +780,50 @@ else {
 
 exports.getProjects = function (req,res) {
 	
-	if (1 != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(1, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
-		var managerId =  req.cookies.shenkarShowUserId;
+		var managerId =  req.headers['x-access-token'];
     		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     project.find ({ institute : manager.institute}).exec (function (err, docs) {
+    
+        console.log ('docs: ' + docs);
+        res.json (docs);
+        return;
+    });
+		
+		
+	});
+
+}
+else {
+	res.send ("not authorized!");
+}
+	}); }
+	else {
+		res.send ("not authorized!");
+	}
+};
+
+
+exports.getMaps = function (req,res) {
+		
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		var managerId =  req.headers['x-access-token'];
+    		console.log ('User ID = ' + managerId);
+    		
+    		user.findOne ({_id : managerId}).exec (function (err , manager) {
+
+    map.find ({ institute : manager.institute}).exec (function (err, docs) {
     
         console.log ('docs: ' + docs);
         res.json (docs);

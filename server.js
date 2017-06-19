@@ -73,6 +73,7 @@ var departmentManagerController = require ('./controllers/departmentManagerContr
 var studentController = require ('./controllers/studentController');
 var guestController = require ('./controllers/guestController');
 
+
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       
 app.use(bodyParser.urlencoded({ extended: true})); 
@@ -134,6 +135,8 @@ app.get ('/session', authController.getSession);
 app.post ('/users/create', userController.createUser);
 app.post ('/users/update', userController.updateUser);
 app.post ('/users/delete', userController.deleteUser);
+app.post ('/updatePassword', userController.updatePassword);
+
 
 //institutes
 app.get ('/allInstitutes', instituteController.getAllInstitutes);
@@ -188,6 +191,8 @@ app.post ('/projects/update', upload.fields([{name : 'imageUrl', maxCount : 1 } 
 	}
 	});
 app.post ('/projects/delete', projectController.deleteProject);
+app.get ('/instituteProjects', projectController.getInstituteProjects);
+
 
 //admin
 app.get ('/admin', adminController.getIndex);
@@ -277,6 +282,7 @@ app.post ('/institute/createRoute',  instituteManagerController.createRoute);
 app.post ('/institute/updateRoute',  instituteManagerController.updateRoute);
 app.post ('/institute/deleteRoute',  instituteManagerController.deleteRoute);
 
+
 //department manager
 app.get ('/department', departmentManagerController.getIndex);
 app.get ('/department/projects', departmentManagerController.getProjects);
@@ -353,6 +359,13 @@ app.get ('/guest/department/id/:departmentId/projects', guestController.getDepar
 app.get ('/guest/institute/:instituteId/department/:departmentId/projects', guestController.getInstituteProjects2);
 //routes
 app.get ('/guest/institute/id/:instituteId/routes', guestController.getInstituteRoutes);
+//maps
+app.get ('/guest/institute/:instituteId/maps', guestController.getInstituteMaps);
+app.get ('/guest/institute/:instituteId/mapsArray', guestController.getInstituteMapsArray);
+app.get ('/guest/map/:mapId', guestController.getMapById);
+//search
+app.get ('/guest/institute/:instituteId/projects/:keyword', guestController.getProjectsBySearch);
+
 
 app.get ('/public/index', function(req, res) {res.render('index.html');} );
 app.get ('/public/institute',function(req, res) {res.render('institute.html');});

@@ -12,12 +12,12 @@ var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
-	res.send (req.cookies.shenkarShowUserId);
+	res.send (true);
 }
 else {
 	res.send ("not authorized!");
@@ -30,8 +30,8 @@ else {
 
 exports.createInstitute = function (request,response, files) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -52,8 +52,8 @@ else {
 
 exports.updateInstitute = function (request, response, files) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -79,8 +79,8 @@ exports.deleteInstitute = function (request, response) {
 	console.log ("INSTITUTE ID IN ADMIN : " + request.body.id);
 	
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -105,8 +105,8 @@ else {
 
 exports.getInstitutes = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if ( req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -134,8 +134,8 @@ else {
 
 exports.getUsers = function (req, res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (req.headers['x-access-token'] != undefined){
+	auth.authCookies( req.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -158,8 +158,8 @@ else {
 
 exports.createUser = function (request,response) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -184,8 +184,8 @@ else {
 
 exports.updateUser = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{
@@ -206,8 +206,8 @@ else {
 
 exports.deleteUser = function (request, response) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'admin')
 	{

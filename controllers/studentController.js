@@ -12,8 +12,8 @@ var async = require("async");
 
 exports.getIndex = function (req,res) {
 	
-	if (req.cookies.shenkarShowSession != undefined || req.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(req.cookies.shenkarShowSession, req.cookies.shenkarShowUserId, function (result) {
+	if (req.cookies.shenkarShowUserId != undefined){
+	auth.authCookies( req.cookies.shenkarShowUserId, function (result) {
 	console.log ("userType : " + result);
 	if (result == 'student')
 	{
@@ -36,30 +36,30 @@ user.findOne ({_id: studentId}).exec (function (err, student) {
 	
 }
 else {
-	res.send ("not authorized!");
+	res.send ({error: "You are not authorized to access this info"});
 }
 	}); 
 	}
 	else {
-		res.send ("not authorized!");
+		res.send ({error: "You are not authorized to access this info"});
 	}
 };
 
 
 exports.getProject = function (request, response ) {
 	
-	if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+	if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'student')
 	{
 		
-		  var studentId =  request.cookies.shenkarShowUserId;
+		  var studentId =  request.headers['x-access-token'];
     		console.log ('User ID = ' + studentId);
     		
     		user.findOne ({_id : studentId}).exec (function (err , student) {
 
-    project.findOne ({ _id : student.project}).populate('location').exec (function (err, doc) {
+    project.find ({ _id : student.project}).populate('location').exec (function (err, doc) {
     
         console.log ('doc: ' + doc);
         response.json (doc);
@@ -70,11 +70,11 @@ exports.getProject = function (request, response ) {
 	});
 }
 else {
-	response.send ("not authorized!");
+	response.send ({error: "You are not authorized to access this project"});
 }
 	}); }
 	else {
-		response.send ("not authorized!");
+		response.send ({error: "You are not authorized to access this project"});
 	}
 };
 
@@ -84,12 +84,12 @@ else {
 
 exports.updateProject = function (request, response, files) {
 	
-		if (request.cookies.shenkarShowSession != undefined || request.cookies.shenkarShowUserId != undefined){
-	auth.authCookies(request.cookies.shenkarShowSession, request.cookies.shenkarShowUserId, function (result) {
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'student')
 	{
-		  var studentId =  request.cookies.shenkarShowUserId;
+		  var studentId =  request.headers['x-access-token'];
 		user.findOne ({ _id: studentId}).exec (function (err, student) {
 			
 			project.findOne({ _id : student.project}).exec (function (err, doc) {
