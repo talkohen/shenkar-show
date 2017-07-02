@@ -19,8 +19,7 @@ var instituteSchema = new schema (
     aboutText: String, 
     aboutImageUrl: String,
     path: String,
-    location: {type: Number, ref: 'location'},
-    building: {type: Number, ref: 'building'},
+    building: {type: Number, ref: 'building'}
 
 }, 
 

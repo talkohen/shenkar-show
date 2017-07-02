@@ -93,7 +93,6 @@ exports.createInstitute = function (request, response, files) {
 			    mainTextColor: request.body.mainTextColor,
 			    aboutText: request.body.aboutText, 
     			aboutImageUrl: imageKey,
-    			location: request.body.location,
     			path: request.body.path,
     			building: request.body.building
 
@@ -151,7 +150,6 @@ exports.updateInstitute = function (request, response, files) {
 			    mainTextColor: request.body.mainTextColor,
 			    aboutText: request.body.aboutText, 
     			aboutImageUrl: image,
-    			location: request.body.location,
     			path: request.body.path,
     			building: request.body.building
 
