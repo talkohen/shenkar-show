@@ -462,17 +462,18 @@ exports.updateUser = function (request, response) {
 		  var managerId =  request.headers['x-access-token'];
 		user.findOne ({ _id: managerId}).exec (function (err, manager) {
 			
-			department.find({ _id : manager.department}).exec (function (err, doc) {
-	    	
+			department.findOne({ _id : manager.department}).exec (function (err, doc) {
 	    	
 	    	
 	    	console.log ("REQ ID : " + request.body.department);
 	    	console.log ("DOC ID : " + doc._id);
+	    	console.log ("STUDENT ID : " + request.body.id);
+	    	console.log ("PROJECT ID : " + request.body.project);
 	    	
 	    	
-	    	
-	    	if (request.body.department ==  doc._id ){
+	    	if (doc._id ){
 	    		user.findOne({ _id : request.body.id}).exec (function (err, user) {
+	    			
 	    		if (user.role == "student") {
 	    			var oldProject = user.project;
 	    			var newProject =request.body.project;

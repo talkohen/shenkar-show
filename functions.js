@@ -13,7 +13,8 @@ if (url != null) {
 		callback (URLsplit[1]);
 		}
 		else{
-			callback (url);
+			if (url == null) {callback (null);}
+			else {callback (url);}
 		}
 	}	
 	catch (exception) {

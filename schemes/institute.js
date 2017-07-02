@@ -17,8 +17,10 @@ var instituteSchema = new schema (
     lineColor: {type: String, default: "#ffffff"},
     mainTextColor: {type: String, default: "#000000"},
     aboutText: String, 
-    aboutImageUrl: String
-    
+    aboutImageUrl: String,
+    path: String,
+    location: {type: Number, ref: 'location'},
+    building: {type: Number, ref: 'building'},
 
 }, 
 

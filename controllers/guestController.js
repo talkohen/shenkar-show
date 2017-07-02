@@ -5,6 +5,7 @@ var user = require ('../schemes/user');
 var location = require ('../schemes/location');
 var route = require ('../schemes/route');
 var map = require ('../schemes/map');
+var building = require ('../schemes/building');
 var projectController = require ('./projectController.js');
 
 
@@ -26,32 +27,25 @@ exports.getInstituteById  = function (req, res) {
 	var id = req.params.instituteId;
     console.log ('Dep ID = ' + id);
 
-    institute.findOne ({_id : id}).exec (function (err, institute) {
+    institute.findOne ({_id : id}).populate('location', 'description lat lng url id').populate('building', 'name location locationDescription zoom id').exec (function (err, instituteFound) {
 
-	if (institute != undefined) {
-		instJSON = {
-			"id" : institute._id, 
-			"name" : institute.name,
-			"logoUrl" : institute.logoUrl,
-			"primaryColor": institute.primaryColor,
-			"secondaryColor": institute.secondaryColor,
-			"lineColor": institute.lineColor,
-			"mainTextColor": institute.mainTextColor,
-			"aboutText": institute.aboutText,
-			"aboutImageUrl": institute.aboutImageUrl
-			
-		};
-        
-        res.json (instJSON);
-        return;
-    }
+     var buildingLocation = {
+      path: 'building.location',
+      model: 'location'
+    };
+
+		if (institute) {
+			institute.populate (instituteFound, buildingLocation , function (err, institutePopulatedBuilding) {
+      res.json(institutePopulatedBuilding);
+    });
+		}
+        else {
+        res.send (instituteFound);
+        }
+ 
     
        
-   else {
-   	res.send ({error: "not found"}); 
-   }
-    }
-    );
+    });
 
 
 };
@@ -63,10 +57,23 @@ exports.getInstituteDepartments = function (req, res) {
 	var resultArray = [];
 	
 	
-	department.find ({institute : id}).exec (function (err, departments) {
+	department.find ({institute : id}).populate('location', 'description lat lng url id').populate('building', 'name  location locationDescription zoom id').exec (function (err, departments) {
 		
 
-			res.send (departments);
+			var buildingLocation = {
+      path: 'building.location',
+      model: 'location'
+    };
+
+		if (departments) {
+			department.populate (departments, buildingLocation , function (err, departmentPopulatedBuilding) {
+      		res.json(departmentPopulatedBuilding);
+    		});
+		}
+        else {
+        res.send (departments);
+        }
+ 
 		
 		
 		 });
@@ -246,22 +253,22 @@ exports.getDepartmentById  = function (req, res) {
     console.log ('Dep ID = ' + id);
     
 
-    department.findOne ({_id : id}).exec (function (err, doc) {
-	if(doc) {
-		depJSON = {
-			"id" : doc._id, 
-			"name" : doc.name,
-			"imageUrl" :  doc.imageUrl,
-			"largeImageUrl": doc.largeImageUrl,
-			"locationDescription": doc.locationDescription
-		};
-        
-        res.json (depJSON);
-        return;
-       }
-       else {
-       	res.send(null);
-       }
+    department.findOne ({_id : id}).populate('location', 'description lat lng url id').populate('building', 'name  location locationDescription zoom id').exec (function (err, departmentFound) {
+	
+	var buildingLocation = {
+      path: 'building.location',
+      model: 'location'
+    };
+
+		if (departmentFound) {
+			institute.populate (departmentFound, buildingLocation , function (err, departmentPopulatedBuilding) {
+      res.json(departmentPopulatedBuilding);
+    });
+		}
+        else {
+        res.send (departmentFound);
+        }
+ 
     });
 	
 	

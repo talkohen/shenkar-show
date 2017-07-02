@@ -25,11 +25,10 @@ var upload = multer({
    fileFilter: function (req, file, cb) {
  if (file.mimetype !== 'image/png' || file.originalname =='') {
  	
- 	console.log ("ERRORRRRRRR: " + file.originalname);
   req.fileValidationError = 'goes wrong on the mimetype';
   return cb(null, false, new Error('goes wrong on the mimetype'));
  }
- console.log ("NOOOOOOO: " + file.originalname);
+
  file.key = '';
  cb(null, true);
 },
@@ -43,22 +42,6 @@ var upload = multer({
     }
   })
 });
-
-// var deleteImage = s3.deleteObjects({
-    // Bucket: 'myprivatebucket/some/subfolders',
-    // Delete: {
-        // Objects: [
-             // { Key: 'nameofthefile1.extension' }
-        // ]
-    // }
-// }, function(err, data) {
-// 
-    // if (err)
-        // return console.log(err);
-// 
-    // console.log('success');
-// 
-// });
 
 
 //controllers
@@ -108,16 +91,6 @@ app.use(function(req, res, next) {
 });
 
 
-// app.use(function(req, res, next) {
-    // if (req.cookies.shenkarShowSession != undefined ){
-// // if user is not logged-in redirect back to login page //
-        // res.writeHead(302, {Location: '/'});
-	 		// res.end ();
-// 	 		
-    // }   else{
-        // next();
-    // }
-// });
 var ejs = require('ejs');
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/public/views');
@@ -127,8 +100,6 @@ app.set('view engine', 'html');
 
 //users
 app.get ('/allUsers', userController.getAllUsers);
-app.get ('/users/id/:userId', userController.getUserById);
-app.get ('/users/name/:userName', userController.getUserByName);
 app.post ('/users/auth', userController.auth);
 app.get ('/logout', authController.logout);
 app.get ('/session', authController.getSession);
@@ -179,35 +150,30 @@ app.get ('/projects/id/:projectId', projectController.getProjectById);
 app.get ('/projects/name/:projectName', projectController.getProjectByName);
 app.post ('/projects/create', upload.fields([{name : 'imageUrl', maxCount : 1 } , {name : 'soundUrl', maxCount : 1 }]) ,function(req, res){projectController.createProject(req,res, req.files);} );
 app.post ('/projects/update', upload.fields([{name : 'imageUrl', maxCount : 1 } , {name : 'soundUrl', maxCount : 1 }]) ,
- function(req, res){
+ 	function(req, res){
 
-	if (req.files){
-		
-		
-	projectController.updateProject(req,res, req.files);}
-	else {
-		
-		projectController.updateProject(req,res);
-	}
+		if (req.files){
+			projectController.updateProject(req,res, req.files);
+		}
+		else {
+			projectController.updateProject(req,res);
+		}
 	});
 app.post ('/projects/delete', projectController.deleteProject);
 app.get ('/instituteProjects', projectController.getInstituteProjects);
 
 
 //admin
-app.get ('/admin', adminController.getIndex);
 app.post ('/admin/createInstitute',  upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,
 
-function(req, res){
-	if (req.files){
-	adminController.createInstitute(req,res, req.files);
-	}
-	
-	else {
+	function(req, res){
 		
-		adminController.createInstitute(req,res);
-	}
-	
+		if (req.files){
+			adminController.createInstitute(req,res, req.files);
+		}
+		else {	
+			adminController.createInstitute(req,res);
+		}		
 	});
 	
 app.post ('/admin/updateInstitute',   upload.fields([{name : 'logoUrl', maxCount : 1 } ,{name : 'aboutImageUrl', maxCount : 1 }]) ,

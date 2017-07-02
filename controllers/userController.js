@@ -12,7 +12,7 @@ var sendmail = require('sendmail')();
 
 
 
-
+//Get all the users in the system. (for DEV only)
 exports.getAllUsers = function (req, res) {
 
     user.find ({}).
@@ -25,222 +25,116 @@ exports.getAllUsers = function (req, res) {
     });
 };
 
+//Authenticate username and password
 exports.auth = function (req, res) {
 	
-	if (req.body.userName == undefined || req.body.password == undefined ) {
-		res.send ("missing parameters");
-	}
-	else {
-		console.log (req.body.userName);
-		console.log (req.body.password);
-	var userName = req.body.userName;
-	var query = user.findOne().where ('userName', userName);
-	
-	
-	 query.exec (function (err,doc) {
-	 		try {	
-	 	if (doc.password == req.body.password) {
-	 		if (doc.role == "admin"){
-	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		doc.shenkarShowSession = crypto.hashMake (doc.email);
-	 		
-	 		res.send (doc);
-	 		
-	 		}
-	 		
-	 		else if 
-	 		(doc.role == "institute manager"){
-	 			doc["shenkarShowSession"] = crypto.hashMake (doc.email);
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		
-	 		console.log (doc);
-	 		institute.findOne ({_id : doc.institute}).exec (function (err, institute) {
-	 			
-	 			console.log ("institute 111 : " + institute); 
-	 			if (institute) {
-	 				newDoc = doc.toJSON ();
-	 				console.log ("new doc 1" + newDoc);
-	 				newDoc.instituteName = institute.name;
-	 				console.log ("new doc 1.5" + newDoc);
-	 				console.log ("insti name : " + institute.name);
-	 				doc = newDoc;
-	 				console.log ("new doc 2" + doc);
-	 				}
-	 		res.send (doc);
-	 		});
-	 		
-	 		}
-	 		
-	 		else if 
-	 		(doc.role == "department manager"){
-	 			
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		
-	 		console.log (doc);
-	 		department.findOne ({_id : doc.department}).exec (function (err, department) {
-	 			institute.findOne ({_id : doc.institute}).exec (function (err, institute) {
-	 				
-	 			console.log ("department 111 : " + department); 
-	 			if (department) {
-	 				newDoc = doc.toJSON ();
-	 				console.log ("new doc 1" + newDoc);
-	 				newDoc.departmentName = department.name;
-	 				if (institute) {newDoc.instituteName = institute.name;}
-	 				console.log ("new doc 1.5" + newDoc);
-	 				console.log ("department name : " + department.name);
-	 				doc = newDoc;
-	 				console.log ("new doc 2" + doc);
-	 				}
-	 		res.send (doc);
-	 		});
-	 		});
-	 		}
-	 		
-	 		
-	 		else if (doc.role == "student"){
-	 		res.cookie ("shenkarShowSession", crypto.hashMake (doc.email),  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
-	 		res.cookie ("shenkarShowUserName", doc.name,  { expires: false, path: '/'});
-	 		
-			console.log (doc);
-	 		project.findOne ({_id : doc.project}).exec (function (err, project) {
-	 			institute.findOne ({_id : doc.institute}).exec (function (err, institute) {
-	 			console.log ("project 111 : " + project); 
-	 			if (project) {
-	 				newDoc = doc.toJSON ();
-	 				console.log ("new doc 1" + newDoc);
-	 				newDoc.projectName = project.name;
-	 				if (institute) {newDoc.instituteName = institute.name;}
-	 				console.log ("new doc 1.5" + newDoc);
-	 				console.log ("project name : " + project.name);
-	 				doc = newDoc;
-	 				console.log ("new doc 2" + doc);
-	 				}
-	 		res.send (doc);
-	 		});
-	 		});
+	if (req.body.userName == undefined || req.body.password == undefined ){
+  		res.send ("missing parameters");
+  	}
+	else
+    {
+	     var userName = req.body.userName;
+	     user.findOne().where('userName', userName).exec (function (err,doc) {
+	 		    try {	
+	 	         if (crypto.hashCheck (req.body.password, doc.password)) {
+                institute.findOne ({_id : doc.institute}).exec (function (err, institute) {
+                  department.findOne ({_id : doc.department}).exec (function (err, department) {
+                    project.findOne ({_id : doc.project}).exec (function (err, project) {
+                      newDoc = doc.toJSON ();
+                      if (institute) {newDoc.instituteName = institute.name;}
+                      if (department) {newDoc.departmentName = department.name;}
+                      if (project) {newDoc.projectName = project.name;}
 
-	 		}
-	 		
-	 		else {
-	 			res.cookie ("shenkar-show", "guest",  { expires: false, httpOnly: true });
-	 			
-	 		}
-	 		
-	 	}
-	 	else {
-	 		res.send (false);
-	 	}
-	 	}
-	 	catch (exception) {
- 	console.log (exception); 
- 	res.send (false);
- }
-	 	
-	 });
-	}
- 
+                      doc = newDoc;
+
+	 		          res.cookie ("shenkarShowUserId", doc._id,  { expires: false, path: '/'});
+	 		          res.send (doc);	
+                      });
+                    });
+                  });
+	 	         }
+	 	         else {
+	 		          res.send (false);
+	 	         }
+	 	       }
+	 	       catch (exception) {
+ 	            console.log (exception); 
+ 	            res.send (false);
+              }	
+	     });
+	   } 
 };
 
 
-exports.getUserById  = function (req, res) {
-    var id = req.params.userId;
-    console.log ('User ID = ' + id);
-
-    user.find ({_id : id}).
-    where('user').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
-        return;
-    });
-};
-
-exports.getUserByName  = function (req, res) {
-    var name = req.params.userName;
-    console.log ('User name = ' + name);
-
-    user.find ({name : name}).
-    where('user').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
-        res.json (docs);
-        return;
-    });
-};
-
+//Create a new user in the system
 exports.createUser = function (request, response) {
 
+    //Check if the username is already taken
     user.find({userName : request.body.userName },function(err, doc){
+
        if (doc.length){
             console.log("user already exists");
             response.send ("user already exists");
-          }else{
+          }
+        else{
           	
+            //Generate a new , 8 character long password
           	func.generatePassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', function (password) {
           	
              var newUser = new user({
              	role : request.body.role,
              	userName :request.body.userName,
                 name :request.body.name,
-                password : password,
+                password : crypto.hashMake(password),
                 email :request.body.email,
                 department :request.body.department,
                 institute :request.body.institute,
                 project: request.body.project
               });
               
-           try {
-              newUser.save(function(error, result) {
-                if (error) {
-                  console.error(error);
-                } else {
-                  console.log("Saved document : " + doc);
-                  
-                  sendmail({
-    		from: 'shenkar-show@shenkar-show.co.il',
-    		to: request.body.email,
-    		subject: 'הזמנה לתערוכת שנקר',
-    		html: 	'<div style = "text-align: center">'+
-    				'<h1>תערוכת שנקר</h1>'+
-    				'<img src = "https://s3.amazonaws.com/shenkar-show2/ic_launcher.png" style = "width:50px; height:50px"> <br>'+
-    				'.שלום, משתמש חדש נוצר עבורך באתר תערוכת שנקר<br> : שם המשתמש <br> ' + 
-    				'<span style = "color: red; font-weight: bold">'+
-    				request.body.userName +'</span><br>'+
-    				' : סיסמא <br>' + 
-    				'<span style = "color: red; font-weight: bold">'+
-    				password+'</span><br><br>'+
-    				'<a href = "https://shenkar-show-web-new.herokuapp.com/#/login">מעבר לאתר</a>'+
-    				'</div>' ,
-  			}, function(err, reply) {
-    		console.log(err && err.stack);
-    		console.dir(reply);
-				});
-                  
-
-                  response.send (true);
-                };
+              try {
+                  newUser.save(function(error, result) {
+                    if (error) {
+                      console.error(error);
+                    }
+                    else {                  
+                          //If the user is created successfully, send him/her an email with the username and password.
+                          sendmail({
+                          		from: 'shenkar-show@shenkar-show.co.il',
+                          		to: request.body.email,
+                          		subject: 'הזמנה לתערוכת שנקר',
+                          		html: 	'<div style = "text-align: center">'+
+                          				'<h1>תערוכת שנקר</h1>'+
+                          				'<img src = "https://s3.amazonaws.com/shenkar-show2/ic_launcher.png" style = "width:50px; height:50px"> <br>'+
+                          				'.שלום, משתמש חדש נוצר עבורך באתר תערוכת שנקר<br> : שם המשתמש <br> ' + 
+                          				'<span style = "color: red; font-weight: bold">'+
+                          				request.body.userName +'</span><br>'+
+                          				' : סיסמא <br>' + 
+                          				'<span style = "color: red; font-weight: bold">'+
+                          				password+'</span><br><br>'+
+                          				'<a href = "https://shenkar-show-web-new.herokuapp.com/#/login">מעבר לאתר</a>'+
+                          				'</div>' ,
+                        			}, 
+                          function(err, reply) {
+                      		console.log(err && err.stack);
+                      		console.dir(reply);
+                  				});
+                      
+                          response.send (true);
+                    };
+                  });
+                }
+              catch (exception) {
+                 	console.log (exception); 
+                 	response.send (false);
+                }
               });
-              }
-               catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
- });
-            } 
-           
-          });    
+            }    
+      });    
 };
 
+
+//Update a user's details in the system.
 exports.updateUser = function (request, response) {
 
 	var department = null;
@@ -248,285 +142,212 @@ exports.updateUser = function (request, response) {
 
 	user.findOne({_id: request.body.id}).exec (function (err,doc) {
 	
-	try {	
-	 	var query = doc.update ({
-	 		$set: {
-                name :request.body.name,
-                email :request.body.email,
-                department : department,
-                institute :request.body.institute
-	 		}	 		
-	 	});
- 	
- 	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
- 	});
- 	      	
-			console.log("Updated Doc : " + doc);
-            response.send (true);
-            
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
-
- });
+    	try {	
+    	 	var query = doc.update ({
+    	 		$set: {
+                    name :request.body.name,
+                    email :request.body.email,
+                    department : department,
+                    institute :request.body.institute
+    	 		}	 		
+    	 	});
+     	
+     	 	query.exec (function (err, result) {
+     		 console.log ("Result : " + JSON.stringify (result));
+     	  });
+              
+        response.send (true);
+                
+     	}
+     catch (exception) {
+     	console.log (exception); 
+     	response.send (false);
+     }
+  });
 };
 
 
+//Delete a user from the system
 exports.deleteUser = function (request, response) {
 
 	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
 	 		try {	
-	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({_id: request.body.id}, function (err, doc) {
-	 			console.log("Removed doc : " + doc);
-                  response.send (true);
-	 		});
-	 	});
-	 	
-	 	}
-	 	catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
-	 	
+	 	       var query = doc.remove (function (err, deletedDoc) {
+            response.send (true);
+	 	       }); 	
+	   }
+	 	 catch (exception) {
+ 	        console.log (exception); 
+ 	        response.send (false);
+        }	 	
 	 });
-
 };
 
 
-
+//Create a new student in the system (with callback)
 exports.createStudent = function (request, response, callback) {
 
+    //Check if the username is already taken
     user.find({userName : request.body.userName },function(err, doc){
        if (doc.length){
             console.log("user already exists");
             response.send ("user already exists");
-          }else{
+          }
+        else{
           	
+            //Generate a new , 8 character long password
           	func.generatePassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', function (password) {
           	
-             var newUser = new user({
-             	role : request.body.role,
-             	userName :request.body.userName,
-                name :request.body.name,
-                password : password,
-                email :request.body.email,
-                department :request.body.department,
-                institute :request.body.institute,
-                project: request.body.project
-              });
+                 var newUser = new user({
+                   	role : request.body.role,
+                   	userName :request.body.userName,
+                    name :request.body.name,
+                    password : crypto.hashMake(password),
+                    email :request.body.email,
+                    department :request.body.department,
+                    institute :request.body.institute,
+                    project: request.body.project
+                  });
               
-           try {
-              newUser.save(function(error, result) {
-                if (error) {
-                  console.error(error);
-                } else {
-                  console.log("Saved document : " + doc);
-                  
-                  sendmail({
-    		from: 'shenkar-show@shenkar-show.co.il',
-    		to: request.body.email,
-    		subject: 'הזמנה לתערוכת שנקר',
-    		html: 	'<div style = "text-align: center">'+
-    				'<h1>תערוכת שנקר</h1>'+
-    				'<img src = "https://s3.amazonaws.com/shenkar-show2/ic_launcher.png" style = "width:50px; height:50px"> <br>'+
-    				'.שלום, משתמש חדש נוצר עבורך באתר תערוכת שנקר<br> : שם המשתמש <br> ' + 
-    				'<span style = "color: red; font-weight: bold">'+
-    				request.body.userName +'</span><br>'+
-    				' : סיסמא <br>' + 
-    				'<span style = "color: red; font-weight: bold">'+
-    				password+'</span><br><br>'+
-    				'<a href = "https://shenkar-show-web-new.herokuapp.com/#/login">מעבר לאתר</a>'+
-    				'</div>' ,
-  			}, function(err, reply) {
-    		console.log(err && err.stack);
-    		console.dir(reply);
-				});
-                  
-
-                  callback (true);
-                };
+                 try {
+                    newUser.save(function(error, result) {
+                      if (error) {
+                        console.error(error);
+                      } else {
+                        
+                          //If the user is created successfully, send him/her an email with the username and password.
+                          sendmail({        
+                        		from: 'shenkar-show@shenkar-show.co.il',
+                        		to: request.body.email,
+                        		subject: 'הזמנה לתערוכת שנקר',
+                        		html: 	'<div style = "text-align: center">'+
+                        				'<h1>תערוכת שנקר</h1>'+
+                        				'<img src = "https://s3.amazonaws.com/shenkar-show2/ic_launcher.png" style = "width:50px; height:50px"> <br>'+
+                        				'.שלום, משתמש חדש נוצר עבורך באתר תערוכת שנקר<br> : שם המשתמש <br> ' + 
+                        				'<span style = "color: red; font-weight: bold">'+
+                        				request.body.userName +'</span><br>'+
+                        				' : סיסמא <br>' + 
+                        				'<span style = "color: red; font-weight: bold">'+
+                        				password+'</span><br><br>'+
+                        				'<a href = "https://shenkar-show-web-new.herokuapp.com/#/login">מעבר לאתר</a>'+
+                        				'</div>' ,
+            			        }, 
+                          function(err, reply) {
+                      		console.log(err && err.stack);
+                      		console.dir(reply);
+                  				});
+                        
+                          callback (true);
+                        };
+                    });
+                  }
+                catch (exception) {
+               	console.log (exception); 
+               	callback (false);
+                }
               });
-              }
-               catch (exception) {
- 	console.log (exception); 
- 	callback (false);
- }
- });
             }
-          });    
+      });    
 };
 
 
 
-
+//Update a student's details in the system (with callback)
 exports.updateStudent = function (request, response, callback) {
-
-
 
 	user.findOne({_id: request.body.id}).exec (function (err,doc) {
 	
-	try {	
-	 	var query = doc.update ({
-	 		$set: {
+    try {	
+	 	       var query = doc.update ({
+	 		        $set: {
                 name :request.body.name,
                 email :request.body.email,
-                department :request.body.department,
-                institute :request.body.institute,
                 project :request.body.project
-	 		}	 		
-	 	});
+	 		        }	 		
+	 	       });
  	
- 	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
- 	});
+ 	 	       query.exec (function (err, result) {
+ 		       console.log ("Result: " + JSON.stringify (result));
+ 	          });
  	      	
-			console.log("Updated Doc : " + doc);
             callback (true);
             
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	callback (false);
- }
-
- });
+ 	  }
+    catch (exception) {
+ 	    console.log (exception); 
+ 	    callback (false);
+    }
+  });
 };
 
+//Delete a user from the system
 exports.deleteStudent = function (request, response, callback) {
 
 	 user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) {
-	 		try {	
-	 	var query = doc.remove (function (err, deletedDoc) {
-	 		user.findOne ({_id: request.body.id}, function (err, doc) {
-	 			console.log("Removed doc : " + doc);
-                  callback (true);
-	 		});
-	 	});
-	 	
-	 	}
-	 	catch (exception) {
- 	console.log (exception); 
- 	callback (false);
- }
-	 	
+	     try {	
+	 	     var query = doc.remove (function (err, deletedDoc) {
+            callback (true);
+          });	
+	 	    }
+	 	   catch (exception) {
+ 	      console.log (exception); 
+ 	      callback (false);
+      }
 	 });
-
 };
 
 
+//Update a user's password
 exports.updatePassword = function (request, response) {
+
 	if (request.headers['x-access-token'] != undefined){
-	auth.authCookies( request.headers['x-access-token'], function (result) {
+	     auth.authCookies( request.headers['x-access-token'], function (result) {
 	
-	userID = request.headers['x-access-token'];
-	
-		user.findOne().where ({_id :  userID}).exec (function (err,doc) { 
-			if (doc) {
-			if (doc.password == request.body.oldPassword) {
-			if (request.body.newPassword == request.body.reNewPassword) {
+	         userID = request.headers['x-access-token'];
+
+		       user.findOne().where ({_id :  userID}).exec (function (err,doc) { 
+			         if (doc) {
+			           if ( crypto.hashCheck(request.body.oldPassword, doc.password )) {
+			             if (request.body.newPassword == request.body.reNewPassword) {
 				
-				try {	
-	 	var query = doc.update ({
-	 		$set: {
-                password :request.body.newPassword
-	 		}	 		
-	 	});
+				              try {	
+	 	                     var query = doc.update ({
+	 		                      $set: {
+                                password : crypto.hashMake( request.body.newPassword)
+	 		                      }	 		
+	 	                      });
  	
- 	 	query.exec (function (err, results) {
- 		console.log ("\n Resulets Object : " + JSON.stringify (results));
- 	});
- 	      	
-			console.log("Updated Doc : " + doc);
-            response.send (true);
+ 	 	                      query.exec (function (err, result) {
+                       		   console.log ("\n Result : " + JSON.stringify (result));
+                       	  });
+                          response.send (true);
             
- 	}
- catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
+ 	                      }
+                      catch (exception) {
+                         	console.log (exception); 
+                         	response.send (false);
+                       }
 			
 			
-			}
-			else {
-				response.send ({error: "new passwords dont match."});
-			}
-			}
-			else {
-				response.send ({error: "incorrect password."});
-			}
-		}
-		else {
-				response.send ({error: "user not found."});
-			}
-		});
+			               }
+			             else {
+				                response.send ({error: "new passwords dont match."});
+			                  }
+			           }
+			         else {
+				            response.send ({error: "incorrect password."});
+			             }
+		            }
+		        else {
+				          response.send ({error: "user not found."});
+			           }
+		      });
 		
-
-
-	});
-	}
+	     });
+	   }
 	else {
 				response.send ({error: "no session."});
 			}
 };
 
-// 
-// exports.updatePassword = function (request, response) {
-// 	
-		// if (request.headers['x-access-token'] != undefined){
-	// auth.authCookies( request.headers['x-access-token'], function (result) {
-	// console.log ("userType : " + result);
-// 	
-	// if (request.headers['x-access-token'] == requset.body.id) {
-// 	
-	// user.findOne().where ({_id :  request.body.id}).exec (function (err,doc) { 
-// 		
-		// if (doc.password == request.body.oldPassword) {
-			// if (request.body.newPassword == request.body.reNewPassword) {
-// 			
-// 			
-			// try {	
-	 	// var query = doc.update ({
-	 		// $set: {
-                // password :request.body.newPassword
-	 		// }	 		
-	 	// });
-//  	
- 	 	// query.exec (function (err, results) {
- 		// console.log ("\n Resulets Object : " + JSON.stringify (results));
- 	// });
-//  	      	
-			// console.log("Updated Doc : " + doc);
-            // callback (true);
-//             
- 	// }
- // catch (exception) {
- 	// console.log (exception); 
- 	// callback (false);
- // }
-// 				
-		// }
-// 		
-				// else {
-			// response.send ("new passwords dont match");
-		// }
-		// }
-// 
-		// else {
-			// response.send ("wrong password");
-		// }
-// 		
-	// });
-// else {
-	// response.send ("not authorized!");
-// }
-	// });
-	 // }
-	// else {
-		// response.send ("not authorized!");
-	// }
-// 	
-// };
+

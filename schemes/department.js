@@ -13,7 +13,11 @@ var departmentSchema = new schema (
     imageUrl : String, 
     largeImageUrl: String,
     locationDescription: String,
+    location: {type: Number, ref: 'location'},
+    path: String,
+    building: {type: Number, ref: 'building'},
     institute: {type: Number, ref: 'institute'}
+    
 }, 
 
 {collection: 'departments'}

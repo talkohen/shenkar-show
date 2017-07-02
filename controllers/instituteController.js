@@ -92,7 +92,10 @@ exports.createInstitute = function (request, response, files) {
     			lineColor: request.body.lineColor,
 			    mainTextColor: request.body.mainTextColor,
 			    aboutText: request.body.aboutText, 
-    			aboutImageUrl: imageKey
+    			aboutImageUrl: imageKey,
+    			location: request.body.location,
+    			path: request.body.path,
+    			building: request.body.building
 
 
               });
@@ -120,7 +123,8 @@ exports.createInstitute = function (request, response, files) {
 exports.updateInstitute = function (request, response, files) {
 
 	
-		try {
+	
+	try {
 
 	var logo = null;
 	var image = null ;
@@ -146,7 +150,10 @@ exports.updateInstitute = function (request, response, files) {
     			lineColor: request.body.lineColor,
 			    mainTextColor: request.body.mainTextColor,
 			    aboutText: request.body.aboutText, 
-    			aboutImageUrl: image
+    			aboutImageUrl: image,
+    			location: request.body.location,
+    			path: request.body.path,
+    			building: request.body.building
 
 
 	 		}

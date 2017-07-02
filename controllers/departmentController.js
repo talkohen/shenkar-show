@@ -74,6 +74,14 @@ exports.createDepartment = function (request, response, files) {
 	}
 }
 
+var location =null;
+
+console.log ("location : " + location);
+
+console.log ("request.body.location 0 : " +request.body.location );
+
+if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
+
           	
           	
              var newDepartment = new department({
@@ -81,7 +89,11 @@ exports.createDepartment = function (request, response, files) {
                 imageUrl : logoKey,
                 largeImageUrl : imageKey,
                 locationDescription: request.body.locationDescription,
-                institute : request.body.institute
+                location: location,
+    			path: request.body.path,
+    			building: request.body.building,
+                institute : request.body.institute,
+
 
               });
               
@@ -122,12 +134,26 @@ exports.updateDepartment = function (request, response, files) {
 	if (files['largeImageUrl'] != undefined) { image = 'https://s3.amazonaws.com/shenkar-show2/' + files['largeImageUrl'][0].key;} else {image = doc.largeImageUrl;}
 	}
 	
+	var location =null;
+
+console.log ("location : " + location);
+
+console.log ("request.body.location 0 : " +request.body.location );
+
+if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
+
+	
+	
+	
 	 	var query = doc.update ({
 	 		$set: {
                 name :request.body.name,
                 imageUrl : logo,
                 largeImageUrl : image,
                 locationDescription: request.body.locationDescription,
+                location: location,
+                path: request.body.path,
+    			building: request.body.building,
                 institute : request.body.institute
 	 		}
 	 	});

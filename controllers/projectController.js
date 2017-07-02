@@ -208,10 +208,11 @@ if (request.body.location != 'undefined') { console.log ("request.body.location 
 			if (image5 != undefined) {imageKeys.push (image5);}
 			
 			var video = null;
-if (request.body.videoUrl != 'undefined') { video = request.body.videoUrl; }
+if (request.body.videoUrl != undefined) { video = request.body.videoUrl; }
 	
           	func.getYoutubeSuffix(video, function (videoSuffix) {
-			
+			console.log ("videoSuffix : " + videoSuffix);
+			if (videoSuffix == "null") {videoSuffix = null;}
 	 	var query = doc.update ({
 	 		$set: {
 	 			
