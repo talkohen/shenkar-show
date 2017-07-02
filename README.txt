@@ -11,21 +11,21 @@ https://shenkar-show.herokuapp.com/logout
 
 Admin- 
 //institutes
-http://shenkar-show-dev.herokuapp.com/admin/createInstitute {name : text , aboutText : text, logoUrl: file , aboutimageUrl : file, mainTextColor: text, lineColor: text, secondaryColor: text, primaryColor: text}
-http://shenkar-show-dev.herokuapp.com/admin/updateInstitute {id: number , name : text , aboutText : text, logoUrl: file , logoKey: text (current imageUrl), aboutimageUrl : file, imageKey: text (current imageUrl), mainTextColor: text, lineColor: text, secondaryColor: text, primaryColor: text}
-http://shenkar-show-dev.herokuapp.com/admin/deleteInstitute {id: number}
+http://shenkar-show.herokuapp.com/admin/createInstitute {name : text , aboutText : text, logoUrl: file , aboutimageUrl : file, mainTextColor: text, lineColor: text, secondaryColor: text, primaryColor: text, building: number, path:text, location:number}
+http://shenkar-show.herokuapp.com/admin/updateInstitute {id: number , name : text , aboutText : text, logoUrl: file , logoKey: text (current imageUrl), aboutimageUrl : file, imageKey: text (current imageUrl), mainTextColor: text, lineColor: text, secondaryColor: text, primaryColor: text, building: number, path:text, location:number}
+http://shenkar-show.herokuapp.com/admin/deleteInstitute {id: number}
 
 //users
-http://shenkar-show-dev.herokuapp.com/admin/createUser {userName: text , role: "institute manager", name: text, password: text, email: text, institute: number}
-http://shenkar-show-dev.herokuapp.com/admin/updateUser {userName: text , role: "institute manager", name: text, password: text, email: text, institute: number}
-http://shenkar-show-dev.herokuapp.com/admin/deleteUser {id: number, institute: number}
+http://shenkar-show.herokuapp.com/admin/createUser {userName: text , role: "institute manager", name: text, password: text, email: text, institute: number}
+http://shenkar-show.herokuapp.com/admin/updateUser {userName: text , role: "institute manager", name: text, password: text, email: text, institute: number}
+http://shenkar-show.herokuapp.com/admin/deleteUser {id: number, institute: number}
 
 
 Institute manager - 
 
 //departments
-https://shenkar-show.herokuapp.com/institute/createDepartment {institute: number, name: text, locationDescription: text, imageUrl: file, largeImageUrl: file}
-https://shenkar-show.herokuapp.com/institute/updateDepartment {id: number, institute: number, name: text, locationDescription: text, imageUrl: file, logoKey:text (current imageUrl), largeImageUrl: file, imageKey:text (current imageUrl)}
+https://shenkar-show.herokuapp.com/institute/createDepartment {institute: number, name: text, locationDescription: text, imageUrl: file, largeImageUrl: file, building: number, path:text, location:number}
+https://shenkar-show.herokuapp.com/institute/updateDepartment {id: number, institute: number, name: text, locationDescription: text, imageUrl: file, logoKey:text (current imageUrl), largeImageUrl: file, imageKey:text (current imageUrl), building: number, path:text, location:number}
 https://shenkar-show.herokuapp.com/institute/deleteDepartment {id: number, institute: number }
 https://shenkar-show.herokuapp.com/institute/departments
 
@@ -37,16 +37,16 @@ https://shenkar-show.herokuapp.com/institute/deleteUser {id: number, institute: 
 
 //locations
 https://shenkar-show.herokuapp.com/institute/locations
-http://shenkar-show-dev.herokuapp.com/institute/createLocation {institute: number , lat: number, lng: number , url: text, description: text}
-http://shenkar-show-dev.herokuapp.com/institute/updateLocation {id:number , institute: number , lat: number, lng: number , url: text, description: text}
-http://shenkar-show-dev.herokuapp.com/institute/deleteLocation {id: number, institute: number}
+http://shenkar-show.herokuapp.com/institute/createLocation {institute: number , lat: number, lng: number , url: text, description: text}
+http://shenkar-show.herokuapp.com/institute/updateLocation {id:number , institute: number , lat: number, lng: number , url: text, description: text}
+http://shenkar-show.herokuapp.com/institute/deleteLocation {id: number, institute: number}
 
 
 //routes
 https://shenkar-show.herokuapp.com/institute/routes
-http://shenkar-show-dev.herokuapp.com/institute/createRoute {institute: number , name: text, projectIds: [number]}
-http://shenkar-show-dev.herokuapp.com/institute/updateRoute {id: number, institute: number , name: text, projectIds: [number]}
-http://shenkar-show-dev.herokuapp.com/institute/deleteRoute {id: number, institute: number}
+http://shenkar-show.herokuapp.com/institute/createRoute {institute: number , name: text, projectIds: [number]}
+http://shenkar-show.herokuapp.com/institute/updateRoute {id: number, institute: number , name: text, projectIds: [number]}
+http://shenkar-show.herokuapp.com/institute/deleteRoute {id: number, institute: number}
 
 
 
