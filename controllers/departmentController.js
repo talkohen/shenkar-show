@@ -76,11 +76,22 @@ exports.createDepartment = function (request, response, files) {
 
 var location =null;
 
-console.log ("location : " + location);
-
-console.log ("request.body.location 0 : " +request.body.location );
-
-if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
+if (request.body.location != 'undefined') 
+{ 
+location = request.body.location;
+ } 
+ else { 
+ 	location = 1;
+ 	}
+ 	
+ 	var building =null;
+ 	if (request.body.building != 'undefined') 
+{ 
+building = request.body.building;
+ } 
+ else { 
+ 	building = 0;
+ 	}
 
           	
           	
@@ -90,8 +101,8 @@ if (request.body.location != 'undefined') { console.log ("request.body.location 
                 largeImageUrl : imageKey,
                 locationDescription: request.body.locationDescription,
                 location: location,
-    			path: request.body.path,
-    			building: request.body.building,
+    			path: null,
+    			building: building,
                 institute : request.body.institute,
 
 
@@ -124,9 +135,7 @@ exports.updateDepartment = function (request, response, files) {
 
 	
 	try {
-		
-			
-		
+
 	 department.findOne({_id: request.body.id}).exec (function (err,doc) {
 	 	
 	 	if (files != undefined) {
@@ -136,15 +145,16 @@ exports.updateDepartment = function (request, response, files) {
 	
 	var location =null;
 
-console.log ("location : " + location);
-
-console.log ("request.body.location 0 : " +request.body.location );
-
 if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
 
-	
-	
-	
+ 	var building =null;
+ 	if (request.body.building != 'undefined') 
+{ 
+building = request.body.building;
+ } 
+ else { 
+ 	building = 0;
+ 	}	
 	 	var query = doc.update ({
 	 		$set: {
                 name :request.body.name,
@@ -152,18 +162,16 @@ if (request.body.location != 'undefined') { console.log ("request.body.location 
                 largeImageUrl : image,
                 locationDescription: request.body.locationDescription,
                 location: location,
-                path: request.body.path,
     			building: request.body.building,
                 institute : request.body.institute
 	 		}
 	 	});
 
  	 	query.exec (function (err, results) {
+ 	 	
+ 	 	console.log("Updated Doc : " + doc);
  	 		
  	});
- 	      	
-			console.log("Updated Doc : " + doc);
-        
 
  });
 		
@@ -192,10 +200,8 @@ exports.deleteDepartment = function (request, response) {
 	 	project.remove ({departmentId: doc.id}).exec (function (err, deletedProjects) {
 	 		user.remove ({department: doc.id}).exec (function (err, deletedUsers) {
 	 			doc.remove (function (err, deletedDoc) {
-	 		department.findOne ({_id: request.body.departmentId}, function (err, doc) {
-	 			console.log("Removed doc : " + doc);
+
                   response.send (true);
-	 		});
 	 	});
 	 	});
 	 	});

@@ -247,6 +247,12 @@ app.get ('/institute/routes',  instituteManagerController.getRoutes);
 app.post ('/institute/createRoute',  instituteManagerController.createRoute);
 app.post ('/institute/updateRoute',  instituteManagerController.updateRoute);
 app.post ('/institute/deleteRoute',  instituteManagerController.deleteRoute);
+//routes
+app.get ('/institute/buildings',  instituteManagerController.getBuildings);
+app.post ('/institute/createBuilding',  instituteManagerController.createBuilding);
+app.post ('/institute/updateBuilding',  instituteManagerController.updateBuilding);
+app.post ('/institute/deleteBuilding',  instituteManagerController.deleteBuilding);
+
 
 
 //department manager
@@ -325,10 +331,8 @@ app.get ('/guest/department/id/:departmentId/projects', guestController.getDepar
 app.get ('/guest/institute/:instituteId/department/:departmentId/projects', guestController.getInstituteProjects2);
 //routes
 app.get ('/guest/institute/id/:instituteId/routes', guestController.getInstituteRoutes);
-//maps
-app.get ('/guest/institute/:instituteId/maps', guestController.getInstituteMaps);
-app.get ('/guest/institute/:instituteId/mapsArray', guestController.getInstituteMapsArray);
-app.get ('/guest/map/:mapId', guestController.getMapById);
+
+
 //search
 app.get ('/guest/institute/:instituteId/projects/:keyword', guestController.getProjectsBySearch);
 

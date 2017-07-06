@@ -15,13 +15,9 @@ var sendmail = require('sendmail')();
 //Get all the users in the system. (for DEV only)
 exports.getAllUsers = function (req, res) {
 
-    user.find ({}).
-    where('user').ne ('PRIVATE').
-    exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
+    user.find ({}).exec (function (err, docs) {
         res.json (docs);
-        return;
+
     });
 };
 
@@ -73,7 +69,6 @@ exports.createUser = function (request, response) {
     user.find({userName : request.body.userName },function(err, doc){
 
        if (doc.length){
-            console.log("user already exists");
             response.send ("user already exists");
           }
         else{
@@ -153,7 +148,7 @@ exports.updateUser = function (request, response) {
     	 	});
      	
      	 	query.exec (function (err, result) {
-     		 console.log ("Result : " + JSON.stringify (result));
+     		 console.log ("updated User number: " + doc._id);
      	  });
               
         response.send (true);
@@ -190,7 +185,6 @@ exports.createStudent = function (request, response, callback) {
     //Check if the username is already taken
     user.find({userName : request.body.userName },function(err, doc){
        if (doc.length){
-            console.log("user already exists");
             response.send ("user already exists");
           }
         else{
@@ -267,7 +261,7 @@ exports.updateStudent = function (request, response, callback) {
 	 	       });
  	
  	 	       query.exec (function (err, result) {
- 		       console.log ("Result: " + JSON.stringify (result));
+ 		       console.log ("updated Student: " + doc._id);
  	          });
  	      	
             callback (true);
@@ -318,7 +312,7 @@ exports.updatePassword = function (request, response) {
 	 	                      });
  	
  	 	                      query.exec (function (err, result) {
-                       		   console.log ("\n Result : " + JSON.stringify (result));
+                       		   console.log ("updated Password for user : " + doc._id);
                        	  });
                           response.send (true);
             

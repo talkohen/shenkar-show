@@ -3,10 +3,11 @@ var user = require ('../schemes/user');
 var institute = require ('../schemes/institute');
 var user = require ('../schemes/user');
 var department = require ('../schemes/department');
-var map = require ('../schemes/map');
+var building = require ('../schemes/building');
 var departmentController = require ('../controllers/departmentController');
 var location = require ('../schemes/location');
 var locationController = require ('../controllers/locationController');
+var buildingController = require ('../controllers/buildingController');
 var route = require ('../schemes/route');
 var routeController = require ('../controllers/routeController');
 var userController = require ('../controllers/userController');
@@ -183,21 +184,18 @@ exports.getDepartments = function (req,res) {
 	
 	if (req.headers['x-access-token'] != undefined){
 	
-	console.log ("req.headers['x-access-token'] : " +req.headers['x-access-token']);
 	auth.authCookies( req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
+
 	if (result == 'institute manager')
 	{
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     department.find ({ institute : manager.institute}).exec (function (err, docs) {
     
-        console.log ('docs: ' + docs);
         res.json (docs);
-        return;
+        
     });
 		
 		
@@ -217,20 +215,17 @@ exports.getDepartment = function (req,res) {
 	
 	if ( req.headers['x-access-token'] != undefined){
 	auth.authCookies(req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		var departmentId =  req.params.departmentId;
 		
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     		department.findOne ({ _id : departmentId}).exec (function (err, docs) {
     			
     			if(manager.institute == docs.institute) {
-        			console.log ('docs: ' + docs);
         			res.json (docs);
        			}
        			
@@ -257,25 +252,22 @@ else {
 exports.getUsers = function (req, res) {
 	
 	if (req.headers['x-access-token'] != undefined){
+		
 	auth.authCookies(req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		var myUsers = [];
 		var managerId =  req.headers['x-access-token'];
-		console.log ('User ID = ' + managerId);
 		
 		user.findOne ({_id : managerId}).exec (function (err, manager){
 		
 	    institute.findOne ({ _id : manager.institute}).exec (function (err, doc) {
 	    	
-	    	console.log ("INSTITUTE : " + doc);
-	    	
 	    	user.find ({ institute : doc._id, role: "department manager"}).populate('institute', 'name').populate('department', 'name').
     exec (function (err, instituteUsers) {
-        console.log ('institute Users: ' + instituteUsers);
+    	
         res.send (instituteUsers);
-        return;
+        
     });
     
     });
@@ -583,19 +575,17 @@ exports.getLocations = function (req,res) {
 	
 	if ( req.headers['x-access-token'] != undefined){
 	auth.authCookies( req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
+		
 	if (result == 'institute manager')
 	{
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
-    		
+
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     location.find ({ institute : manager.institute}).exec (function (err, docs) {
     
-        console.log ('docs: ' + docs);
         res.json (docs);
-        return;
+
     });
 		
 		
@@ -750,19 +740,16 @@ exports.getRoutes = function (req,res) {
 	
 	if ( req.headers['x-access-token'] != undefined){
 	auth.authCookies(req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     route.find ({ institute : manager.institute}).exec (function (err, docs) {
     
-        console.log ('docs: ' + docs);
         res.json (docs);
-        return;
+
     });
 		
 		
@@ -782,19 +769,17 @@ exports.getProjects = function (req,res) {
 	
 	if ( req.headers['x-access-token'] != undefined){
 	auth.authCookies( req.headers['x-access-token'], function (result) {
-	console.log ("userType : " + result);
+
 	if (result == 'institute manager')
 	{
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
     project.find ({ institute : manager.institute}).exec (function (err, docs) {
-    
-        console.log ('docs: ' + docs);
+
         res.json (docs);
-        return;
+
     });
 		
 		
@@ -811,23 +796,157 @@ else {
 };
 
 
-exports.getMaps = function (req,res) {
-		
-	if ( req.headers['x-access-token'] != undefined){
-	auth.authCookies( req.headers['x-access-token'], function (result) {
+
+exports.createBuilding = function (request,response) {
+	
+	if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
 	console.log ("userType : " + result);
 	if (result == 'institute manager')
 	{
+		  var managerId =  request.headers['x-access-token'];
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
+	    	
+
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		buildingController.createBuilding (request, response);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+		
+		
+	
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+exports.updateBuilding = function (request, response) {
+	
+		if (request.headers['x-access-token'] != undefined){
+	auth.authCookies( request.headers['x-access-token'], function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.headers['x-access-token'];
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		buildingController.updateBuilding (request, response);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+exports.deleteBuilding = function (request, response) {
+	
+		if ( request.headers['x-access-token'] != undefined){
+	auth.authCookies(request.headers['x-access-token'], function (result) {
+	console.log ("userType : " + result);
+	if (result == 'institute manager')
+	{
+		  var managerId =  request.headers['x-access-token'];
+		user.findOne ({ _id: managerId}).exec (function (err, manager) {
+			
+			institute.findOne({ _id : manager.institute}).exec (function (err, doc) {
+	    	
+	    	
+	    	
+	    	console.log ("REQ ID : " + request.body.institute);
+	    	console.log ("DOC ID : " + doc._id);
+	    	
+	    	if (request.body.institute ==  doc._id ){
+	    		buildingController.deleteBuilding (request, response);
+	    	}
+	    	
+	    	else {
+	    
+	    	response.json ({error: "you are not authorized in this institute."});
+	      }
+    });
+			
+			
+			
+		});
+	    
+}
+else {
+	response.json ({error: "invalid seesion token."});
+}
+	}); }
+	else {
+		response.json ({error: "no session."});
+	}
+};
+
+
+
+
+
+
+exports.getBuildings = function (req,res) {
+	
+	if (req.headers['x-access-token'] != undefined){
+	
+
+	auth.authCookies( req.headers['x-access-token'], function (result) {
+
+	if (result == 'institute manager')
+	{
 		var managerId =  req.headers['x-access-token'];
-    		console.log ('User ID = ' + managerId);
+
     		
     		user.findOne ({_id : managerId}).exec (function (err , manager) {
 
-    map.find ({ institute : manager.institute}).exec (function (err, docs) {
-    
-        console.log ('docs: ' + docs);
+    building.find ({ institute : manager.institute}).populate('location', 'description lat lng url id').exec (function (err, docs) {
+
         res.json (docs);
-        return;
+
     });
 		
 		

@@ -4,26 +4,14 @@ var project = require ('../schemes/project');
 var user = require ('../schemes/user');
 var location = require ('../schemes/location');
 var route = require ('../schemes/route');
-var map = require ('../schemes/map');
 var building = require ('../schemes/building');
 var projectController = require ('./projectController.js');
 
 
 
 exports.getInstituteById  = function (req, res) {
+
 	
-	
-	// id
-	// name
-	// logoUrl
-	// primaryColor
-	// secondaryColor
-	// lineColor
-	// mainTextColor
-	// aboutText
-	// aboutImageUrl
-	
-    
 	var id = req.params.instituteId;
     console.log ('Dep ID = ' + id);
 
@@ -117,11 +105,6 @@ exports.getInstituteProjects2 = function (req, res) {
 
 exports.getLocationById  = function (req, res) {
 	
-	//description
-	//lat
-	//lng
-	//url
-	
 	var id = req.params.locationId;
     console.log ('Dep ID = ' + id);
 
@@ -150,17 +133,6 @@ if (doc != undefined) {
 };
 
 exports.getProjectById = function (req, res) {
-	
-	//id
-	//departmentId
-	//name
-	//description
-	//studentNames
-	//studentEmails
-	//videoUrl
-	//soundUrl
-	// location
-	
 	
 	var id = req.params.projectId;
     console.log ('Dep ID = ' + id);
@@ -213,9 +185,7 @@ if (project !=null) {
 
 exports.getRouteById  = function (req, res) {
 	
-	//name
-	//projectIds
-	
+
 	var id = req.params.routeId;
     console.log ('Dep ID = ' + id);
 
@@ -243,11 +213,6 @@ if (doc != undefined) {
 
 exports.getDepartmentById  = function (req, res) {
 	
-	//id
-	//name
-	//imageUrl
-	//largeImageUrl
-	//locationDescription
 	
 	var id = req.params.departmentId;
     console.log ('Dep ID = ' + id);
@@ -312,40 +277,3 @@ exports.getProjectsBySearch = function (req, res) {
 };
 
 
-exports.getInstituteMaps = function (req, res) {
-	var id = req.params.instituteId;
-	
-	map.find ({institute : id}).exec (function (err, maps){
-		
-		res.send (maps);
-	});
-	
-};
-
-exports.getInstituteMapsArray = function (req, res) {
-	var id = req.params.instituteId;
-	
-	map.find ({institute : id}).exec (function (err, maps){
-		
-		var mapsArray = [];
-		
-		for (i=0; i<maps.length; i++) {
-			
-			mapArray.push (maps[i].imageUrl);
-					
-		}
-	
-		res.send (mapArray);
-	});
-	
-};
-
-exports.getMapById = function (req, res) {
-	var id = req.params.mapId;
-	
-	map.findOne ({_id : id}).exec (function (err, map){
-		
-		res.send (map);
-	});
-	
-};

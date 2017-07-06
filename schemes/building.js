@@ -14,8 +14,7 @@ var buildingSchema = new schema (
     location: {type: Number, ref: 'location'},
     locationDescription: String,
     zoom: Number,
-    institute: {type: Number, ref: 'institute'},
-    department: {type: Number, ref: 'department'}
+    institute: {type: Number, ref: 'institute'}
 
 }, 
 
