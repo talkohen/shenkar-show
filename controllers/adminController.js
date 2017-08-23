@@ -3,6 +3,7 @@ var user = require ('../schemes/user');
 var institute = require ('../schemes/institute');
 var user = require ('../schemes/user');
 var department = require ('../schemes/department');
+var building = require ('../schemes/building');
 var departmentController = require ('../controllers/departmentController');
 var instituteController = require ('../controllers/instituteController');
 var userController = require ('../controllers/userController');
@@ -183,4 +184,25 @@ exports.deleteUser = function (request, response) {
 	else {
 		response.json ({error: "no session."});
 		 }
+};
+
+
+//Get all buildings 
+exports.getBuildings = function (req, res) {
+	
+	if (req.headers['x-access-token'] != undefined){
+		auth.authCookies( req.headers['x-access-token'], function (result) {
+			if (result == 'admin'){
+				building.find ({}).exec (function (err, Buildings) {
+        			res.send (Buildings);
+    			});
+			}
+			else {
+				res.send ("error: you not authorized to perform this action");
+				}
+		});
+	}
+	else {
+		res.send ("error: you not authorized to perform this action");
+		}
 };

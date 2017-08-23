@@ -3,7 +3,7 @@ var location = require ('../schemes/location');
 var building = require ('../schemes/building');
 
 
-//return all buildings in database
+//Return all buildings in database
 exports.getAllBuildings = function (req, res) {
 
     building.find ({}).exec (function (err, buildings) {
@@ -13,7 +13,7 @@ exports.getAllBuildings = function (req, res) {
 };
 
 
-//search building by id
+//Search building by id
 exports.getBuildingById  = function (req, res) {
     var id = req.params.buildingId;
 
@@ -24,6 +24,7 @@ exports.getBuildingById  = function (req, res) {
     });
 };
 
+//Create a new building
 exports.createBuilding = function (request, response) {
 	
     var newBuilding = new building({
@@ -53,7 +54,7 @@ exports.createBuilding = function (request, response) {
  }
 };
 
-
+//Update an existing building
 exports.updateBuilding = function (request, response) {
 	
 	try {
@@ -88,21 +89,14 @@ catch (exception) {
 };
 
 
-
+//Delete an existing building
 exports.deleteBuilding = function (request, response) {
 
-	
-	
 	 building.findOne({_id : request.body.id}).exec (function (err,doc) {
-	 		try {	
-			
-	
-	 			
-	 	var query = doc.remove (function (err, deletedDoc) {
-	 		
-                  response.send (true);
-	 		
-	 	});
+	 		try {
+                    doc.remove (function (err, deletedDoc) {
+                    response.send (true);
+	 	        });
 	 	
 	 	}
 	 	catch (exception) {

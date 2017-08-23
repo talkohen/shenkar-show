@@ -5,22 +5,19 @@ var user = require ('../schemes/user');
 var fh = require ('../fileHandler.js');
 
 
+//Get all departments in the database
 exports.getAllDepartments = function (req, res) {
-
     department.find ({}).
     where('department').ne ('PRIVATE').
     exec (function (err, docs) {
-        Data = docs;
-        console.log ('docs: ' + docs);
         res.json (docs);
         return;
     });
 };
 
-
+//Get department by id
 exports.getDepartmentById  = function (req, res) {
     var id = req.params.departmentId;
-    console.log ('Dep ID = ' + id);
 
     department.findOne ({_id : id}).exec (function (err, doc) {
 
@@ -37,63 +34,41 @@ exports.getDepartmentById  = function (req, res) {
     });
 };
 
-exports.getDepartmentById2  = function (depId, callback) {
-    var id = depId;
-    console.log ('Dep ID = ' + id);
 
-    department.findOne ({_id : id}).
-    where('department').ne ('PRIVATE').
-    exec (function (err, doc) {
-    	console.log ('dasdasd');
-        callback (doc);
-    });
-};
-
-
+//Create a new department
 exports.createDepartment = function (request, response, files) {
-	
-	
 
 	var logoKey = null;
 	var imageKey = null ;
 	
 	if (files != undefined) {
 	
-	if (files['imageUrl'] != undefined ) {
-	logoKey = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl'][0].key;	
-	}
+		if (files['imageUrl'] != undefined ) {
+			logoKey = "https://shenkar-show2.s3.amazonaws.com/" + files['imageUrl'][0].key;
+			}
 		else {
-		logoKey = null;
-	}
-	
-	if (files['largeImageUrl'] != undefined ) {
-	imageKey = "https://shenkar-show2.s3.amazonaws.com/" + files['largeImageUrl'][0].key;	
-	}
-	else {
-		imageKey = null;
-	}
-}
+			logoKey = null;
+		}
 
-var location =null;
+		if (files['largeImageUrl'] != undefined ) {
+		imageKey = "https://shenkar-show2.s3.amazonaws.com/" + files['largeImageUrl'][0].key;
+		}
+		else {
+			imageKey = null;
+		}
+	}
 
-if (request.body.location != 'undefined') 
-{ 
-location = request.body.location;
- } 
- else { 
- 	location = 1;
- 	}
+	var location =null;
+
+	if (request.body.location != 'undefined')
+	{location = request.body.location;}
+	else {location = 1;}
  	
  	var building =null;
  	if (request.body.building != 'undefined') 
-{ 
-building = request.body.building;
- } 
- else { 
- 	building = 0;
- 	}
+	{building = request.body.building;}
+	 else {building = 0;}
 
-          	
           	
              var newDepartment = new department({
                 name :request.body.name,
@@ -118,16 +93,14 @@ building = request.body.building;
                 };
               });
               }
-               catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
-            
-   
+		   catch (exception) {
+				console.log (exception);
+				response.send (false);
+			 }
 
 };
 
-
+//Update existing Department
 exports.updateDepartment = function (request, response, files) {
 
 	var logo = null;
@@ -136,83 +109,76 @@ exports.updateDepartment = function (request, response, files) {
 	
 	try {
 
-	 department.findOne({_id: request.body.id}).exec (function (err,doc) {
+	 	department.findOne({_id: request.body.id}).exec (function (err,doc) {
 	 	
-	 	if (files != undefined) {
-	if (files['imageUrl'] != undefined) { logo = 'https://s3.amazonaws.com/shenkar-show2/' + files['imageUrl'][0].key;} else {logo = doc.imageUrl;}
-	if (files['largeImageUrl'] != undefined) { image = 'https://s3.amazonaws.com/shenkar-show2/' + files['largeImageUrl'][0].key;} else {image = doc.largeImageUrl;}
-	}
-	
-	var location =null;
+			if (files != undefined) {
+				if (files['imageUrl'] != undefined) { logo = 'https://s3.amazonaws.com/shenkar-show2/' + files['imageUrl'][0].key;} else {logo = doc.imageUrl;}
+				if (files['largeImageUrl'] != undefined) { image = 'https://s3.amazonaws.com/shenkar-show2/' + files['largeImageUrl'][0].key;} else {image = doc.largeImageUrl;}
+			}
 
-if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
+			var location =null;
 
- 	var building =null;
- 	if (request.body.building != 'undefined') 
-{ 
-building = request.body.building;
- } 
- else { 
- 	building = 0;
- 	}	
-	 	var query = doc.update ({
-	 		$set: {
-                name :request.body.name,
-                imageUrl : logo,
-                largeImageUrl : image,
-                locationDescription: request.body.locationDescription,
-                location: location,
-    			building: request.body.building,
-                institute : request.body.institute
-	 		}
-	 	});
+			if (request.body.location != 'undefined') { console.log ("request.body.location : " + request.body.location); location = request.body.location; } else { location = 1;}
 
- 	 	query.exec (function (err, results) {
- 	 	
- 	 	console.log("Updated Doc : " + doc);
- 	 		
- 	});
+			var building =null;
+			if (request.body.building != 'undefined')
+			{building = request.body.building;}
+			else {building = 0;}
 
- });
+				var query = doc.update ({
+					$set: {
+						name :request.body.name,
+						imageUrl : logo,
+						largeImageUrl : image,
+						locationDescription: request.body.locationDescription,
+						location: location,
+						building: request.body.building,
+						institute : request.body.institute
+					}
+				});
+
+				query.exec (function (err, results) {
+
+				console.log("Updated Doc : " + doc);
+
+				});
+
+ 		});
 		
 	response.send (true);  
-}
-catch (exception) {
-	console.log (exception);
-            	return response.send (false);
-}
+	}
+	catch (exception) {
+		console.log (exception);
+					return response.send (false);
+	}
 
 	
 };
 
 
-
+//Delete an existing department
 exports.deleteDepartment = function (request, response) {
 
-	
-	
 	 department.findOne({_id : request.body.id}).exec (function (err,doc) {
-	 		try {	
+		 try {
 			
-		fh.delete (doc.logo);
-	 	fh.delete (doc.image);
-	 	
-	 	project.remove ({departmentId: doc.id}).exec (function (err, deletedProjects) {
-	 		user.remove ({department: doc.id}).exec (function (err, deletedUsers) {
-	 			doc.remove (function (err, deletedDoc) {
+			fh.delete (doc.logo);
+			fh.delete (doc.image);
 
-                  response.send (true);
-	 	});
-	 	});
-	 	});
-	 	}
+			project.remove ({departmentId: doc.id}).exec (function (err, deletedProjects) {
+				user.remove ({department: doc.id}).exec (function (err, deletedUsers) {
+					doc.remove (function (err, deletedDoc) {
+
+					  response.send (true);
+					});
+				});
+			});
+		 }
 	 	catch (exception) {
- 	console.log (exception); 
- 	response.send (false);
- }
-	 	
+			console.log (exception);
+			response.send (false);
+ 		}
 	 });
-
 };
 
 

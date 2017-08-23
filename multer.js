@@ -21,12 +21,11 @@ var upload = multer({
       limits: { fileSize: 1000*1000*1 },
    fileFilter: function (req, file, cb) {
  if (file.mimetype !== 'image/png' || file.originalname =='') {
- 	
- 	console.log ("ERRORRRRRRR: " + file.originalname);
+
   req.fileValidationError = 'goes wrong on the mimetype';
   return cb(null, false, new Error('goes wrong on the mimetype'));
  }
- console.log ("NOOOOOOO: " + file.originalname);
+
  file.key = '';
  cb(null, true);
 },
