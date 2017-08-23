@@ -14,7 +14,7 @@ AWS.config.update({
 
 var s3 = new AWS.S3();
 
-
+//Update a file
 exports.update = function (file, fileKey , callback) {
 	
 	var updatedKey = undefined;
@@ -51,7 +51,7 @@ exports.update = function (file, fileKey , callback) {
 	
 };
 
-
+//Delete a file
 exports.delete = function (fileKey, callback) {
 	if (fileKey != undefined) {
 		splitKey = fileKey.split ("https://shenkar-show2.s3.amazonaws.com/");
